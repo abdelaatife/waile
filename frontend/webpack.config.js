@@ -1,6 +1,6 @@
 const path = require('path');
 const glob = require('glob');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 // -------------------------------------------------------------------------------
 // Config
@@ -121,17 +121,21 @@ if (conf.sourcemaps) {
 // -------------------------------------------------------------------------------
 // Minify
 
+
 // Minifies sources by default in production mode
 if (process.env.NODE_ENV !== 'production' && conf.minify) {
-  webpackConfig.plugins.push(
-    new UglifyJsPlugin({
-      uglifyOptions: {
-        warnings: false
+  webpackConfig.optimization = webpackConfig.optimization || {};
+  webpackConfig.optimization.minimize = true;
+  webpackConfig.optimization.minimizer = [
+    new TerserPlugin({
+      terserOptions: {
+        compress: {
+          warnings: false
+        }
       },
       sourceMap: conf.sourcemaps,
       parallel: true
     })
-  );
+  ];
 }
-
 module.exports = webpackConfig;
