@@ -3,145 +3,145 @@
 
 // Lists
 // *******************************************************************************
-@function slice-list(Dzdlist, Dzdstart: 1, Dzdend: length(Dzdlist)) {
-  Dzdresult: null;
+@function slice-list($list, $start: 1, $end: length($list)) {
+  $result: null;
 
-  @if type-of(Dzdstart) != number or type-of(Dzdend) != number {
-    @warn "Either Dzdstart or Dzdend are not a number for `slice`.";
-  } @else if Dzdstart > Dzdend {
+  @if type-of($start) != number or type-of($end) != number {
+    @warn "Either $start or $end are not a number for `slice`.";
+  } @else if $start > $end {
     @warn "The start index has to be lesser than or equals to the end index for `slice`.";
-  } @else if Dzdstart < 1 or Dzdend < 1 {
+  } @else if $start < 1 or $end < 1 {
     @warn "List indexes must be non-zero integers for `slice`.";
-  } @else if Dzdstart > length(Dzdlist) {
-    @warn "List index is #{Dzdstart} but list is only #{length(Dzdlist)} item long for `slice`.";
-  } @else if Dzdend > length(Dzdlist) {
-    @warn "List index is #{Dzdend} but list is only #{length(Dzdlist)} item long for `slice`.";
+  } @else if $start > length($list) {
+    @warn "List index is #{$start} but list is only #{length($list)} item long for `slice`.";
+  } @else if $end > length($list) {
+    @warn "List index is #{$end} but list is only #{length($list)} item long for `slice`.";
   } @else {
-    Dzdresult: ();
+    $result: ();
 
-    @for Dzdi from Dzdstart through Dzdend {
-      Dzdresult: append(Dzdresult, nth(Dzdlist, Dzdi));
+    @for $i from $start through $end {
+      $result: append($result, nth($list, $i));
     }
   }
 
-  @return Dzdresult;
+  @return $result;
 }
 
 // * Units
 // *******************************************************************************
 
 // Remove the unit of a length
-@function strip-unit(Dzdnumber) {
-  @if type-of(Dzdnumber) == 'number' and not unitless(Dzdnumber) {
-    @return divide(Dzdnumber, (Dzdnumber * 0 + 1));
+@function strip-unit($number) {
+  @if type-of($number) == 'number' and not unitless($number) {
+    @return divide($number, ($number * 0 + 1));
   }
 
-  @return Dzdnumber;
+  @return $number;
 }
 
 // Convert size px to rem
-@function px-to-rem(Dzdvalue) {
+@function px-to-rem($value) {
   // Assumes the browser default font size = `16px`
-  @return (divide(strip-unit(Dzdvalue), 16)) * 1rem;
+  @return (divide(strip-unit($value), 16)) * 1rem;
 }
 
 // Convert size rem to px
-@function rem-to-px(Dzdvalue) {
+@function rem-to-px($value) {
   // Assumes the browser default font size = `16px`
-  @return (strip-unit(Dzdvalue) * 16) * 1px;
+  @return (strip-unit($value) * 16) * 1px;
 }
 
 // * Colors
 // *******************************************************************************
 
-// ? Override shade, tint and shift function with custom background color option i.e Dzdcard-bg to make it similar like design
+// ? Override shade, tint and shift function with custom background color option i.e $card-bg to make it similar like design
 // Shade a color: mix a color with background/white
-@function tint-color(Dzdcolor, Dzdweight, Dzdbackground: null) {
-  Dzdbackground: if(Dzdbackground, Dzdbackground, white);
-  @return mix(Dzdbackground, Dzdcolor, Dzdweight);
+@function tint-color($color, $weight, $background: null) {
+  $background: if($background, $background, white);
+  @return mix($background, $color, $weight);
 }
 
 // Shade a color: mix a color with background/black
-@function shade-color(Dzdcolor, Dzdweight, Dzdbackground: null) {
-  Dzdbackground: if(Dzdbackground, Dzdbackground, black);
-  @return mix(Dzdbackground, Dzdcolor, Dzdweight);
+@function shade-color($color, $weight, $background: null) {
+  $background: if($background, $background, black);
+  @return mix($background, $color, $weight);
 }
 
 // Shade the color if the weight is positive, else tint it
-@function shift-color(Dzdcolor, Dzdweight, Dzdbackground: null) {
-  @return if(Dzdweight > 0, shade-color(Dzdcolor, Dzdweight, Dzdbackground), tint-color(Dzdcolor, -Dzdweight));
+@function shift-color($color, $weight, $background: null) {
+  @return if($weight > 0, shade-color($color, $weight, $background), tint-color($color, -$weight));
 }
 
-//RGBA to HEX
-@function rgba-to-hex(Dzdcolor, Dzdbackground: #fff) {
-  @if Dzdcolor and alpha(Dzdcolor) != 1 {
-    Dzdpercent: alpha(Dzdcolor) * 100%;
-    Dzdopaque: opacify(Dzdcolor, 1);
+// RGBA to HEX
+@function rgba-to-hex($color, $background: #fff) {
+  @if $color and alpha($color) != 1 {
+    $percent: alpha($color) * 100%;
+    $opaque: opacify($color, 1);
 
-    @return mix(Dzdopaque, Dzdbackground, Dzdpercent);
+    @return mix($opaque, $background, $percent);
   } @else {
-    @return Dzdcolor;
+    @return $color;
   }
 }
 
 // Calculating Color Contrast
-@function contrast-value(Dzdcolor) {
-  @if Dzdcolor == transparent {
-    @return Dzdbody-color;
-  } @else if alpha(Dzdcolor) != 1 {
-    Dzdcolor: rgba-to-hex(Dzdcolor);
+@function contrast-value($color) {
+  @if $color == transparent {
+    @return $body-color;
+  } @else if alpha($color) != 1 {
+    $color: rgba-to-hex($color);
   }
 
-  Dzdr: red(Dzdcolor);
-  Dzdg: green(Dzdcolor);
-  Dzdb: blue(Dzdcolor);
+  $r: red($color);
+  $g: green($color);
+  $b: blue($color);
 
-  @return divide(((Dzdr * 299) + (Dzdg * 587) + (Dzdb * 114)), 1000);
+  @return divide((($r * 299) + ($g * 587) + ($b * 114)), 1000);
 }
 
 // * Utilities
 // *******************************************************************************
 
 // Return Nav opacity, contrast-percent, contrast-percent-inverted, bg, color, active-color, disabled-color, muted-color, border
-@function get-navbar-prop(Dzdbg, Dzdactive-color: null, Dzdinactive-color: null, Dzdborder: null) {
-  Dzdbg: rgba-to-hex(Dzdbg);
+@function get-navbar-prop($bg, $active-color: null, $inactive-color: null, $border: null) {
+  $bg: rgba-to-hex($bg);
 
-  Dzdactive-color: rgba-to-hex(Dzdactive-color);
-  Dzdactive-color: if(Dzdactive-color, Dzdactive-color, color-contrast(Dzdbg));
+  $active-color: rgba-to-hex($active-color);
+  $active-color: if($active-color, $active-color, color-contrast($bg));
 
-  Dzdcontrast-percent: divide(contrast-value(Dzdbg), 255);
-  Dzdcontrast-percent-inverted: 1 - Dzdcontrast-percent;
+  $contrast-percent: divide(contrast-value($bg), 255);
+  $contrast-percent-inverted: 1 - $contrast-percent;
 
-  Dzdopacity: if(Dzdactive-color == #fff, 0.6 + (0.4 * Dzdcontrast-percent), 0.6 + (0.4 * (1 - Dzdcontrast-percent)));
+  $opacity: if($active-color == #fff, 0.6 + (0.4 * $contrast-percent), 0.6 + (0.4 * (1 - $contrast-percent)));
 
-  Dzdcolor: if(
-    Dzdinactive-color,
-    rgba-to-hex(Dzdinactive-color, Dzdbg),
-    rgba-to-hex(rgba(Dzdactive-color, if(Dzdcontrast-percent < 0.25, Dzdopacity + 0.2, Dzdopacity)), Dzdbg)
+  $color: if(
+    $inactive-color,
+    rgba-to-hex($inactive-color, $bg),
+    rgba-to-hex(rgba($active-color, if($contrast-percent < 0.25, $opacity + 0.2, $opacity)), $bg)
   );
-  Dzddisabled-color: rgba-to-hex(rgba(Dzdcolor, 0.6), Dzdbg);
-  Dzdmuted-color: rgba-to-hex(rgba(Dzdcolor, 0.75), Dzdbg);
-  Dzdborder: if(
-    Dzdborder,
-    Dzdborder,
+  $disabled-color: rgba-to-hex(rgba($color, 0.6), $bg);
+  $muted-color: rgba-to-hex(rgba($color, 0.75), $bg);
+  $border: if(
+    $border,
+    $border,
     if(
-      Dzdcontrast-percent > 0.75,
-      rgba(Dzdactive-color, divide(Dzdopacity, 8)),
-      if(Dzdcontrast-percent < 0.25, rgba(Dzdactive-color, 0.06), rgba(Dzdactive-color, 0.15))
+      $contrast-percent > 0.75,
+      rgba($active-color, divide($opacity, 8)),
+      if($contrast-percent < 0.25, rgba($active-color, 0.06), rgba($active-color, 0.15))
     )
   );
 
   @return (
     // Metadata
-    opacity: Dzdopacity,
-    contrast-percent: Dzdcontrast-percent,
-    contrast-percent-inverted: Dzdcontrast-percent-inverted,
+    opacity: $opacity,
+    contrast-percent: $contrast-percent,
+    contrast-percent-inverted: $contrast-percent-inverted,
     // Colors
-    bg: Dzdbg,
-    color: Dzdcolor,
-    active-color: Dzdactive-color,
-    disabled-color: Dzddisabled-color,
-    muted-color: Dzdmuted-color,
-    border: Dzdborder
+    bg: $bg,
+    color: $color,
+    active-color: $active-color,
+    disabled-color: $disabled-color,
+    muted-color: $muted-color,
+    border: $border
   );
 }
