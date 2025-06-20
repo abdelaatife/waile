@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -151,3 +152,158 @@
 
 </body>
 </html>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Report Generator</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #f9fafb; /* clean whiteish */
+      font-family: 'Segoe UI', sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #submitBtn {
+      font-size: 18px;
+      padding: 14px 30px;
+      border-radius: 50px;
+      background: linear-gradient(to right, #3b82f6, #60a5fa); /* blue gradient */
+      border: none;
+      color: white;
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    #submitBtn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 25px rgba(96, 165, 250, 0.4);
+    }
+
+    /* Floating Assistant */
+    #assistantBox {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 400px;
+      padding: 30px;
+      background: #ffffff;
+      border-radius: 20px;
+      border: 2px solid #3b82f6;
+      box-shadow: 0 10px 25px rgba(59, 130, 246, 0.2);
+      display: none;
+      z-index: 9999;
+      text-align: center;
+      animation: fadeIn 0.6s ease-in-out;
+    }
+
+    #assistantBox img {
+      width: 120px;
+      margin-bottom: 20px;
+    }
+
+  .robot-image img {
+  width: 120px;
+  margin-bottom: 10px;
+}
+
+.message-box {
+  min-height: 50px; /* Fix the height to prevent robot jumping */
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.typewriter-text {
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 500;
+  color: #1e3a8a;
+  border-right: 2px solid #3b82f6;
+  white-space: normal;
+  overflow: hidden;
+  width: 0;
+  animation: typing 3.5s steps(60, end) forwards, blink 0.8s infinite;
+}
+
+@keyframes typing {
+  to { width: 100%; }
+}
+
+@keyframes blink {
+  0%, 100% { border-color: transparent; }
+  50% { border-color: #3b82f6; }
+}
+
+
+    .glow-spinner {
+      margin-top: 20px;
+      width: 40px;
+      height: 40px;
+      border: 4px solid transparent;
+      border-top: 4px solid #3b82f6;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      box-shadow: 0 0 10px #3b82f6;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translate(-50%, -60%); }
+      to { opacity: 1; transform: translate(-50%, -50%); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Button -->
+<button id="submitBtn">
+  🤖 Get AI Analysis Report
+</button>
+
+<!-- AI Assistant Box -->
+<div id="assistantBox">
+  <!-- Robot image stays fixed -->
+  <div class="robot-image">
+    <img src="https://cdn-icons-png.flaticon.com/512/4712/4712035.png" alt="AI Robot">
+  </div>
+  
+  <!-- Message box with fixed height to avoid shifting -->
+  <div class="message-box">
+    <div class="typewriter-text">
+      <span>Starting AI analysis...</span><br>
+      <span>Preparing your PDF report...</span>
+    </div>
+  </div>
+
+  <div class="glow-spinner"></div>
+</div>
+
+
+<script>
+  document.getElementById("submitBtn").addEventListener("click", function () {
+    const assistant = document.getElementById("assistantBox");
+    assistant.style.display = "block";
+
+    // After 4 seconds, redirect
+    setTimeout(() => {
+      window.location.href = "report.html"; // Replace with your actual PDF/report page
+    }, 10000);
+  });
+</script>
+
+</body>
+</html>
+>>>>>>> 8ef7dc1 (Initial commit)

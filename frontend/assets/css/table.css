@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 body {
     background-color: #f4f6fc;
     font-family: 'Segoe UI', Roboto, sans-serif;
@@ -157,4 +158,165 @@ body {
     button {
       max-width: 100%;
     }
+=======
+body {
+    background-color: #f4f6fc;
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    color: #1f1f2e;
+  }
+
+  h1 {
+    font-weight: 800;
+    font-size: 28px;
+    color: #696cff;
+    margin-bottom: 24px;
+    text-align: center;
+    letter-spacing: 0.03em;
+  }
+
+  table {
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 960px;
+    background: #ffffff;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+  }
+
+  thead tr:first-child th {
+    background-color: #f0f2ff;
+    color: #696cff;
+    font-weight: 800;
+    font-size: 18px;
+    border-bottom: 2px solid #696cff;
+    padding: 14px 0;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    text-align: center;
+  }
+
+  thead tr:nth-child(2) th {
+    background-color: #f9f9fb;
+    font-weight: 600;
+    font-size: 14px;
+    border: 1px solid #e5e5e5;
+    padding: 10px 0;
+    text-align: center;
+  }
+
+  tbody tr:first-child td,
+  tbody tr:first-child th {
+    background-color: #f9f9fb;
+    font-weight: 700;
+    border: 1px solid #e5e5e5;
+    padding: 10px;
+  }
+
+  tbody tr td {
+    border-bottom: 1px solid #f0f0f0;
+    border-left: 1px solid #e5e5e5;
+    padding: 10px 14px;
+    vertical-align: middle;
+    font-size: 14px;
+  }
+
+  tbody tr td:first-child {
+    font-weight: 700;
+    color: #373740;
+    background-color: #f4f6fc;
+  }
+
+  tbody tr td:first-child,
+  tbody tr td:nth-child(4),
+  tbody tr td:last-child {
+    border-left: none;
+  }
+
+  tbody tr td.editable {
+    text-align: right;
+    background-color: #fcfdff;
+    transition: background-color 0.2s ease;
+    cursor: text;
+  }
+
+  tbody tr td.editable:hover {
+    background-color: #ebf0ff;
+  }
+
+  tbody tr td.editable:focus-within {
+    background-color: #dce3ff;
+  }
+
+  input[type="text"] {
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 0;
+    margin: 0;
+    text-align: right;
+    outline: none;
+  }
+
+  input[type="text"]::placeholder {
+    color: #b0b3bd;
+  }
+
+  input[type="text"]:focus {
+    outline: 2px solid #696cff;
+    border-radius: 6px;
+    background-color: #f0f3ff;
+  }
+
+  button {
+    margin-top: 30px;
+    background-color: #696cff;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 16px;
+    padding: 12px 36px;
+    border-radius: 30px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 6px 12px rgba(105, 108, 255, 0.4);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    max-width: 240px;
+    width: 100%;
+  }
+
+  button:hover,
+  button:focus {
+    background-color: #5759d6;
+    box-shadow: 0 10px 20px rgba(87, 89, 214, 0.5);
+    outline: none;
+  }
+
+  @media (max-width: 600px) {
+    body {
+      padding: 12px;
+    }
+
+    table {
+      font-size: 12px;
+    }
+
+    h1 {
+      font-size: 22px;
+    }
+
+    button {
+      max-width: 100%;
+    }
+>>>>>>> 8ef7dc1 (Initial commit)
   }

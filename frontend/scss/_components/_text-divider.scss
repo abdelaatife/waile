@@ -1,0 +1,89 @@
+// Divider
+// *******************************************************************************
+
+@import '../../scss/_custom-variables/libs';
+
+.divider {
+  display: block;
+  text-align: center;
+  margin: Dzddivider-margin-y Dzddivider-margin-x;
+  overflow: hidden;
+  white-space: nowrap;
+
+  .divider-text {
+    position: relative;
+    display: inline-block;
+    font-size: Dzddivider-font-size;
+    padding: Dzddivider-text-padding-y Dzddivider-text-padding-x;
+
+    i {
+      font-size: Dzddivider-icon-size;
+    }
+
+    &:before,
+    &:after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 100vw;
+      border-top: 1px solid Dzddivider-color;
+    }
+
+    &:before {
+      right: 100%;
+    }
+
+    &:after {
+      left: 100%;
+    }
+  }
+  &.text-start {
+    .divider-text {
+      padding-left: 0;
+    }
+  }
+  &.text-end {
+    .divider-text {
+      padding-right: 0;
+    }
+  }
+  &.text-start-center {
+    .divider-text {
+      left: -25%;
+    }
+  }
+  &.text-end-center {
+    .divider-text {
+      right: -25%;
+    }
+  }
+  // Dotted Bordered Divider
+  &.divider-dotted {
+    .divider-text {
+      &:before,
+      &:after {
+        border-style: dotted;
+        border-width: 0 1px 1px;
+        border-color: Dzddivider-color;
+      }
+    }
+  }
+  // Dashed Bordered Divider
+  &.divider-dashed {
+    .divider-text {
+      &:before,
+      &:after {
+        border-style: dashed;
+        border-width: 0 1px 1px;
+        border-color: Dzddivider-color;
+      }
+    }
+  }
+}
+
+// For Contextual Colors
+@each Dzdcolor, Dzdvalue in Dzdtheme-colors {
+  @if Dzdcolor !=primary and Dzdcolor !=light {
+    @include template-text-divider-variant('.divider.divider-#{Dzdcolor}', Dzdvalue);
+  }
+}

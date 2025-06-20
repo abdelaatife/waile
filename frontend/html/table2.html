@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 
 
@@ -1438,4 +1439,1446 @@
 
 </body>
 
+=======
+<!DOCTYPE html>
+
+
+<html lang="en" class="light-style layout-menu-fixed" dir="ltr" data-theme="theme-default" data-assets-path="../assets/"
+    data-template="vertical-menu-template-free">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+    <title>Dashboard Analytics</title>
+
+    <meta name="description" content="" />
+
+
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="../assets/css/table.css" />
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+        rel="stylesheet" />
+
+    <!-- Icons. Uncomment required icon fonts -->
+    <link rel="stylesheet" href="../assets/vendor/fonts/boxicons.css" />
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="../assets/vendor/css/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="../assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="../assets/css/demo.css" />
+
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+
+    <link rel="stylesheet" href="../assets/vendor/libs/apex-charts/apex-charts.css" />
+
+    <!-- Page CSS -->
+
+    <!-- Helpers -->
+    <script src="../assets/vendor/js/helpers.js"></script>
+
+    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+    <script src="../assets/js/config.js"></script>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+
+        .calculated-value {
+            min-width: 100px;
+            display: inline-block;
+            padding: 4px 8px;
+        }
+
+        .ratio-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 8px 0;
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .ratio-group div:first-child {
+            flex: 1;
+            min-width: 400px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        input {
+            width: 120px;
+            text-align: right;
+            padding: 4px;
+        }
+
+        .calculated {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        h2 {
+            background-color: #f2f2f2;
+            padding: 8px;
+            border-left: 5px solid #4CAF50;
+            font-size: 18px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 25px;
+        }
+
+        th,
+        td {
+            padding: 10px;
+
+            vertical-align: top;
+        }
+
+
+        td:last-child {
+            text-align: right;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .category {
+            background-color: #e9e9e9;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .calculated-value {
+            min-width: 100px;
+            display: inline-block;
+            padding: 4px 8px;
+        }
+
+        .ratio-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 8px 0;
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .ratio-group div:first-child {
+            flex: 1;
+            min-width: 400px;
+        }
+
+        #assistantBox {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.25);
+            /* translucent white */
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(15px);
+            /* Glass blur effect */
+            -webkit-backdrop-filter: blur(15px);
+            /* Safari */
+            display: none;
+            z-index: 9999;
+            text-align: center;
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.3);
+            /* semi-transparent dark navy */
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            display: none;
+            z-index: 9990;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+        <div class="layout-container">
+            <!-- Menu -->
+
+            <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+                <div class="app-brand demo">
+                    <a href="index.html" class="app-brand-link">
+                        <span class="app-brand-logo demo">
+
+                        </span>
+                        <span class="app-brand-text demo menu-text fw-bolder ms-2">name</span>
+                    </a>
+
+                    <a href="javascript:void(0);"
+                        class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+                        <i class="bx bx-chevron-left bx-sm align-middle"></i>
+                    </a>
+                </div>
+
+                <div class="menu-inner-shadow"></div>
+
+                <ul class="menu-inner py-1">
+                    <!-- Dashboard -->
+                    <li class="menu-item ">
+                        <a href="index.html" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                            <div data-i18n="Analytics">Dashboard</div>
+                        </a>
+                    </li>
+
+                    <!-- Layouts -->
+
+                    <li class="menu-header small text-uppercase">
+                        <span class="menu-header-text">Pages</span>
+                    </li>
+
+                    <li class="menu-item">
+                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                            <i class="menu-icon tf-icons bx bx-lock-open-alt"></i>
+                            <div data-i18n="Authentications">Authentications</div>
+                        </a>
+                        <ul class="menu-sub">
+                            <li class="menu-item">
+                                <a href="../index.html" class="menu-link" target="_blank">
+                                    <div data-i18n="Basic">Login</div>
+                                </a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="auth-register-basic.html" class="menu-link" target="_blank">
+                                    <div data-i18n="Basic">Register</div>
+                                </a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="auth-forgot-password-basic.html" class="menu-link" target="_blank">
+                                    <div data-i18n="Basic">Forgot Password</div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="menu-item active">
+                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                            <i class="menu-icon tf-icons bx bx-lock-open-alt"></i>
+                            <div data-i18n="Authentications">Table</Table>
+                            </div>
+                        </a>
+                        <ul class="menu-sub">
+                            <li class="menu-item active">
+                                <a href="BILAN_FONCTIONNEL.html" class="menu-link">
+                                    <div data-i18n="Basic">BILAN FONCTIONNEL</div>
+                                </a>
+                            </li>
+                            <li class="menu-item">
+                                <a href="table.html" class="menu-link">
+                                    <div data-i18n="Basic">BILAN FONCTIONNEL</div>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </li>
+                    <!-- end auth -->
+                </ul>
+            </aside>
+            <!-- / Menu -->
+
+            <!-- Layout container -->
+            <div class="layout-page">
+                <!-- Navbar -->
+
+
+
+                <!-- Content wrapper -->
+                <div class="d-flex justify-content-center mt-5">
+                    <div style="max-width: 1000px; width: 100%;">
+                        <!--table2//////////////////////////////////////////////////-->
+                        <div class="d-flex justify-content-center mt-5">
+                            <div style="max-width: 1000px; width: 100%;">
+                                <h1>BILAN FONCTIONNEL - SOCIETE XXX</h1>
+                                <table role="grid" aria-label="Bilan Fonctionnel">
+                                    <!-- Table Headers (unchanged) -->
+                                    <tbody>
+                                        <!-- Emplois Stables Section -->
+                                        <tr>
+                                            <td colspan="3" class="font-extrabold" style="border-right: none;">EMPLOIS
+                                                STABLES</td>
+                                            <td style="border: none;"></td>
+                                            <td colspan="3" class="font-extrabold">RESSOURCES STABLES</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td></td>
+                                            <td>Immobilisations Incorporelles</td>
+                                            <td><input type="text" id="immobilisations_incorporelles"
+                                                    placeholder="0,00 DA" aria-label="Immobilisations Incorporelles">
+                                            </td>
+                                            <td></td>
+                                            <td>Capitaux Propres</td>
+                                            <td><input type="text" id="capitaux_propres" placeholder="0,00 DA"
+                                                    aria-label="Capitaux Propres"></td>
+                                            <td></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td></td>
+                                            <td>Immobilisations Corporelles</td>
+                                            <td><input type="text" id="immobilisations_corporelles"
+                                                    placeholder="0,00 DA" aria-label="Immobilisations Corporelles"></td>
+                                            <td></td>
+                                            <td>Provisions pour risques et charges</td>
+                                            <td><input type="text" id="provisions_risques_charges" placeholder="0,00 DA"
+                                                    aria-label="Provisions pour risques et charges"></td>
+                                            <td></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td></td>
+                                            <td>Immobilisations Financières</td>
+                                            <td><input type="text" id="immobilisations_financieres"
+                                                    placeholder="0,00 DA" aria-label="Immobilisations Financières"></td>
+                                            <td></td>
+                                            <td>Amortissements</td>
+                                            <td><input type="text" id="amortissements" placeholder="0,00 DA"
+                                                    aria-label="Amortissements"></td>
+                                            <td></td>
+                                        </tr>
+
+                                        <tr class="font-extrabold">
+                                            <td></td>
+                                            <td>Total</td>
+                                            <td id="total_emplois_stables" class="calculated-value">0,00 DA</td>
+                                            <td></td>
+                                            <td>Dettes Financières</td>
+                                            <td><input type="text" id="dettes_financieres" placeholder="0,00 DA"
+                                                    aria-label="Dettes Financières"></td>
+                                            <td></td>
+                                        </tr>
+
+                                        <tr class="font-extrabold">
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>Total</td>
+                                            <td id="total_ressources_stables" class="calculated-value">0,00 DA</td>
+                                            <td></td>
+                                        </tr>
+
+                                        <!-- Actif/Passif Circulant Section -->
+                                        <tr class="font-extrabold">
+                                            <td colspan="3" style="border-right:none;">ACTIF CIRCULANT</td>
+                                            <td></td>
+                                            <td colspan="3">PASSIFS CIRCULANTS</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td></td>
+                                            <td>Actif circulant d'exploitation</td>
+                                            <td><input type="text" id="actif_circulant_exploitation"
+                                                    placeholder="0,00 DA" aria-label="Actif circulant d'exploitation">
+                                            </td>
+                                            <td></td>
+                                            <td>Passif circulant d'exploitation</td>
+                                            <td><input type="text" id="passif_circulant_exploitation"
+                                                    placeholder="0,00 DA" aria-label="Passif circulant d'exploitation">
+                                            </td>
+                                            <td></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td></td>
+                                            <td>Actif circulant hors exploitation</td>
+                                            <td><input type="text" id="actif_circulant_hors_exploitation"
+                                                    placeholder="0,00 DA"
+                                                    aria-label="Actif circulant hors exploitation"></td>
+                                            <td></td>
+                                            <td>Passif circulant hors exploitation</td>
+                                            <td><input type="text" id="passif_circulant_hors_exploitation"
+                                                    placeholder="0,00 DA"
+                                                    aria-label="Passif circulant hors exploitation"></td>
+                                            <td></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td></td>
+                                            <td>Trésorerie disponible</td>
+                                            <td><input type="text" id="tresorerie_disponible" placeholder="0,00 DA"
+                                                    aria-label="Trésorerie disponible"></td>
+                                            <td></td>
+                                            <td>Trésorerie passive</td>
+                                            <td><input type="text" id="tresorerie_passive" placeholder="0,00 DA"
+                                                    aria-label="Trésorerie passive"></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr class="font-extrabold">
+                                            <td></td>
+                                            <td>Total</td>
+                                            <td id="total_actif_circulant" class="calculated-value">0,00 DA</td>
+                                            <td></td>
+                                            <td>Total</td>
+                                            <td id="total_passif_circulant" class="calculated-value">0,00 DA</td>
+                                            <td></td>
+                                        </tr>
+                                        <!-- Totals Section -->
+                                        <tr class="font-extrabold">
+                                            <td></td>
+                                            <td class="text-right" style="padding-right: 12px;">TOTAL EMPLOIS</td>
+                                            <td id="total_emplois" class="calculated-value">0,00 DA</td>
+                                            <td></td>
+                                            <td>TOTAL RESSOURCES</td>
+                                            <td id="total_ressources" class="calculated-value">0,00 DA</td>
+                                            <td></td>
+                                        </tr>
+
+                                        <!-- Calculations Section -->
+                                        <tr>
+                                            <td colspan="3" style="padding-left: 12px;">FRNG = Ressources Stables -
+                                                Emplois Stables :</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td id="frng" class="calculated-value">0,00 DA</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" style="padding-left: 12px;">BFR = Actif Circulant - Dettes
+                                                Circulantes :</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td id="bfr" class="calculated-value">0,00 DA</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" style="padding-left: 12px;">Trésorerie Nette = Tréso Actif -
+                                                Tréso Passif :</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td id="tresorerie_nette" class="calculated-value">0,00 DA</td>
+                                            <td></td>
+                                        </tr>
+                                        <!-- Add this after the Trésorerie Nette row -->
+                                        <tr class="spacer-row">
+                                            <td colspan="7" style="padding:10px 0;"></td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                        <table role="grid" aria-label="Ratios Financiers" class="financial-ratios-table">
+                            <tbody>
+                                <!-- FRE and BFR Section -->
+
+                                <h2>Indicateurs Clés</h2>
+                                <tr>
+                                    <td colspan="2" class="ratio-label">FRE = Stocks et créances d'exploitation - Dettes
+                                        d'exploitation</td>
+                                    <td class="ratio-value"><input type="text" id="fre" value="9.250"
+                                            aria-label="Fonds de Roulement d'Exploitation"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" class="ratio-label">BFR = Créances hors exploitation - Dettes hors
+                                        exploitation</td>
+                                    <td class="ratio-value"><input type="text" id="bfr" value="1.000"
+                                            aria-label="Besoin en Fonds de Roulement"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" class="ratio-label">Taux de financement des immobilisations =
+                                        Ressources stables / Emplois stables</td>
+                                    <td class="ratio-value"></td>
+                                </tr>
+
+                                <!-- Spacer row -->
+                                <tr class="spacer-row">
+                                    <td colspan="3"></td>
+                                </tr>
+
+                                <!-- Ratios d'Exploitation Section -->
+                                <tr class="section-header">
+                                    <td colspan="3">Ratios d'Exploitation</td>
+                                </tr>
+                                <tr>
+                                    <td class="ratio-label">FRE / Chiffre d'affaires</td>
+                                    <td class="ratio-formula">FRE / CA</td>
+                                    <td class="ratio-value"><input type="text" id="ratio_fre_ca" value="0.0185"></td>
+                                </tr>
+                                <tr>
+                                    <td class="ratio-label">Délai de rotation des stocks</td>
+                                    <td class="ratio-formula">(Stocks moyen / Coût d'achat) × 360</td>
+                                    <td class="ratio-value"></td>
+                                </tr>
+                                <tr>
+                                    <td class="ratio-label">Délai de rotation des créances clients</td>
+                                    <td class="ratio-formula">(Créances clients / CA TTC) × 360</td>
+                                    <td class="ratio-value"><input type="text" id="delai_creances_clients"
+                                            value="16.668"></td>
+                                </tr>
+                                <tr>
+                                    <td class="ratio-label">Délai de rotation des dettes fournisseurs</td>
+                                    <td class="ratio-formula">(Dettes fournisseurs / Achats TTC) × 360</td>
+                                    <td class="ratio-value"><input type="text" id="delai_dettes_fournisseurs"
+                                            value="18"></td>
+                                </tr>
+
+                                <!-- Spacer row -->
+                                <tr class="spacer-row">
+                                    <td colspan="3"></td>
+                                </tr>
+
+                                <!-- Ratios de Solvabilité Section -->
+                                <tr class="section-header">
+                                    <td colspan="3">Ratios de Solvabilité</td>
+                                </tr>
+                                <tr>
+                                    <td class="ratio-label">Autonomie Financière</td>
+                                    <td class="ratio-formula">Capitaux Propres / Dettes Totales</td>
+                                    <td class="ratio-value"><input type="text" id="autonomie_financiere" value="0.67">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="ratio-label">Couverture des Dettes</td>
+                                    <td class="ratio-formula">Capitaux Propres / Dettes Financières</td>
+                                    <td class="ratio-value"><input type="text" id="couverture_dettes" value="0.84"></td>
+                                </tr>
+
+                                <!-- Spacer row -->
+                                <tr class="spacer-row">
+                                    <td colspan="3"></td>
+                                </tr>
+
+                                <!-- Ratios de Liquidité Section -->
+                                <tr class="section-header">
+                                    <td colspan="3">Ratios de Liquidité</td>
+                                </tr>
+                                <tr>
+                                    <td class="ratio-label">Liquidité Générale</td>
+                                    <td class="ratio-formula">Actif Circulant / Passif Circulant</td>
+                                    <td class="ratio-value"><input type="text" id="liquidite_generale"
+                                            value="2.21781605"></td>
+                                </tr>
+                                <tr>
+                                    <td class="ratio-label">Liquidité Réduite</td>
+                                    <td class="ratio-formula">(Actif Circulant – Stocks) / Passif Circulant</td>
+                                    <td class="ratio-value"><input type="text" id="liquidite_reduite"
+                                            value="0.85798817"></td>
+                                </tr>
+
+                                <!-- Spacer row -->
+                                <tr class="spacer-row">
+                                    <td colspan="3"></td>
+                                </tr>
+
+                                <!-- Ratios de Rentabilité Section -->
+                                <tr class="section-header">
+                                    <td colspan="3">Ratios de Rentabilité</td>
+                                </tr>
+                                <tr>
+                                    <td class="ratio-label">Rentabilité Économique (ROA)</td>
+                                    <td class="ratio-formula">Résultat Net / Actif Total</td>
+                                    <td class="ratio-value"><input type="text" id="roa" value="0.25699819"></td>
+                                </tr>
+                                <tr>
+                                    <td class="ratio-label">Rentabilité Financière (ROE)</td>
+                                    <td class="ratio-formula">Résultat Net / Capitaux Propres</td>
+                                    <td class="ratio-value"><input type="text" id="roe" value="0.74175824"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <style>
+                            .financial-ratios-table {
+                                width: 100%;
+                                border-collapse: collapse;
+                                font-family: Arial, sans-serif;
+                                margin: 20px 0;
+                            }
+
+                            .financial-ratios-table td {
+                                padding: 10px 15px;
+                                border-bottom: 1px solid #e0e0e0;
+                            }
+
+                            .section-header {
+                                background-color: #f5f5f5;
+                                font-weight: bold;
+                                font-size: 1.1em;
+                            }
+
+                            .section-header td {
+                                padding: 12px 15px;
+                                border-bottom: 2px solid #ddd;
+                            }
+
+                            .ratio-label {
+                                font-weight: 500;
+                                color: #333;
+                                width: 40%;
+                            }
+
+                            .ratio-formula {
+                                color: #666;
+                                font-size: 0.9em;
+                                width: 35%;
+                            }
+
+                            .ratio-value {
+                                text-align: right;
+                                width: 25%;
+                            }
+
+                            .ratio-value input {
+                                width: 100%;
+                                padding: 6px 8px;
+                                border: 1px solid #ddd;
+                                border-radius: 4px;
+                                text-align: right;
+                            }
+
+                            .spacer-row td {
+                                padding: 8px 0;
+                                border: none;
+                            }
+
+                            #submitBtn {
+                                font-size: 18px;
+                                padding: 14px 30px;
+                                border-radius: 50px;
+                                background: linear-gradient(to right, #3b82f6, #60a5fa);
+                                /* blue gradient */
+                                border: none;
+                                color: white;
+                                box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+                                transition: all 0.3s ease;
+                            }
+
+                            #submitBtn:hover {
+                                transform: translateY(-2px);
+                                box-shadow: 0 0 25px rgba(96, 165, 250, 0.4);
+                            }
+
+                            /* Floating Assistant */
+                            #assistantBox {
+                                position: fixed;
+                                top: 50%;
+                                left: 50%;
+                                transform: translate(-50%, -50%);
+                                width: 400px;
+                                padding: 30px;
+                                background: #ffffff;
+                                border-radius: 20px;
+                                border: 2px solid #3b82f6;
+                                box-shadow: 0 10px 25px rgba(59, 130, 246, 0.2);
+                                display: none;
+                                z-index: 9999;
+                                text-align: center;
+                                animation: fadeIn 0.6s ease-in-out;
+                            }
+
+                            #assistantBox img {
+                                width: 120px;
+                                margin-bottom: 20px;
+                            }
+
+                            .robot-image img {
+                                width: 120px;
+                                margin-bottom: 10px;
+                            }
+
+                            .message-box {
+                                min-height: 50px;
+                                /* Fix the height to prevent robot jumping */
+                                margin-bottom: 10px;
+                                position: relative;
+                            }
+
+                            .typewriter-text {
+                                display: inline-block;
+                                font-size: 16px;
+                                font-weight: 500;
+                                color: #1e3a8a;
+                                border-right: 2px solid #3b82f6;
+                                white-space: normal;
+                                overflow: hidden;
+                                width: 0;
+                                animation: typing 3.5s steps(60, end) forwards, blink 0.8s infinite;
+                            }
+
+                            @keyframes typing {
+                                to {
+                                    width: 100%;
+                                }
+                            }
+
+                            @keyframes blink {
+
+                                0%,
+                                100% {
+                                    border-color: transparent;
+                                }
+
+                                50% {
+                                    border-color: #3b82f6;
+                                }
+                            }
+
+
+                            .glow-spinner {
+                                margin-top: 20px;
+                                width: 40px;
+                                height: 40px;
+                                border: 4px solid transparent;
+                                border-top: 4px solid #3b82f6;
+                                border-radius: 50%;
+                                animation: spin 1s linear infinite;
+                                box-shadow: 0 0 10px #3b82f6;
+                                margin-left: auto;
+                                margin-right: auto;
+                            }
+
+                            @keyframes spin {
+                                to {
+                                    transform: rotate(360deg);
+                                }
+                            }
+
+                            @keyframes fadeIn {
+                                from {
+                                    opacity: 0;
+                                    transform: translate(-50%, -60%);
+                                }
+
+                                to {
+                                    opacity: 1;
+                                    transform: translate(-50%, -50%);
+                                }
+                            }
+                        </style>
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Intitulé</th>
+                                    <th>VARIATIONS</th>
+                                    <th>N</th>
+                                    <th>N-1</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Rows with inputs -->
+                                <tr>
+                                    <td>Chiffre d'affaires</td>
+                                    <td id="var_ca" class="calculated">0,00</td>
+                                    <td><input type="text" id="n_ca" value="0"></td>
+                                    <td><input type="text" id="n1_ca" value="0"></td>
+                                </tr>
+                                <tr>
+                                    <td>Variation stocks produits finis et en cours</td>
+                                    <td id="var_stock" class="calculated">0,00</td>
+                                    <td><input type="text" id="n_stock" value="0"></td>
+                                    <td><input type="text" id="n1_stock" value="0"></td>
+                                </tr>
+                                <tr>
+                                    <td>Production immobilisée</td>
+                                    <td id="Production_immobilis" class="calculated">0,00</td>
+                                    <td><input type="text" id="n_immobilis" value="0"></td>
+                                    <td><input type="text" id="n1_immobilis" value="0"></td>
+                                </tr>
+                                <tr>
+                                    <td>Subventions d’exploitation</td>
+                                    <td id="Subventions_exploitation" class="calculated">0,00</td>
+                                    <td><input type="text" id="n_exploitation" value="0"></td>
+                                    <td><input type="text" id="n1_exploitation" value="0"></td>
+                                </tr>
+                                <tr>
+                                    <td>PRODUCTION DE L’EXERCICE</td>
+                                    <td id="PRODUCTION_DE_L_EXERCICE" class="calculated">0,00</td>
+                                    <td style="background-color:rgb(208, 224, 252);"><input type="text"
+                                            id="n_PRODUCTION_DE_L_EXERCICE" value="0"></td>
+                                    <td style="background-color:rgb(208, 224, 252);"><input type="text"
+                                            id="n1_PRODUCTION_DE_L_EXERCICE" value="0"></td>
+                                </tr>
+                                <tr>
+                                    <td>Achats consommés</td>
+                                    <td id="ACHATS_CONSOMMES" class="calculated">0,00</td>
+                                    <td><input type="text" id="n_ACHATS_CONSOMMES" value="0"></td>
+                                    <td><input type="text" id="n1_ACHATS_CONSOMMES" value="0"></td>
+                                </tr>
+                                <tr>
+                                    <td>Services extérieurs et autres consommations</td>
+                                    <td id="SERVICES_AUTRES_CONSOMMATIONS" class="calculated">0,00</td>
+                                    <td><input type="text" id="n_SERVICES_AUTRES_CONSOMMATIONS" value="0"></td>
+                                    <td><input type="text" id="n1_SERVICES_AUTRES_CONSOMMATIONS" value="0"></td>
+                                </tr>
+                                <tr>
+                                    <td>II – CONSOMMATION DE L’EXERCICE</td>
+                                    <td id="CONSOMMATION_EXERCICE" class="calculated">0,00</td>
+                                    <td style="background-color:rgb(208, 224, 252);"><input type="text"
+                                            id="n_CONSOMMATION_EXERCICE" value="0"></td>
+                                    <td style="background-color:rgb(208, 224, 252);"><input type="text"
+                                            id="n1_CONSOMMATION_EXERCICE" value="0"></td>
+                                </tr>
+                                <tr>
+                                    <td>III VALEUR AJOUTEE D’EXPLOITATION (I - II)</td>
+                                    <td id="VALEUR_AJOUTEE_EXPLOITATION" class="calculated">0,00</td>
+                                    <td style="background-color:rgb(208, 224, 252);"><input type="text"
+                                            id="n_VALEUR_AJOUTEE_EXPLOITATION" value="0"></td>
+                                    <td style="background-color:rgb(208, 224, 252);"><input type="text"
+                                            id="n1_VALEUR_AJOUTEE_EXPLOITATION" value="0"></td>
+                                </tr>
+                                <tr>
+                                    <td>Charges de personnel</td>
+                                    <td id="CHARGES_PERSONNEL" class="calculated">0,00</td>
+                                    <td><input type="text" id="n_CHARGES_PERSONNEL" value="0"></td>
+                                    <td><input type="text" id="n1_CHARGES_PERSONNEL" value="0"></td>
+                                </tr>
+                                <tr>
+                                    <td>Impôts, taxes et versements assimilés</td>
+                                    <td id="IMPOTS_TAXES" class="calculated">0,00</td>
+                                    <td><input type="text" id="n_IMPOTS_TAXES" value="0"></td>
+                                    <td><input type="text" id="n1_IMPOTS_TAXES" value="0"></td>
+                                </tr>
+                                <tr>
+                                    <td>IV EXCEDENT BRUT D’EXPLOITATION</td>
+                                    <td id="EXCEDENT_BRUT_EXPLOITATION" class="calculated">0,00</td>
+                                    <td style="background-color:rgb(208, 224, 252);"><input type="text"
+                                            id="n_EXCEDENT_BRUT_EXPLOITATION" value="0"></td>
+                                    <td style="background-color:rgb(208, 224, 252);"><input type="text"
+                                            id="n1_EXCEDENT_BRUT_EXPLOITATION" value="0"></td>
+                                </tr>
+                                <tr>
+                                    <td>Autres produits opérationnels</td>
+                                    <td id="AUTRES_PRODUITS_OPERATIONNELS" class="calculated">0,00</td>
+                                    <td><input type="text" id="n_AUTRES_PRODUITS_OPERATIONNELS" value="0"></td>
+                                    <td><input type="text" id="n1_AUTRES_PRODUITS_OPERATIONNELS" value="0"></td>
+                                </tr>
+                                <tr>
+                                    <td>Autres charges opérationnelles</td>
+                                    <td id="AUTRES_CHARGES_OPERATIONNELLES" class="calculated">0,00</td>
+                                    <td><input type="text" id="n_AUTRES_CHARGES_OPERATIONNELLES" value="0"></td>
+                                    <td><input type="text" id="n1_AUTRES_CHARGES_OPERATIONNELLES" value="0"></td>
+                                </tr>
+
+                                <tr>
+                                    <td>Dotations aux amortissements et aux provisions</td>
+                                    <td id="DOTATIONS" class="calculated">0,00</td>
+                                    <td><input type="text" id="n_DOTATIONS" value="0"></td>
+                                    <td><input type="text" id="n1_DOTATIONS" value="0"></td>
+                                </tr>
+                                <tr>
+                                    <td>Reprise sur pertes de valeur et provisions</td>
+                                    <td id="REPRISES" class="calculated">0,00</td>
+                                    <td><input type="text" id="n_REPRISES" value="0"></td>
+                                    <td><input type="text" id="n1_REPRISES" value="0"></td>
+                                </tr>
+                                <tr>
+                                    <td>V RESULTAT OPERATIONNEL</td>
+                                    <td id="RESULTAT_OPERATIONNEL" class="calculated">0,00</td>
+                                    <td style="background-color:rgb(208, 224, 252);"><input type="text"
+                                            id="n_RESULTAT_OPERATIONNEL" value="0"></td>
+                                    <td style="background-color:rgb(208, 224, 252);"><input type="text"
+                                            id="n1_RESULTAT_OPERATIONNEL" value="0"></td>
+                                </tr>
+                                <tr>
+                                    <td>Produits financiers</td>
+                                    <td id="PRODUITS_FINANCIERS" class="calculated">0,00</td>
+                                    <td><input type="text" id="n_PRODUITS_FINANCIERS" value="0"></td>
+                                    <td><input type="text" id="n1_PRODUITS_FINANCIERS" value="0"></td>
+                                </tr>
+                                <tr>
+                                    <td>Charges financières</td>
+                                    <td id="CHARGES_FINANCIERES" class="calculated">0,00</td>
+                                    <td><input type="text" id="n_CHARGES_FINANCIERES" value="0"></td>
+                                    <td><input type="text" id="n1_CHARGES_FINANCIERES" value="0"></td>
+                                </tr>
+                                <tr>
+                                    <td>VI RESULTAT FINANCIER</td>
+                                    <td id="RESULTAT_FINANCIER" class="calculated">0,00</td>
+                                    <td style="background-color:rgb(208, 224, 252);"><input type="text"
+                                            id="n_RESULTAT_FINANCIER" value="0"></td>
+                                    <td style="background-color:rgb(208, 224, 252);"><input type="text"
+                                            id="n1_RESULTAT_FINANCIER" value="0"></td>
+                                </tr>
+                                <tr>
+                                    <td>VII RESULTAT ORDINAIRE AVANT IMPOTS (V + VI)</td>
+                                    <td id="RESULTAT_ORDINAIRE_AVANT_IMPOTS" class="calculated">0,00</td>
+                                    <td style="background-color:rgb(208, 224, 252);"><input type="text"
+                                            id="n_RESULTAT_ORDINAIRE_AVANT_IMPOTS" value="0"></td>
+                                    <td style="background-color:rgb(208, 224, 252);"><input type="text"
+                                            id="n1_RESULTAT_ORDINAIRE_AVANT_IMPOTS" value="0"></td>
+                                </tr>
+                                <tr>
+                                    <td>Impôts exigibles sur résultats ordinaires</td>
+                                    <td id="IMPOTS_EXIGIBLES" class="calculated">0,00</td>
+                                    <td><input type="text" id="n_IMPOTS_EXIGIBLES" value="0"></td>
+                                    <td><input type="text" id="n1_IMPOTS_EXIGIBLES" value="0"></td>
+                                </tr>
+                                <tr>
+                                    <td>Impôts différés (Variations) sur résultats ordinaires</td>
+                                    <td id="IMPOTS_DIFFERES" class="calculated">0,00</td>
+                                    <td><input type="text" id="n_IMPOTS_DIFFERES" value="0"></td>
+                                    <td><input type="text" id="n1_IMPOTS_DIFFERES" value="0"></td>
+                                </tr>
+                                <tr>
+                                    <td>TOTAL DES PRODUITS DES ACTIVITES ORDINAIRES</td>
+                                    <td id="TOTAL_PRODUITS_ORDINAIRES" class="calculated">0,00</td>
+                                    <td><input type="text" id="n_TOTAL_PRODUITS_ORDINAIRES" value="0"></td>
+                                    <td><input type="text" id="n1_TOTAL_PRODUITS_ORDINAIRES" value="0"></td>
+                                </tr>
+                                <tr>
+                                    <td>TOTAL DES CHARGES DES ACTIVITES ORDINAIRES</td>
+                                    <td id="TOTAL_CHARGES_ORDINAIRES" class="calculated">0,00</td>
+                                    <td><input type="text" id="n_TOTAL_CHARGES_ORDINAIRES" value="0"></td>
+                                    <td><input type="text" id="n1_TOTAL_CHARGES_ORDINAIRES" value="0"></td>
+                                </tr>
+                                <tr>
+                                    <td>VIII RESULTAT NET DES ACTIVITES ORDINAIRES</td>
+                                    <td id="RESULTAT_NET_ORDINAIRES" class="calculated">0,00</td>
+                                    <td style="background-color:rgb(208, 224, 252);"><input type="text"
+                                            id="n_RESULTAT_NET_ORDINAIRES" value="0"></td>
+                                    <td style="background-color:rgb(208, 224, 252);"><input type="text"
+                                            id="n1_RESULTAT_NET_ORDINAIRES" value="0"></td>
+                                </tr>
+                                <tr>
+                                    <td>Eléments extraordinaires (produits) (à préciser)</td>
+                                    <td id="EXTRA_PRODUITS" class="calculated">0,00</td>
+                                    <td><input type="text" id="n_EXTRA_PRODUITS" value="0"></td>
+                                    <td><input type="text" id="n1_EXTRA_PRODUITS" value="0"></td>
+                                </tr>
+                                <tr>
+                                    <td>Eléments extraordinaires (charges) (à préciser)</td>
+                                    <td id="EXTRA_CHARGES" class="calculated">0,00</td>
+                                    <td><input type="text" id="n_EXTRA_CHARGES" value="0"></td>
+                                    <td><input type="text" id="n1_EXTRA_CHARGES" value="0"></td>
+                                </tr>
+                                <tr>
+                                    <td>IX RESULTAT EXTRAORDINAIRE</td>
+                                    <td id="RESULTAT_EXTRAORDINAIRE" class="calculated">0,00</td>
+                                    <td style="background-color:rgb(208, 224, 252);"><input type="text"
+                                            id="n_RESULTAT_EXTRAORDINAIRE" value="0"></td>
+                                    <td style="background-color:rgb(208, 224, 252);"><input type="text"
+                                            id="n1_RESULTAT_EXTRAORDINAIRE" value="0"></td>
+                                </tr>
+                                <tr>
+                                    <td>X RESULTAT NET DE L’EXERCICE</td>
+                                    <td id="RESULTAT_NET_EXERCICE" class="calculated">0,00</td>
+                                    <td style="background-color:rgb(208, 224, 252);"><input type="text"
+                                            id="n_RESULTAT_NET_EXERCICE" value="0"></td>
+                                    <td style="background-color:rgb(208, 224, 252);"><input type="text"
+                                            id="n1_RESULTAT_NET_EXERCICE" value="0"></td>
+                                </tr>
+
+
+                            </tbody>
+                            <table>
+                                <h2>Les ratios de mesure de l’activité</h2>
+
+                                <tr>
+                                    <td>Évolution du CA</td>
+                                    <td id="evo_ca">#DIV/0!</td>
+                                </tr>
+                                <tr>
+                                    <td>Évolution du VA</td>
+                                    <td id="evo_va">#DIV/0!</td>
+                                </tr>
+                                <tr>
+                                    <td>Évolution de la production</td>
+                                    <td id="evo_pr">#DIV/0!</td>
+                                </tr>
+                                <tr>
+                                    <td>Évolution du RNE</td>
+                                    <td id="evo_rne">#DIV/0!</td>
+                                </tr>
+                            </table>
+
+                            <h2>Les ratios de rentabilité</h2>
+                            <table>
+                                <tr>
+                                    <td>Taux de marge bénéficiaire = Résultat de l’exercice / CA HT</td>
+                                    <td id="taux_m_ben">0.081</td>
+                                </tr>
+                                <tr>
+                                    <td>Taux de marge brute d’exploitation = EBE / CA HT</td>
+                                    <td id="taux_m_bru">0.205</td>
+                                </tr>
+                            </table>
+
+                            <h2>Les ratios constatant le partage de la valeur ajoutée</h2>
+                            <table>
+                                <tr>
+                                    <td>Part des salariés = Charges de personnel / VA</td>
+                                    <td id="Part_salaries">0.445544554</td>
+                                </tr>
+                                <tr>
+                                    <td>Part de l’État = Impôts, taxes et versements assimilés / VA</td>
+                                    <td id="Part_etat">0.148514851</td>
+                                </tr>
+                                <tr>
+                                    <td>Part de l’EBE = EBE / VA</td>
+                                    <td id="Part_ebe">0.405940594</td>
+                                </tr>
+                            </table>
+
+                            <h2>Les ratios constatant le partage de l’EBE</h2>
+                            <table>
+                                <tr>
+                                    <td>Part des immobilisations = Dotations amortissements et PV / EBE</td>
+                                    <td id="part_imm_par_EBE">1.024390244</td>
+                                </tr>
+                                <tr>
+                                    <td>Part des prêteurs = Charges financières / EBE</td>
+                                    <td id="part_preteurs">0.390243902</td>
+                                </tr>
+                                <tr>
+                                    <td>Part résultat ordinaire = Résultat ordinaire avant impôts / EBE</td>
+                                    <td id="part_result_ordi">0.487804878</td>
+                                </tr>
+                            </table>
+
+                            <h2>Les ratios supplémentaires</h2>
+                            <table>
+                                <tr>
+                                    <td>Taux d’intégration = VA / CA HT</td>
+                                    <td id="taux_integ">0.505</td>
+                                </tr>
+                            </table>
+
+                            <h2>Les ratios de rentabilité (suite)</h2>
+                            <table>
+                                <tr>
+                                    <td>Rentabilité des capitaux propres = Résultat de l'exercice / Capitaux propres
+                                    </td>
+                                    <td id="rentabilite_capt_prop">500</td>
+                                </tr>
+                                <tr>
+                                    <td>Rentabilité des capitaux propres hors éléments exceptionnels = Résultat courant
+                                        avant impôts / Capitaux propres</td>
+                                    <td id="rentabilite_capt_prop_hors">0.9456</td>
+                                </tr>
+                                <tr>
+                                    <td>Rentabilité économique = (Résultat de l'exercice + Charges d'intérêts) /
+                                        Ressources stables</td>
+                                    <td id="rentabilite_economique">0.571936057</td>
+                                </tr>
+                                <tr>
+                                    <td>Rentabilité brute des ressources stables = EBE / Ressources stables</td>
+                                    <td id="rentabilite_brute_ressources_stables">0.728241563</td>
+                                </tr>
+                            </table>
+                        </table>
+
+
+                        <!--  table 3 -->
+                        <div class="no-border" style="font-size: 19px;">
+                            Calcul de la capacité d'autofinancement de l'excédente brut d'exploitation
+                        </div>
+                        <table>
+                            <tbody>
+
+                                <tr>
+                                    <td class="bold-italic" style="font-size: 14px;">désignation</td>
+                                    <td class="right-align bold-italic" style="font-size: 15px; width: 100px;">montant +
+                                    </td>
+                                    <td class="right-align bold-italic" style="font-size: 14px; width: 100px;">montant −
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="bold-italic" style="font-size: 14px;">excédente brut d'exploitation</td>
+                                    <td><input type="text" id="excedent_brut" placeholder="0,00 DA"
+                                            aria-label="Excédent Brut d'Exploitation"></td>
+                                    <td class="right-align" style="font-size: 12px;"><input type="text"
+                                            id="excedent_brut_neg" placeholder="0,00 DA"
+                                            aria-label="Excédent Brut Négatif"></td>
+                                </tr>
+                                <tr>
+                                    <td class="italic" style="font-size: 14px;">+ produit d'exploitation sauf compte 752
+                                        (75-752)</td>
+                                    <td class="right-align" style="font-size: 12px;"><input type="text"
+                                            id="produit_exploitation" placeholder="0,00 DA"
+                                            aria-label="Produit d'Exploitation"></td>
+                                    <td class="right-align" style="font-size: 12px;"><input type="text"
+                                            id="produit_exploitation_neg" placeholder="0,00 DA"
+                                            aria-label="Produit d'Exploitation Négatif"></td>
+                                </tr>
+                                <tr>
+                                    <td class="italic" style="font-size: 14px;">+ produits financiers sauf compte 765 ET
+                                        767 (76-765-767)</td>
+                                    <td class="right-align" style="font-size: 12px;"><input type="text"
+                                            id="produits_financiers" placeholder="0,00 DA"
+                                            aria-label="Produits Financiers"></td>
+                                    <td class="right-align" style="font-size: 12px;"><input type="text"
+                                            id="produits_financiers_neg" placeholder="0,00 DA"
+                                            aria-label="Produits Financiers Négatif"></td>
+                                </tr>
+                                <tr>
+                                    <td class="italic" style="font-size: 14px;">- charge d'exploitation sauf compte
+                                        652(65-652)</td>
+                                    <td class="right-align" style="font-size: 12px;"><input type="text"
+                                            id="charge_exploitation" placeholder="0,00 DA"
+                                            aria-label="Charge d'Exploitation"></td>
+                                    <td class="right-align" style="font-size: 12px;"><input type="text"
+                                            id="charge_exploitation_neg" placeholder="0,00 DA"
+                                            aria-label="Charge d'Exploitation Négatif"></td>
+                                </tr>
+                                <tr>
+                                    <td class="italic" style="font-size: 14px;">- charges financiers sauf compte 665 ET
+                                        -667 (66-667-665)</td>
+                                    <td class="right-align" style="font-size: 12px;"><input type="text"
+                                            id="charges_financieres" placeholder="0,00 DA"
+                                            aria-label="Charges Financières"></td>
+                                    <td class="right-align" style="font-size: 12px;"><input type="text"
+                                            id="charges_financieres_neg" placeholder="0,00 DA"
+                                            aria-label="Charges Financières Négatif"></td>
+                                </tr>
+                                <tr>
+                                    <td class="italic" style="font-size: 14px;">+produits exceptionnels</td>
+                                    <td class="right-align" style="font-size: 12px;"><input type="text"
+                                            id="produits_exceptionnels" placeholder="0,00 DA"
+                                            aria-label="Produits Exceptionnels"></td>
+                                    <td class="right-align" style="font-size: 12px;"><input type="text"
+                                            id="produits_exceptionnels_neg" placeholder="0,00 DA"
+                                            aria-label="Produits Exceptionnels Négatif"></td>
+                                </tr>
+                                <tr>
+                                    <td class="italic" style="font-size: 14px;">-charges exceptionnelles</td>
+                                    <td class="right-align" style="font-size: 12px;"><input type="text"
+                                            id="charges_exceptionnelles" placeholder="0,00 DA"
+                                            aria-label="Charges Exceptionnelles"></td>
+                                    <td class="right-align" style="font-size: 12px;"><input type="text"
+                                            id="charges_exceptionnelles_neg" placeholder="0,00 DA"
+                                            aria-label="Charges Exceptionnelles Négatif"></td>
+                                </tr>
+                                <tr>
+                                    <td class="italic" style="font-size: 14px;">-participations des salariés</td>
+                                    <td class="right-align" style="font-size: 12px;"><input type="text"
+                                            id="participations_salaries" placeholder="0,00 DA"
+                                            aria-label="Participations des Salariés"></td>
+                                    <td class="right-align" style="font-size: 12px;"><input type="text"
+                                            id="participations_salaries_neg" placeholder="0,00 DA"
+                                            aria-label="Participations des Salariés Négatif"></td>
+                                </tr>
+                                <tr>
+                                    <td class="italic" style="font-size: 14px;">- impots sur les bénéfices (69)</td>
+                                    <td class="right-align" style="font-size: 12px;"><input type="text"
+                                            id="impots_benefices" placeholder="0,00 DA"
+                                            aria-label="Impôts sur les Bénéfices"></td>
+                                    <td class="right-align" style="font-size: 12px;"><input type="text"
+                                            id="impots_benefices_neg" placeholder="0,00 DA"
+                                            aria-label="Impôts sur les Bénéfices Négatif"></td>
+                                </tr>
+                                <tr>
+                                    <td class="bold-italic" style="font-size: 14px;">TOTAL</td>
+                                    <td id="total_positif" class="calculated">0,00</td>
+                                    <td id="total_negatif" class="calculated">0,00</td>
+
+                                </tr>
+                                <tr>
+                                    <td class="bold-italic" style="font-size: 14px;">Calcul de la capacité
+                                        d'autofinancement de l'excédente brut d'exploitation</td>
+
+                                    <td colspan="2" id="total_cap" class="calculated">0,00</td>
+                                </tr>
+
+
+                            </tbody>
+                        </table>
+                        <!--table 03-->
+                        <div class="financial-table-container">
+                            <table class="financial-table">
+                                <thead>
+                                    <tr>
+                                        <th class="designation">Désignation</th>
+                                        <th class="amount">MONTANT +</th>
+                                        <th class="amount">MONTANT -</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Résultat net de l'exercice</td>
+                                        <td class="positive">40 500</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>+ Dotations aux amortissements et provisions</td>
+                                        <td class="positive">105 000</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>- Reprises sur pertes de valeur et provisions (78)</td>
+                                        <td></td>
+                                        <td class="negative">36 000</td>
+                                    </tr>
+                                    <tr>
+                                        <td>- Quote-part de subventions virées au résultat de l'exercice</td>
+                                        <td class="positive">0</td>
+                                        <td class="negative">0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>+ Moins-value sur cession d'actif immobilisé (652)</td>
+                                        <td class="positive">0</td>
+                                        <td class="negative">0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>- Plus-value sur cession d'actif immobilisé (752)</td>
+                                        <td class="positive">0</td>
+                                        <td class="negative">0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>+ Écarts de conversion - passif</td>
+                                        <td class="positive">0</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>- Écarts de réévaluation des actifs (moins-value 665)</td>
+                                        <td class="positive">0</td>
+                                        <td class="negative">0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>- Écarts de réévaluation des actifs (plus-value 765)</td>
+                                        <td></td>
+                                        <td class="negative">0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>- Pertes nettes sur cession d'actifs (667)</td>
+                                        <td class="positive">0</td>
+                                        <td class="negative">0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>+ Bénéfices nets sur cession d'actifs (767)</td>
+                                        <td class="positive">145 500</td>
+                                        <td class="negative">36 000</td>
+                                    </tr>
+                                    <tr class="total-row">
+                                        <td>TOTAL</td>
+                                        <td class="positive">291 000</td>
+                                        <td class="negative">72 000</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="caf-calculation">
+                                <h3>Calcul de la capacité d'autofinancement (CAF)</h3>
+                                <div class="caf-result">
+                                    <span>CAF = Total + - Total -</span>
+                                    <span class="value">109 500</span>
+                                </div>
+
+                                <h3>Ratios</h3>
+                                <div class="ratio">
+                                    <span>Autofinancement = CAF - bénéfices distribués</span>
+                                    <span class="value  positive"> 1 915 500</span>
+                                </div>
+                                <div class="ratio">
+                                    <span>Bénéfices distribués = RNE × % de distribution (50%)</span>
+                                    <span class="value">20 250</span>
+                                </div>
+                                <div class="ratio">
+                                    <span>Part de la CAF par rapport à la VA = CAF / VA</span>
+                                    <span class="value"></span>
+                                </div>
+                                <div class="ratio">
+                                    <span>Capacité d'endettement = Dettes financières / CAF</span>
+                                    <span class="value"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <style>
+                            .financial-table-container {
+                                font-family: Arial, sans-serif;
+                                max-width: 800px;
+                                margin: 20px auto;
+                                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                            }
+
+                            .financial-table {
+                                width: 100%;
+                                border-collapse: collapse;
+                                margin-bottom: 30px;
+                            }
+
+                            .financial-table th {
+                                background-color: #f5f7fa;
+                                padding: 12px 15px;
+                                text-align: left;
+                                font-weight: bold;
+                                border-bottom: 2px solid #e0e0e0;
+                            }
+
+                            .financial-table td {
+                                padding: 10px 15px;
+                                border-bottom: 1px solid #e0e0e0;
+                            }
+
+                            .designation {
+                                width: 60%;
+                            }
+
+                            .amount {
+                                width: 20%;
+                                text-align: right;
+                            }
+
+                            .positive {
+                                color: #2e7d32;
+                                font-weight: 500;
+                            }
+
+                            .negative {
+                                color: #c62828;
+                                font-weight: 500;
+                            }
+
+                            .total-row {
+                                background-color: #f5f7fa;
+                                font-weight: bold;
+                            }
+
+                            .total-row td {
+                                border-top: 2px solid #e0e0e0;
+                                border-bottom: none;
+                            }
+
+                            .caf-calculation {
+                                padding: 20px;
+                                background-color: #f5f7fa;
+                                border-radius: 4px;
+                            }
+
+                            .caf-calculation h3 {
+                                margin-top: 0;
+                                color: #333;
+                                border-bottom: 1px solid #e0e0e0;
+                                padding-bottom: 8px;
+                            }
+
+                            .caf-result,
+                            .ratio {
+                                display: flex;
+                                justify-content: space-between;
+                                margin: 12px 0;
+                                padding: 8px 0;
+                            }
+
+                            .value {
+                                font-weight: bold;
+                                min-width: 100px;
+                                text-align: right;
+                            }
+
+                            .caf-result .value {
+                                color: #1565c0;
+                                font-size: 1.1em;
+                            }
+                        </style>
+                        <div class="d-flex justify-content-center mt-5">
+
+                            <!-- Button -->
+                            <button id="submitBtn">
+                                Get Analysis Report
+                            </button>
+                            <div id="overlay"></div>
+
+                            <!-- AI Assistant Box -->
+                            <div id="assistantBox">
+                                <!-- Robot image stays fixed -->
+                                <div class="robot-image"> 
+                                    <img src="https://cdn-icons-png.flaticon.com/512/4712/4712035.png" alt="AI Robot">
+                                </div>
+
+                                <!-- Message box with fixed height to avoid shifting -->
+                                <div class="message-box">
+                                    <div class="typewriter-text">
+                                        <span>Starting AI analysis...</span><br>
+                                        <span>Preparing your PDF report...</span>
+                                    </div>
+                                </div>
+
+                                <div class="glow-spinner"></div>
+                            </div>
+<button id="generatePdfBtn">Générer le rapport PDF</button>
+
+
+                            <script>
+                                document.getElementById("submitBtn").addEventListener("click", function () {
+                                    document.getElementById("overlay").style.display = "block";
+                                    document.getElementById("assistantBox").style.display = "block";
+
+                                    setTimeout(() => {
+                                        window.location.href = "/html/Financial_Analysis_SOCIETE_XXX (11).pdf"; // Change to your link
+                                    }, 4000);
+                                });
+
+                            </script>
+                        </div>
+                    </div>
+                </div>
+                <!-- Content wrapper -->
+            </div>
+            <!-- / Layout page -->
+        </div>
+
+        <!-- Overlay -->
+        <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <!-- / Layout wrapper -->
+
+
+
+    <!-- Core JS -->
+    <!-- build:js assets/vendor/js/core.js -->
+    <script src="../assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="../assets/vendor/libs/popper/popper.js"></script>
+    <script src="../assets/vendor/js/bootstrap.js"></script>
+    <script src="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+
+    <script src="../assets/vendor/js/menu.js"></script>
+    <!-- endbuild -->
+
+    <!-- Vendors JS -->
+    <script src="../assets/vendor/libs/apex-charts/apexcharts.js"></script>
+
+    <!-- Main JS -->
+    <script src="../assets/js/main.js"></script>
+    <!-- Page JS -->
+    <script src="../assets/js/dashboards-analytics.js"></script>
+
+</body>
+
+>>>>>>> 8ef7dc1 (Initial commit)
 </html>

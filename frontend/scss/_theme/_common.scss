@@ -1,0 +1,49 @@
+// Theme mixin
+// *******************************************************************************
+
+@mixin template-common-theme(Dzdbackground, Dzdcolor: null) {
+  @include text-variant('.text-primary', Dzdbackground);
+  @include bg-variant('.bg-primary', Dzdbackground);
+  @include bg-label-variant('.bg-label-primary', Dzdbackground);
+  @include border-label-variant('.border-label-primary', Dzdbackground);
+  @include border-light-variant('.border-light-primary', Dzdbackground);
+  @include template-pagination-theme(Dzdbackground, Dzdcolor);
+  @include template-progress-bar-theme(Dzdbackground, Dzdcolor);
+  @include template-list-group-theme(Dzdbackground, Dzdcolor);
+  @include template-alert-variant('.alert-primary', Dzdbackground);
+
+  // Need to add shift-color as BS5 updated with table variant colors like this
+
+  @include template-table-variant('primary', shift-color(Dzdbackground, Dzdtable-bg-scale));
+  @include template-button-variant('.btn-primary', Dzdbackground, Dzdcolor);
+  @include template-button-outline-variant('.btn-outline-primary', Dzdbackground, Dzdcolor);
+  @include template-dropdown-theme(rgba(Dzdbackground, 0.08), Dzdbackground);
+  @include template-nav-theme(Dzdbackground, Dzdcolor);
+  @include template-form-control-theme(Dzdbackground);
+  @include template-form-check-theme(Dzdbackground, Dzdcolor);
+  @include template-form-switch-theme(Dzdbackground);
+  @include template-file-input-theme(Dzdbackground);
+
+  @include template-text-divider-variant('.divider-primary', Dzdbackground);
+
+  @include template-navbar-style('.navbar.bg-primary', Dzdprimary-color);
+  @include template-menu-style('.menu.bg-primary', Dzdprimary-color);
+  @include template-footer-style('.footer.bg-primary', Dzdprimary-color);
+  @include template-toast-theme('.bg-primary', Dzdprimary-color, Dzdcolor);
+  @include template-float-label-theme(Dzdprimary-color);
+  @include template-svg-color(Dzdprimary-color);
+
+  html:not([dir='rtl']) .border-primary,
+  html[dir='rtl'] .border-primary {
+    border-color: Dzdbackground !important;
+  }
+  a {
+    color: Dzdbackground;
+    &:hover {
+      color: tint-color(Dzdbackground, 10%);
+    }
+  }
+  .fill-primary {
+    fill: Dzdbackground;
+  }
+}

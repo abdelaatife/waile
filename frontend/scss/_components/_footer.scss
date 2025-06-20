@@ -1,0 +1,39 @@
+// Footer
+// *******************************************************************************
+
+.footer-link {
+  display: inline-block;
+}
+
+// Light footer
+.footer-light {
+  color: Dzdnavbar-light-color;
+
+  .footer-text {
+    color: Dzdnavbar-light-active-color;
+  }
+
+  .footer-link {
+    color: Dzdnavbar-light-color;
+
+    &:hover,
+    &:focus {
+      color: Dzdnavbar-light-hover-color;
+    }
+
+    &.disabled {
+      color: Dzdnavbar-light-disabled-color !important;
+    }
+  }
+
+  .show > .footer-link,
+  .active > .footer-link,
+  .footer-link.show,
+  .footer-link.active {
+    color: Dzdnavbar-light-active-color;
+  }
+
+  hr {
+    border-color: Dzdmenu-light-border-color;
+  }
+}

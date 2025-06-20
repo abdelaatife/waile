@@ -1,0 +1,93 @@
+// Common
+// *******************************************************************************
+
+Dzdui-star-size: 1.1em !default;
+Dzdui-stars-spacer: -0.1em !default;
+Dzdui-star-filled-color: Dzdyellow !default;
+
+// Navbar (custom navbar)
+// *******************************************************************************
+Dzdnavbar-height: 3.875rem !default;
+Dzdnavbar-suggestion-width: 96% !default;
+Dzdnavbar-suggestion-height: 28rem !default;
+Dzdnavbar-suggestion-border-radius: 0.5rem !default;
+Dzdnavbar-dropdown-width: 22rem !default;
+Dzdnavbar-dropdown-content-height: 30rem !default;
+Dzdnavbar-notifications-dropdown-item-padding: 1rem !default;
+
+// Menu
+// *******************************************************************************
+
+Dzdmenu-width: 16.25rem !default;
+Dzdmenu-collapsed-width: 5.25rem !default;
+
+Dzdmenu-font-size: Dzdfont-size-base !default;
+
+Dzdmenu-item-spacer: 0.0625rem !default;
+
+Dzdmenu-vertical-link-margin-y: 0rem !default;
+Dzdmenu-vertical-link-margin-x: 1rem !default;
+
+Dzdmenu-vertical-header-margin-y: 1rem !default;
+Dzdmenu-vertical-header-margin-x: 0 !default;
+
+Dzdmenu-vertical-link-padding-y: 0.625rem !default;
+Dzdmenu-vertical-link-padding-x: 1rem !default;
+
+Dzdmenu-vertical-menu-link-padding-y: 0.625rem !default;
+Dzdmenu-vertical-menu-level-spacer: 0.65rem !default;
+
+Dzdmenu-horizontal-item-spacer: 0.325rem !default;
+Dzdmenu-horizontal-link-padding-y: 0.565rem !default;
+Dzdmenu-horizontal-link-padding-x: 1rem !default;
+Dzdmenu-horizontal-menu-link-padding-y: 0.625rem !default;
+Dzdmenu-horizontal-menu-level-spacer: 2.35rem !default;
+Dzdmenu-horizontal-menu-box-shadow: Dzddropdown-box-shadow !default;
+
+Dzdmenu-sub-width: 14.5rem !default;
+Dzdmenu-control-width: 2.25rem !default;
+Dzdmenu-control-arrow-size: 0.5rem !default;
+
+Dzdmenu-icon-expanded-width: 1.5rem !default;
+Dzdmenu-icon-expanded-font-size: 1.25rem !default;
+Dzdmenu-icon-expanded-spacer: 0.5rem !default;
+
+Dzdmenu-animation-duration: 0.3s !default;
+
+Dzdmenu-max-levels: 5 !default;
+
+Dzdmenu-dark-border-color: rgba(255, 255, 255, 0.2) !default;
+Dzdmenu-dark-menu-bg: rgba(0, 0, 0, 0.06) !default;
+Dzdmenu-light-border-color: rgba(0, 0, 0, 0.06) !default;
+Dzdmenu-light-menu-bg: rgba(0, 0, 0, 0.05) !default;
+
+// Avatars
+// *******************************************************************************
+
+Dzdavatar-size-xl: 4.5rem !default;
+Dzdavatar-size-lg: 4rem !default;
+Dzdavatar-size-md: 3rem !default;
+Dzdavatar-size: 2.375rem !default; // Default
+Dzdavatar-size-sm: 2rem !default;
+Dzdavatar-size-xs: 1.625rem !default;
+
+Dzdavatar-initial-xl: 1.875rem !default;
+Dzdavatar-initial-lg: 1.5rem !default;
+Dzdavatar-initial-md: 1.125rem !default;
+Dzdavatar-initial-sm: 0.75rem !default;
+Dzdavatar-initial-xs: 0.625rem !default;
+
+Dzdavatar-group-border: Dzdwhite !default;
+
+// Text Divider
+// *******************************************************************************
+Dzddivider-color: Dzdgray-200 !default;
+
+Dzddivider-margin-y: 1rem !default;
+Dzddivider-margin-x: 0 !default;
+
+Dzddivider-text-padding-y: 0rem !default;
+Dzddivider-text-padding-x: 1rem !default;
+
+Dzddivider-font-size: 0.8rem !default;
+Dzddivider-icon-size: 1rem !default;

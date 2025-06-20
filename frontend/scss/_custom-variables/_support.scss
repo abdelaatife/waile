@@ -1,0 +1,9 @@
+Dzdenable-light-style: true;
+
+@mixin app-ltr(Dzdhas-child: true) {
+  @content;
+}
+
+@mixin app-ltr-style() {
+  @content;
+}
