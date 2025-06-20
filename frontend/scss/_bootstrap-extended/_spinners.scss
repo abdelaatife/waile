@@ -1,0 +1,21 @@
+// Spinners
+//
+
+//Large size
+.spinner-border-lg {
+  width: Dzdspinner-width-lg;
+  height: Dzdspinner-height-lg;
+  border-width: Dzdspinner-border-width-lg;
+}
+
+.spinner-grow-lg {
+  width: Dzdspinner-width-lg;
+  height: Dzdspinner-height-lg;
+  border-width: Dzdspinner-border-width-lg;
+}
+
+@include keyframes('spinner-border-rtl') {
+  to {
+    transform: rotate(-360deg);
+  }
+}

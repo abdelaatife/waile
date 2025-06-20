@@ -1,0 +1,73 @@
+/**
+* Apex Charts
+*/
+@use '../../scss/_bootstrap-extended/include' as light;
+@import '../../scss/_custom-variables/libs';
+@import '../../node_modules/apexcharts-clevision/dist/apexcharts';
+
+// Light style
+@if Dzdenable-light-style {
+  .light-style {
+    .apexcharts-canvas {
+      .apexcharts-tooltip {
+        background: light.Dzdwhite;
+        border-color: light.Dzdborder-color;
+        box-shadow: light.Dzdpopover-box-shadow;
+        .apexcharts-tooltip-title {
+          background: light.Dzdwhite;
+          border-color: light.Dzdborder-color;
+          font-family: light.Dzdfont-family-base !important;
+          font-weight: 600;
+        }
+      }
+      .apexcharts-xaxistooltip,
+      .apexcharts-yaxistooltip {
+        background: light.Dzdbody-bg;
+        border-color: light.Dzdborder-color;
+        &.apexcharts-xaxistooltip-bottom,
+        &.apexcharts-yaxistooltip-bottom {
+          &:after {
+            border-bottom-color: light.Dzdbody-bg;
+          }
+          &:before {
+            border-bottom-color: light.Dzdborder-color;
+          }
+        }
+        &.apexcharts-xaxistooltip-left,
+        &.apexcharts-yaxistooltip-left {
+          &:after {
+            border-left-color: light.Dzdbody-bg;
+          }
+          &:before {
+            border-left-color: light.Dzdborder-color;
+          }
+        }
+        &.apexcharts-xaxistooltip-right,
+        &.apexcharts-yaxistooltip-right {
+          &:after {
+            border-right-color: light.Dzdbody-bg;
+          }
+          &:before {
+            border-right-color: light.Dzdborder-color;
+          }
+        }
+        &.apexcharts-xaxistooltip-top,
+        &.apexcharts-yaxistooltip-top {
+          &:after {
+            border-top-color: light.Dzdbody-bg;
+          }
+          &:before {
+            border-top-color: light.Dzdborder-color;
+          }
+        }
+      }
+      .apexcharts-tooltip-text {
+        font-family: light.Dzdfont-family-base !important;
+        filter: none;
+      }
+      .apexcharts-marker {
+        filter: drop-shadow(0 2px 4px #a1acb866);
+      }
+    }
+  }
+}

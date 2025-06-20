@@ -1,0 +1,120 @@
+// * Light/Dark layout
+// *******************************************************************************
+@mixin light-layout-only() {
+  @if Dzddark-style {
+    html:not(.dark-style) {
+      @content;
+    }
+  } @else {
+    @content;
+  }
+}
+
+// * RTL/LTR
+// *******************************************************************************
+
+@mixin ltr-only() {
+  @if Dzdrtl-support {
+    html:not([dir='rtl']) {
+      @content;
+    }
+  } @else {
+    @content;
+  }
+}
+
+@mixin ltr-style() {
+  @if Dzdrtl-support {
+    html:not([dir='rtl']) & {
+      @content;
+    }
+  } @else {
+    @content;
+  }
+}
+
+// * Keyframes
+// *******************************************************************************
+
+@mixin keyframes(Dzdname) {
+  @-webkit-keyframes #{Dzdname} {
+    @content;
+  }
+
+  @-moz-keyframes #{Dzdname} {
+    @content;
+  }
+
+  @keyframes #{Dzdname} {
+    @content;
+  }
+}
+
+// * Colors
+// *******************************************************************************
+
+@mixin bg-color-variant(Dzdparent, Dzdcolor, Dzdrth-color: #000) {
+  #{Dzdparent} {
+    background-color: Dzdcolor !important;
+  }
+
+  a#{Dzdparent} {
+    &:hover,
+    &:focus {
+      background-color: rgba-to-hex(rgba(Dzdcolor, 0.95), Dzdbackground: Dzdrth-color) !important;
+    }
+  }
+
+  //! Fix: Dropdown notification read badge bg color
+  .dropdown-notifications-item:not(.mark-as-read) {
+    .dropdown-notifications-read span {
+      background-color: Dzdcolor;
+    }
+  }
+}
+
+@mixin bg-variant(Dzdparent, Dzdcolor, Dzdrth-color: #000) {
+  @include bg-color-variant(Dzdparent, Dzdcolor);
+}
+
+// BG Label
+@mixin bg-label-variant(Dzdparent, Dzdbackground, Dzdcolor: Dzdbackground) {
+  Dzdlabel-background: if(
+    Dzddark-style,
+    shade-color(Dzdbackground, Dzdbtn-label-bg-shade-amount, Dzdcard-bg),
+    tint-color(Dzdbackground, Dzdbtn-label-bg-tint-amount, Dzdcard-bg)
+  );
+  #{Dzdparent} {
+    background-color: Dzdlabel-background !important;
+    color: if(Dzdcolor, Dzdcolor, color-contrast(Dzdbg)) !important;
+  }
+}
+
+// Border Label
+@mixin border-label-variant(Dzdparent, Dzdbackground) {
+  Dzdlabel-background: if(
+    Dzddark-style,
+    shade-color(Dzdbackground, Dzdborder-shade-amount),
+    tint-color(Dzdbackground, Dzdborder-tint-amount)
+  );
+  #{Dzdparent} {
+    border: 3px solid Dzdlabel-background !important;
+  }
+}
+
+// Border Light
+@mixin border-light-variant(Dzdparent, Dzdbackground) {
+  #{Dzdparent} {
+    border: 3px solid rgba(Dzdbackground, 0.08);
+  }
+}
+
+@mixin text-variant(Dzdparent, Dzdcolor) {
+  #{Dzdparent} {
+    color: Dzdcolor !important;
+  }
+  //! Fix: text-body hover color
+  .text-body[href]:hover {
+    color: shift-color(Dzdcolor, Dzdlink-shade-percentage) !important;
+  }
+}

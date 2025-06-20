@@ -1,0 +1,12 @@
+// Form control
+// *******************************************************************************
+
+.form-control {
+  &::placeholder {
+    transition: Dzdinput-placeholder-transition;
+  }
+  &:focus::placeholder {
+    transform: Dzdinput-placeholder-transform;
+    transition: Dzdinput-placeholder-transition;
+  }
+}

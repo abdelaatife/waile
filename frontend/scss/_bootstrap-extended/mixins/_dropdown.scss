@@ -1,0 +1,20 @@
+// * Dropdowns
+// *******************************************************************************
+
+@mixin template-dropdown-variant(Dzdparent, Dzdbackground, Dzdcolor: null) {
+  #{Dzdparent} .dropdown-item:not(.disabled).active,
+  #{Dzdparent} .dropdown-item:not(.disabled):active {
+    background-color: Dzdbackground;
+    color: if(Dzdcolor, Dzdcolor, color-contrast(Dzdbackground)) !important;
+  }
+
+  #{Dzdparent}.dropdown-menu > li:not(.disabled) > a:not(.dropdown-item):active,
+  #{Dzdparent}.dropdown-menu > li.active:not(.disabled) > a:not(.dropdown-item) {
+    background-color: Dzdbackground;
+    color: if(Dzdcolor, Dzdcolor, color-contrast(Dzdbackground)) !important;
+  }
+}
+
+@mixin template-dropdown-theme(Dzdbackground, Dzdcolor: null) {
+  @include template-dropdown-variant('', Dzdbackground, Dzdcolor);
+}

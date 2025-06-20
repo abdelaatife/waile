@@ -1,0 +1,111 @@
+// Buttons
+// *******************************************************************************
+
+.btn {
+  cursor: pointer;
+  &.disabled,
+  &:disabled {
+    cursor: default;
+  }
+}
+
+// Badge within button
+.btn .badge {
+  @include transition(Dzdbtn-transition);
+}
+
+label.btn {
+  margin-bottom: 0;
+}
+
+// Button Sizes
+
+.btn-xl {
+  @include button-size(Dzdbtn-padding-y-xl, Dzdbtn-padding-x-xl, Dzdbtn-font-size-xl, Dzdbtn-border-radius-xl);
+}
+
+.btn-xs {
+  @include button-size(Dzdbtn-padding-y-xs, Dzdbtn-padding-x-xs, Dzdbtn-font-size-xs, Dzdbtn-border-radius-xs);
+}
+
+// Buttons Variant
+
+@each Dzdcolor, Dzdvalue in Dzdtheme-colors {
+  @if Dzdcolor != primary {
+    @include template-button-variant('.btn-#{Dzdcolor}', Dzdvalue);
+    @include template-button-outline-variant('.btn-outline-#{Dzdcolor}', Dzdvalue);
+  }
+}
+
+// Icon button
+
+.btn-icon {
+  Dzdbtn-icon-size: (Dzdbtn-font-size * Dzdbtn-line-height) + (Dzdbtn-padding-y * 2);
+  Dzdbtn-icon-size-xl: (Dzdbtn-font-size-xl * Dzdbtn-line-height-xl) + (Dzdbtn-padding-y-xl * 2);
+  Dzdbtn-icon-size-lg: (Dzdbtn-font-size-lg * Dzdbtn-line-height-lg) + (Dzdbtn-padding-y-lg * 2);
+  Dzdbtn-icon-size-sm: (Dzdbtn-font-size-sm * Dzdbtn-line-height-sm) + (Dzdbtn-padding-y-sm * 2);
+  Dzdbtn-icon-size-xs: (Dzdbtn-font-size-xs * Dzdbtn-line-height-xs) + (Dzdbtn-padding-y-xs * 2);
+  Dzdborders-width: Dzdbtn-border-width * 2;
+
+  padding: 0;
+  width: calc(#{Dzdbtn-icon-size} + #{Dzdborders-width});
+  height: calc(#{Dzdbtn-icon-size} + #{Dzdborders-width});
+  display: inline-flex;
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+
+  &.btn-xl {
+    width: calc(#{Dzdbtn-icon-size-xl} + #{Dzdborders-width});
+    height: calc(#{Dzdbtn-icon-size-xl} + #{Dzdborders-width});
+    > span {
+      font-size: Dzdbtn-font-size-xl;
+    }
+  }
+
+  &.btn-lg {
+    width: calc(#{Dzdbtn-icon-size-lg} + #{Dzdborders-width});
+    height: calc(#{Dzdbtn-icon-size-lg} + #{Dzdborders-width});
+    font-size: Dzdbtn-font-size-lg;
+  }
+
+  &.btn-sm {
+    width: calc(#{Dzdbtn-icon-size-sm} + #{Dzdborders-width});
+    height: calc(#{Dzdbtn-icon-size-sm} + #{Dzdborders-width});
+    font-size: Dzdbtn-font-size-sm;
+  }
+
+  &.btn-xs {
+    width: calc(#{Dzdbtn-icon-size-xs} + #{Dzdborders-width});
+    height: calc(#{Dzdbtn-icon-size-xs} + #{Dzdborders-width});
+    font-size: Dzdbtn-font-size-xs;
+  }
+}
+
+// Without border
+
+.btn.borderless {
+  &:not(.active):not(:active):not(:hover):not(:focus),
+  :not(.show) > &.dropdown-toggle:not(:hover):not(:focus) {
+    border-color: transparent;
+    box-shadow: none;
+  }
+}
+
+// Link buttons
+.btn.btn-link {
+  font-size: inherit;
+}
+
+.btn-pinned {
+  position: absolute;
+  top: 0.75rem;
+  @include ltr-style {
+    right: 0.75rem;
+  }
+}
+
+// Button focus
+button:focus {
+  outline: none;
+}

@@ -1,0 +1,271 @@
+// * Form controls
+// *******************************************************************************
+
+// Form control
+@mixin template-form-control-theme(Dzdcolor) {
+  .form-control:focus,
+  .form-select:focus {
+    border-color: Dzdcolor;
+  }
+
+  // Using :focus-within to apply focus border color to default and merged input-group
+  .input-group {
+    &:focus-within {
+      .form-control,
+      .input-group-text {
+        border-color: Dzdcolor;
+      }
+    }
+  }
+}
+
+// Float labels
+@mixin template-float-label-theme(Dzdcolor) {
+  .form-floating {
+    > .form-control:focus,
+    > .form-control:not(:placeholder-shown),
+    > .form-select {
+      ~ label {
+        color: Dzdcolor;
+      }
+    }
+
+    > .form-control:-webkit-autofill {
+      ~ label {
+        color: Dzdcolor;
+      }
+    }
+  }
+}
+
+// Form Switch
+@mixin template-form-switch-theme(Dzdbackground) {
+  Dzdfocus-color: Dzdbackground;
+  Dzdfocus-bg-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'><circle r='3' fill='#{Dzdfocus-color}'/></svg>");
+
+  Dzdchecked-color: Dzdcomponent-active-color;
+  Dzdchecked-bg-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'><circle r='3' fill='#{Dzdchecked-color}'/></svg>");
+
+  .form-switch {
+    .form-check-input {
+      &:focus {
+        background-image: escape-svg(Dzdfocus-bg-image);
+      }
+
+      &:checked {
+        @if Dzdenable-gradients {
+          background-image: escape-svg(Dzdchecked-bg-image), var(--#{Dzdvariable-prefix}gradient);
+        } @else {
+          background-image: escape-svg(Dzdchecked-bg-image);
+        }
+      }
+    }
+  }
+}
+
+// File Input
+@mixin template-file-input-theme(Dzdcolor) {
+  .form-control:focus ~ .form-label {
+    border-color: Dzdcolor;
+
+    &::after {
+      border-color: inherit;
+    }
+  }
+}
+
+// Form Check
+@mixin template-form-check-variant(Dzdparent, Dzdbackground, Dzdcolor: null) {
+  Dzdcolor: if(Dzdcolor, Dzdcolor, color-contrast(Dzdbackground));
+  Dzdfocus-border: Dzdbackground;
+
+  #{Dzdparent} .form-check-input {
+    &:focus {
+      border-color: Dzdfocus-border;
+      box-shadow: 0 2px 4px 0 rgba(Dzdbackground, 0.4);
+    }
+
+    &:disabled {
+      background-color: Dzdform-check-input-disabled-bg;
+    }
+
+    &:checked,
+    &[type='checkbox']:indeterminate {
+      background-color: Dzdbackground;
+      border-color: Dzdbackground;
+      box-shadow: 0 2px 4px 0 rgba(Dzdbackground, 0.4);
+    }
+  }
+
+  // Custom options
+  #{Dzdparent}.custom-option {
+    &.checked {
+      border: 1px solid Dzdbackground;
+    }
+  }
+}
+
+@mixin template-form-check-theme(Dzdbackground, Dzdcolor: null) {
+  @include template-form-check-variant('', Dzdbackground, Dzdcolor);
+}
+
+// Form Validation
+
+@mixin form-validation-state(
+  Dzdstate: null,
+  Dzdcolor: null,
+  Dzdicon: null,
+  Dzdtooltip-color: null,
+  Dzdtooltip-bg-color: null,
+  Dzdfocus-box-shadow: null
+) {
+}
+
+@mixin template-form-validation-state(
+  Dzdstate,
+  Dzdcolor,
+  Dzdicon,
+  Dzdtooltip-color: color-contrast(Dzdcolor),
+  Dzdtooltip-bg-color: rgba(Dzdcolor, Dzdform-feedback-tooltip-opacity),
+  Dzdfocus-box-shadow: 0 0 Dzdinput-btn-focus-blur Dzdinput-focus-width rgba(Dzdcolor, Dzdinput-btn-focus-color-opacity)
+) {
+  .#{Dzdstate}-feedback {
+    display: none;
+    width: 100%;
+    margin-top: Dzdform-feedback-margin-top;
+    @include font-size(Dzdform-feedback-font-size);
+    font-style: Dzdform-feedback-font-style;
+    color: Dzdcolor;
+  }
+
+  .#{Dzdstate}-tooltip {
+    position: absolute;
+    top: 100%;
+    z-index: 5;
+    display: none;
+    max-width: 100%; // Contain to parent when possible
+    padding: Dzdform-feedback-tooltip-padding-y Dzdform-feedback-tooltip-padding-x;
+    margin-top: 0.1rem;
+    @include font-size(Dzdform-feedback-tooltip-font-size);
+    line-height: Dzdform-feedback-tooltip-line-height;
+    color: Dzdtooltip-color;
+    background-color: Dzdtooltip-bg-color;
+    @include border-radius(Dzdform-feedback-tooltip-border-radius);
+  }
+
+  @include form-validation-state-selector(Dzdstate) {
+    ~ .#{Dzdstate}-feedback,
+    ~ .#{Dzdstate}-tooltip {
+      display: block;
+    }
+  }
+
+  .form-control {
+    @include form-validation-state-selector(Dzdstate) {
+      border-color: Dzdcolor;
+
+      .dark-style & {
+        border-color: Dzdcolor !important;
+      }
+
+      @if Dzdenable-validation-icons {
+        background-image: escape-svg(Dzdicon);
+        background-repeat: no-repeat;
+        background-size: Dzdinput-height-inner-half Dzdinput-height-inner-half;
+
+        @include ltr-style {
+          padding-right: Dzdinput-height-inner;
+          background-position: right Dzdinput-height-inner-quarter center;
+        }
+      }
+
+      &:focus {
+        border-color: Dzdcolor;
+        box-shadow: Dzdfocus-box-shadow;
+      }
+    }
+  }
+
+  // stylelint-disable-next-line selector-no-qualifying-type
+  textarea.form-control {
+    @include form-validation-state-selector(Dzdstate) {
+      @if Dzdenable-validation-icons {
+        @include ltr-style {
+          padding-right: Dzdinput-height-inner;
+          background-position: top Dzdinput-height-inner-quarter right Dzdinput-height-inner-quarter;
+        }
+      }
+    }
+  }
+
+  .form-select {
+    @include form-validation-state-selector(Dzdstate) {
+      border-color: Dzdcolor;
+      @if Dzdenable-validation-icons {
+        background-size: Dzdform-select-bg-size, Dzdform-select-feedback-icon-size;
+        @include ltr-style {
+          background-image: escape-svg(Dzdform-select-indicator), escape-svg(Dzdicon);
+          padding-right: Dzdform-select-feedback-icon-padding-end;
+          background-position: Dzdform-select-bg-position, Dzdform-select-feedback-icon-position;
+        }
+      }
+
+      &:focus {
+        border-color: Dzdcolor;
+        box-shadow: Dzdfocus-box-shadow;
+      }
+    }
+  }
+
+  .form-check-input {
+    @include form-validation-state-selector(Dzdstate) {
+      border-color: Dzdcolor;
+
+      &:checked {
+        background-color: Dzdcolor;
+        border-color: Dzdcolor;
+      }
+
+      &:focus {
+        box-shadow: Dzdfocus-box-shadow;
+        border-color: Dzdcolor;
+      }
+
+      ~ .form-check-label {
+        color: Dzdcolor;
+      }
+    }
+  }
+  .form-check-inline .form-check-input {
+    ~ .#{Dzdstate}-feedback {
+      @include ltr-style {
+        margin-left: 0.5em;
+      }
+    }
+  }
+  // On validation .input-group & .input-group-merged, setup proper border color & box-shadow
+  .input-group {
+    .form-control {
+      @include form-validation-state-selector(Dzdstate) {
+        ~ .input-group-text {
+          border-color: Dzdcolor;
+        }
+        &:focus {
+          border-color: Dzdcolor;
+          box-shadow: none;
+          // ? .input-group has .input-group-text last/sibling
+          ~ .input-group-text {
+            border-color: Dzdcolor;
+          }
+        }
+      }
+    }
+  }
+
+  .input-group .form-control,
+  .input-group .form-select {
+    @include form-validation-state-selector(Dzdstate) {
+      z-index: 3;
+    }
+  }
+}

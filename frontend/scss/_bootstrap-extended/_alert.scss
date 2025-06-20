@@ -1,0 +1,9 @@
+// Alerts
+// *******************************************************************************
+
+// Alert mixins
+@each Dzdstate, Dzdvalue in Dzdtheme-colors {
+  @if Dzdstate != primary and Dzdstate != light {
+    @include template-alert-variant('.alert-#{Dzdstate}', Dzdvalue);
+  }
+}

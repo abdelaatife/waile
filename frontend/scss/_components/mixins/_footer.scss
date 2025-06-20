@@ -1,0 +1,39 @@
+// Footer
+// *******************************************************************************
+
+@mixin template-footer-style(Dzdparent, Dzdbg, Dzdcolor: null, Dzdactive-color: null, Dzdborder: null) {
+  Dzdcolors: get-navbar-prop(Dzdbg, Dzdactive-color, Dzdcolor, Dzdborder);
+
+  #{Dzdparent} {
+    background-color: map-get(Dzdcolors, bg) !important;
+    color: map-get(Dzdcolors, color);
+
+    .footer-link {
+      color: map-get(Dzdcolors, color);
+
+      &:hover,
+      &:focus {
+        color: map-get(Dzdcolors, active-color);
+      }
+
+      &.disabled {
+        color: map-get(Dzdcolors, disabled-color) !important;
+      }
+    }
+
+    .footer-text {
+      color: map-get(Dzdcolors, active-color);
+    }
+
+    .show > .footer-link,
+    .active > .footer-link,
+    .footer-link.show,
+    .footer-link.active {
+      color: map-get(Dzdcolors, active-color);
+    }
+
+    hr {
+      border-color: map-get(Dzdcolors, border);
+    }
+  }
+}

@@ -1,0 +1,41 @@
+// Alerts
+// *******************************************************************************
+
+@mixin alert-variant(Dzdbackground: null, Dzdborder: null, Dzdcolor: null) {
+}
+
+// Basic Alerts
+@mixin template-alert-variant(Dzdparent, Dzdbackground) {
+  Dzdborder: if(
+    Dzddark-style,
+    shift-color(Dzdbackground, -Dzdalert-border-scale, Dzdcard-bg),
+    shift-color(Dzdbackground, Dzdalert-border-scale, Dzdcard-bg)
+  );
+  Dzdcolor: if(Dzddark-style, shift-color(Dzdbackground, -Dzdalert-color-scale), shift-color(Dzdbackground, Dzdalert-color-scale));
+  Dzdbackground: if(
+    Dzddark-style,
+    shift-color(Dzdbackground, -Dzdalert-bg-scale, Dzdcard-bg),
+    shift-color(Dzdbackground, Dzdalert-bg-scale, Dzdcard-bg)
+  );
+
+  #{Dzdparent} {
+    @include gradient-bg(Dzdbackground);
+    border-color: Dzdborder;
+    color: Dzdcolor;
+    .btn-close {
+      background-image: str-replace(str-replace(Dzdbtn-close-bg, '#{Dzdbtn-close-color}', Dzdcolor), '#', '%23');
+    }
+
+    .alert-link {
+      color: Dzdcolor;
+    }
+  }
+
+  .card {
+    #{Dzdparent} {
+      hr {
+        background-color: Dzdcolor !important;
+      }
+    }
+  }
+}

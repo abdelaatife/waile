@@ -1,0 +1,171 @@
+// Buttons
+// *******************************************************************************
+
+// Basic
+@mixin button-variant(Dzdbackground: null, Dzdborder: null, Dzdactive-background: null, Dzdactive-border: null) {
+}
+@mixin template-button-variant(Dzdparent, Dzdbackground, Dzdcolor: null, Dzdborder: null) {
+  Dzdbackground: Dzdbackground;
+  Dzdborder: Dzdbackground;
+  Dzdcolor: if(Dzdcolor, Dzdcolor, color-contrast(Dzdbackground));
+  Dzdhover-background: if(
+    Dzdcolor == Dzdcolor-contrast-light,
+    shade-color(Dzdbackground, Dzdbtn-hover-bg-shade-amount),
+    tint-color(Dzdbackground, Dzdbtn-hover-bg-tint-amount)
+  );
+  Dzdhover-border: if(
+    Dzdcolor == Dzdcolor-contrast-light,
+    shade-color(Dzdborder, Dzdbtn-hover-border-shade-amount),
+    tint-color(Dzdborder, Dzdbtn-hover-border-tint-amount)
+  );
+  Dzdhover-color: color-contrast(Dzdhover-background);
+
+  Dzdactive-background: if(
+    Dzdcolor == Dzdcolor-contrast-light,
+    shade-color(Dzdbackground, Dzdbtn-active-bg-shade-amount),
+    tint-color(Dzdbackground, Dzdbtn-active-bg-tint-amount)
+  );
+  Dzdactive-border: if(
+    Dzdcolor == Dzdcolor-contrast-light,
+    shade-color(Dzdborder, Dzdbtn-active-border-shade-amount),
+    tint-color(Dzdborder, Dzdbtn-active-border-tint-amount)
+  );
+  Dzdactive-color: color-contrast(Dzdactive-background);
+  Dzddisabled-background: Dzdbackground;
+  Dzddisabled-border: Dzdborder;
+  Dzddisabled-color: color-contrast(Dzddisabled-background);
+
+  #{Dzdparent} {
+    color: Dzdcolor;
+    @include gradient-bg(Dzdbackground);
+    border-color: Dzdborder;
+    @include box-shadow(Dzdbtn-box-shadow);
+    box-shadow: 0 0.125rem 0.25rem 0 rgba(Dzdbackground, 0.4);
+
+    &:hover {
+      color: Dzdhover-color;
+      @include gradient-bg(Dzdhover-background);
+      border-color: Dzdhover-border;
+      transform: Dzdbtn-hover-transform;
+    }
+
+    .btn-check:focus + &,
+    &:focus,
+    &.focus {
+      color: Dzdhover-color;
+      @include gradient-bg(Dzdhover-background);
+      border-color: Dzdhover-border;
+      transform: Dzdbtn-focus-transform;
+      box-shadow: none;
+    }
+
+    .btn-check:checked + &,
+    .btn-check:active + &,
+    &:active,
+    &.active,
+    .show > &.dropdown-toggle {
+      color: Dzdactive-color;
+      background-color: Dzdactive-background;
+      // Remove CSS gradients if they're enabled
+      background-image: if(Dzdenable-gradients, none, null);
+      border-color: Dzdactive-border;
+
+      &:focus {
+        box-shadow: none;
+      }
+    }
+
+    &.disabled,
+    &:disabled {
+      box-shadow: none;
+    }
+  }
+
+  //? Button groups border (Uncomment if needed)
+  // .btn-group #{Dzdparent},
+  // .input-group #{Dzdparent} {
+  //   border-right: Dzdinput-btn-border-width solid Dzdactive-background;
+  //   border-left: Dzdinput-btn-border-width solid Dzdactive-background;
+  // }
+}
+
+// Outline
+@mixin button-outline-variant(Dzdcolor: null, Dzdcolor-hover: null, Dzdhover-color: null) {
+}
+// ? Dzdhover-color <-> Dzdcolor-hover used by bootstrap
+@mixin template-button-outline-variant(Dzdparent, Dzdcolor, Dzdhover-color: null) {
+  Dzdcolor: Dzdcolor;
+  Dzdbackground: Dzdcolor;
+  Dzdcolor-hover: color-contrast(Dzdcolor);
+
+  Dzdfocus-background: Dzdcolor;
+
+  Dzdhover-background: if(
+    Dzdcolor-hover == Dzdcolor-contrast-light,
+    shade-color(Dzdbackground, Dzdbtn-hover-bg-shade-amount),
+    tint-color(Dzdbackground, Dzdbtn-hover-bg-tint-amount)
+  );
+
+  Dzdactive-background: if(
+    Dzdcolor-hover == Dzdcolor-contrast-light,
+    shade-color(Dzdbackground, Dzdbtn-active-bg-shade-amount),
+    tint-color(Dzdbackground, Dzdbtn-active-bg-tint-amount)
+  );
+
+  #{Dzdparent} {
+    color: Dzdcolor;
+    border-color: Dzdcolor;
+    background: transparent;
+
+    &:hover {
+      color: Dzdcolor-hover;
+      background-color: Dzdhover-background;
+      border-color: Dzdhover-background;
+      box-shadow: 0 0.125rem 0.25rem 0 rgba(Dzdbackground, 0.4);
+      transform: Dzdbtn-hover-transform;
+    }
+
+    .btn-check:focus + &,
+    &:focus {
+      color: Dzdcolor-hover;
+      background-color: Dzdhover-background;
+      border-color: Dzdhover-background;
+      box-shadow: none;
+      transform: Dzdbtn-focus-transform;
+    }
+
+    .btn-check:checked + &,
+    .btn-check:active + &,
+    &:active,
+    &.active,
+    &.dropdown-toggle.show {
+      color: Dzdcolor-hover;
+      background-color: Dzdactive-background;
+      border-color: Dzdactive-background;
+      &:focus {
+        box-shadow: none;
+      }
+    }
+
+    &.disabled,
+    &:disabled {
+      box-shadow: none;
+    }
+  }
+
+  #{Dzdparent} .badge {
+    background: Dzdcolor;
+    border-color: Dzdcolor;
+    color: color-contrast(Dzdcolor);
+  }
+
+  #{Dzdparent}:hover .badge,
+  #{Dzdparent}:focus:hover .badge,
+  #{Dzdparent}:active .badge,
+  #{Dzdparent}.active .badge,
+  .show > #{Dzdparent}.dropdown-toggle .badge {
+    background: Dzdcolor-hover;
+    border-color: Dzdcolor-hover;
+    color: if(alpha(Dzdcolor) ==1, Dzdcolor, color-contrast(Dzdcolor-hover));
+  }
+}

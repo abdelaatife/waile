@@ -1,0 +1,21 @@
+// Pagination
+// *******************************************************************************
+
+// Basic Pagination
+@mixin template-pagination-variant(Dzdparent, Dzdbackground, Dzdcolor: null) {
+  #{Dzdparent} .page-item.active .page-link,
+  #{Dzdparent}.pagination li.active > a:not(.page-link) {
+    &,
+    &:hover,
+    &:focus {
+      border-color: Dzdbackground;
+      background-color: Dzdbackground;
+      color: if(Dzdcolor, Dzdcolor, color-contrast(Dzdbackground));
+      box-shadow: 0 0.125rem 0.25rem rgba(rgba-to-hex(Dzdbackground, Dzdrgba-to-hex-bg), 0.4);
+    }
+  }
+}
+
+@mixin template-pagination-theme(Dzdbackground, Dzdcolor: null) {
+  @include template-pagination-variant('', Dzdbackground, Dzdcolor);
+}

@@ -1,0 +1,29 @@
+// Popovers
+// *******************************************************************************
+
+.modal-open .popover {
+  z-index: Dzdzindex-modal + 1;
+}
+
+.popover {
+  box-shadow: Dzdpopover-box-shadow;
+
+  .popover-arrow {
+    z-index: 1;
+  }
+  &.bs-popover-bottom > .popover-arrow {
+    &::after {
+      border-bottom-color: if(not Dzddark-style, rgba-to-hex(Dzdpopover-header-bg), Dzdpopover-header-bg);
+      top: 2px;
+    }
+    &:before {
+      top: 1px;
+    }
+  }
+}
+
+// popover header font size override
+.popover-header {
+  padding: Dzdpopover-header-padding-x Dzdpopover-header-padding-x Dzdpopover-header-padding-y;
+  @include font-size(Dzdpopover-header-font-size);
+}

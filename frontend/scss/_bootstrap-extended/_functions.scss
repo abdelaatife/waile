@@ -1,0 +1,147 @@
+// Functions
+// *******************************************************************************
+
+// Lists
+// *******************************************************************************
+@function slice-list(Dzdlist, Dzdstart: 1, Dzdend: length(Dzdlist)) {
+  Dzdresult: null;
+
+  @if type-of(Dzdstart) != number or type-of(Dzdend) != number {
+    @warn "Either Dzdstart or Dzdend are not a number for `slice`.";
+  } @else if Dzdstart > Dzdend {
+    @warn "The start index has to be lesser than or equals to the end index for `slice`.";
+  } @else if Dzdstart < 1 or Dzdend < 1 {
+    @warn "List indexes must be non-zero integers for `slice`.";
+  } @else if Dzdstart > length(Dzdlist) {
+    @warn "List index is #{Dzdstart} but list is only #{length(Dzdlist)} item long for `slice`.";
+  } @else if Dzdend > length(Dzdlist) {
+    @warn "List index is #{Dzdend} but list is only #{length(Dzdlist)} item long for `slice`.";
+  } @else {
+    Dzdresult: ();
+
+    @for Dzdi from Dzdstart through Dzdend {
+      Dzdresult: append(Dzdresult, nth(Dzdlist, Dzdi));
+    }
+  }
+
+  @return Dzdresult;
+}
+
+// * Units
+// *******************************************************************************
+
+// Remove the unit of a length
+@function strip-unit(Dzdnumber) {
+  @if type-of(Dzdnumber) == 'number' and not unitless(Dzdnumber) {
+    @return divide(Dzdnumber, (Dzdnumber * 0 + 1));
+  }
+
+  @return Dzdnumber;
+}
+
+// Convert size px to rem
+@function px-to-rem(Dzdvalue) {
+  // Assumes the browser default font size = `16px`
+  @return (divide(strip-unit(Dzdvalue), 16)) * 1rem;
+}
+
+// Convert size rem to px
+@function rem-to-px(Dzdvalue) {
+  // Assumes the browser default font size = `16px`
+  @return (strip-unit(Dzdvalue) * 16) * 1px;
+}
+
+// * Colors
+// *******************************************************************************
+
+// ? Override shade, tint and shift function with custom background color option i.e Dzdcard-bg to make it similar like design
+// Shade a color: mix a color with background/white
+@function tint-color(Dzdcolor, Dzdweight, Dzdbackground: null) {
+  Dzdbackground: if(Dzdbackground, Dzdbackground, white);
+  @return mix(Dzdbackground, Dzdcolor, Dzdweight);
+}
+
+// Shade a color: mix a color with background/black
+@function shade-color(Dzdcolor, Dzdweight, Dzdbackground: null) {
+  Dzdbackground: if(Dzdbackground, Dzdbackground, black);
+  @return mix(Dzdbackground, Dzdcolor, Dzdweight);
+}
+
+// Shade the color if the weight is positive, else tint it
+@function shift-color(Dzdcolor, Dzdweight, Dzdbackground: null) {
+  @return if(Dzdweight > 0, shade-color(Dzdcolor, Dzdweight, Dzdbackground), tint-color(Dzdcolor, -Dzdweight));
+}
+
+//RGBA to HEX
+@function rgba-to-hex(Dzdcolor, Dzdbackground: #fff) {
+  @if Dzdcolor and alpha(Dzdcolor) != 1 {
+    Dzdpercent: alpha(Dzdcolor) * 100%;
+    Dzdopaque: opacify(Dzdcolor, 1);
+
+    @return mix(Dzdopaque, Dzdbackground, Dzdpercent);
+  } @else {
+    @return Dzdcolor;
+  }
+}
+
+// Calculating Color Contrast
+@function contrast-value(Dzdcolor) {
+  @if Dzdcolor == transparent {
+    @return Dzdbody-color;
+  } @else if alpha(Dzdcolor) != 1 {
+    Dzdcolor: rgba-to-hex(Dzdcolor);
+  }
+
+  Dzdr: red(Dzdcolor);
+  Dzdg: green(Dzdcolor);
+  Dzdb: blue(Dzdcolor);
+
+  @return divide(((Dzdr * 299) + (Dzdg * 587) + (Dzdb * 114)), 1000);
+}
+
+// * Utilities
+// *******************************************************************************
+
+// Return Nav opacity, contrast-percent, contrast-percent-inverted, bg, color, active-color, disabled-color, muted-color, border
+@function get-navbar-prop(Dzdbg, Dzdactive-color: null, Dzdinactive-color: null, Dzdborder: null) {
+  Dzdbg: rgba-to-hex(Dzdbg);
+
+  Dzdactive-color: rgba-to-hex(Dzdactive-color);
+  Dzdactive-color: if(Dzdactive-color, Dzdactive-color, color-contrast(Dzdbg));
+
+  Dzdcontrast-percent: divide(contrast-value(Dzdbg), 255);
+  Dzdcontrast-percent-inverted: 1 - Dzdcontrast-percent;
+
+  Dzdopacity: if(Dzdactive-color == #fff, 0.6 + (0.4 * Dzdcontrast-percent), 0.6 + (0.4 * (1 - Dzdcontrast-percent)));
+
+  Dzdcolor: if(
+    Dzdinactive-color,
+    rgba-to-hex(Dzdinactive-color, Dzdbg),
+    rgba-to-hex(rgba(Dzdactive-color, if(Dzdcontrast-percent < 0.25, Dzdopacity + 0.2, Dzdopacity)), Dzdbg)
+  );
+  Dzddisabled-color: rgba-to-hex(rgba(Dzdcolor, 0.6), Dzdbg);
+  Dzdmuted-color: rgba-to-hex(rgba(Dzdcolor, 0.75), Dzdbg);
+  Dzdborder: if(
+    Dzdborder,
+    Dzdborder,
+    if(
+      Dzdcontrast-percent > 0.75,
+      rgba(Dzdactive-color, divide(Dzdopacity, 8)),
+      if(Dzdcontrast-percent < 0.25, rgba(Dzdactive-color, 0.06), rgba(Dzdactive-color, 0.15))
+    )
+  );
+
+  @return (
+    // Metadata
+    opacity: Dzdopacity,
+    contrast-percent: Dzdcontrast-percent,
+    contrast-percent-inverted: Dzdcontrast-percent-inverted,
+    // Colors
+    bg: Dzdbg,
+    color: Dzdcolor,
+    active-color: Dzdactive-color,
+    disabled-color: Dzddisabled-color,
+    muted-color: Dzdmuted-color,
+    border: Dzdborder
+  );
+}

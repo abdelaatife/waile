@@ -1,0 +1,885 @@
+// Variables
+//
+// Variables should follow the `Dzdcomponent-state-property-size` formula for
+// consistent naming. Ex: Dzdnav-link-disabled-color and Dzdmodal-content-box-shadow-xs.
+//
+// ? To change the layout colors you just need to change the Dzdblack and Dzdbody-bg colors and rest (border, card, font colors and etc...) will be adjust automatically.
+// ? Use https://noeldelgado.github.io/shadowlord/ to select proper 💄 Color tints and shade for Dzdblack and Dzdbody-bg color.
+// ? color-variables and theme-color-variables (branding colors) can be choose as per your preferences. We suggest you to use https://colors.eva.design/
+// ! Light style use Dzdblack to generate the Dzdgray shades.
+// (C) Custom variables for extended components of bootstrap only
+
+// * Color system
+// *******************************************************************************
+
+// scss-docs-start gray-color-variables
+Dzdwhite: #fff !default;
+Dzdblack: #435971 !default;
+Dzdgray-25: rgba(Dzdblack, 0.025) !default; // (C)
+Dzdgray-50: rgba(Dzdblack, 0.05) !default; // (C)
+Dzdgray-100: rgba(Dzdblack, 0.1) !default;
+Dzdgray-200: rgba(Dzdblack, 0.2) !default;
+Dzdgray-300: rgba(Dzdblack, 0.3) !default;
+Dzdgray-400: rgba(Dzdblack, 0.4) !default;
+Dzdgray-500: rgba(Dzdblack, 0.5) !default;
+Dzdgray-600: rgba(Dzdblack, 0.6) !default;
+Dzdgray-700: rgba(Dzdblack, 0.7) !default;
+Dzdgray-800: rgba(Dzdblack, 0.8) !default;
+Dzdgray-900: rgba(Dzdblack, 0.9) !default;
+// scss-docs-end gray-color-variables
+
+// scss-docs-start gray-colors-map
+Dzdgrays: (
+  '25': Dzdgray-25,
+  '50': Dzdgray-50
+) !default;
+// scss-docs-end gray-colors-map
+
+// scss-docs-start color-variables
+Dzdblue: #007bff !default;
+Dzdindigo: #6610f2 !default;
+Dzdpurple: #696cff !default;
+Dzdpink: #e83e8c !default;
+Dzdred: #ff3e1d !default;
+Dzdorange: #fd7e14 !default;
+Dzdyellow: #ffab00 !default;
+Dzdgreen: #71dd37 !default;
+Dzdteal: #20c997 !default;
+Dzdcyan: #03c3ec !default;
+// scss-docs-end color-variables
+
+// scss-docs-start theme-color-variables
+Dzdprimary: Dzdpurple !default;
+Dzdsecondary: #8592a3 !default;
+Dzdsuccess: Dzdgreen !default;
+Dzdinfo: Dzdcyan !default;
+Dzdwarning: Dzdyellow !default;
+Dzddanger: Dzdred !default;
+Dzdlight: #fcfdfd !default;
+Dzddark: #233446 !default;
+Dzdgray: Dzdgray-100 !default; // (C)
+// scss-docs-end theme-color-variables
+
+// scss-docs-start theme-colors-map
+Dzdtheme-colors: (
+  'primary': Dzdprimary,
+  'secondary': Dzdsecondary,
+  'success': Dzdsuccess,
+  'info': Dzdinfo,
+  'warning': Dzdwarning,
+  'danger': Dzddanger,
+  'light': Dzdlight,
+  'dark': Dzddark,
+  'gray': Dzdgray
+) !default;
+// scss-docs-end theme-colors-map
+
+Dzdcolor-scheme: 'light' !default; // (C)
+// The contrast ratio to reach against white, to determine if color changes from "light" to "dark". Acceptable values for WCAG 2.0 are 3, 4.5 and 7.
+// See https://www.w3.org/TR/WCAG20/#visual-audio-contrast-contrast
+Dzdmin-contrast-ratio: 1.7 !default;
+
+// * Options
+// *******************************************************************************
+
+Dzdenable-negative-margins: true !default;
+Dzdenable-validation-icons: false !default;
+
+// Prefix for :root CSS variables
+Dzdvariable-prefix: bs- !default;
+
+// * Spacing
+// *******************************************************************************
+
+Dzdspacer: 1rem !default;
+
+Dzdsizes-px: (
+  px-20: 20px,
+  px-30: 30px,
+  px-40: 40px,
+  px-50: 50px,
+  px-75: 75px,
+  px-100: 100px,
+  px-150: 150px,
+  px-200: 200px,
+  px-250: 250px,
+  px-300: 300px,
+  px-350: 350px,
+  px-400: 400px,
+  px-500: 500px,
+  px-600: 600px,
+  px-700: 700px,
+  px-800: 800px,
+  auto: auto
+) !default; // (C)
+
+Dzdrgba-to-hex-bg: #fff !default; // (C)
+Dzdrgba-to-hex-bg-inverted: #000 !default; // (C)
+
+// * Body
+// *******************************************************************************
+
+Dzdbody-bg: #f5f5f9 !default;
+Dzdbody-color: rgba-to-hex(Dzdgray-800, Dzdrgba-to-hex-bg) !default;
+
+// * Links
+// *******************************************************************************
+
+Dzdlink-color: Dzdprimary !default;
+Dzdlink-decoration: none !default;
+Dzdlink-shade-percentage: 10% !default;
+Dzdlink-hover-color: shift-color(Dzdlink-color, Dzdlink-shade-percentage) !default;
+Dzdlink-hover-decoration: null !default;
+
+// * Grid
+// *******************************************************************************
+
+// Grid containers
+
+// scss-docs-start container-max-widths
+Dzdcontainer-max-widths: (
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px,
+  xxl: 1440px // Custom xxl size
+) !default;
+// scss-docs-end container-max-widths
+
+Dzdgrid-gutter-width: 1.625rem !default;
+Dzdcontainer-padding-x: 1.625rem !default; // (C)
+Dzdcontainer-padding-x-sm: 1rem !default; // (C)
+Dzdcontainer-padding-y: 1.625rem !default; // (C)
+
+// * Components
+// *******************************************************************************
+
+// scss-docs-start border-variables
+Dzdborder-width: 1px !default;
+Dzdborder-color: rgba-to-hex(Dzdgray-200, Dzdrgba-to-hex-bg) !default;
+Dzdborder-inner-color: rgba-to-hex(Dzdgray-200, Dzdrgba-to-hex-bg) !default; // (C)
+// scss-docs-end border-variables
+
+// scss-docs-start border-radius-variables
+Dzdborder-radius: 0.375rem !default;
+Dzdborder-radius-xl: 0.625rem !default; // (C)
+Dzdborder-radius-lg: 0.5rem !default;
+Dzdborder-radius-sm: 0.25rem !default;
+Dzdborder-radius-xs: 0.125rem !default; // (C)
+
+Dzdborder-shade-amount: 25% !default; // (C)
+Dzdborder-tint-amount: 60% !default; // (C)
+// scss-docs-end border-radius-variables
+
+// scss-docs-start box-shadow-variables
+Dzdbox-shadow: 0 0.25rem 1rem rgba(rgba-to-hex(Dzdgray-500, Dzdrgba-to-hex-bg), 0.45) !default;
+Dzdbox-shadow-sm: 0 0.125rem 0.25rem rgba(rgba-to-hex(Dzdgray-500, Dzdrgba-to-hex-bg), 0.4) !default;
+Dzdbox-shadow-lg: 0 0.625rem 1.25rem rgba(rgba-to-hex(Dzdgray-500, Dzdrgba-to-hex-bg), 0.5) !default;
+// scss-docs-end box-shadow-variables
+
+Dzdcomponent-active-color: Dzdwhite !default;
+Dzdcomponent-active-bg: rgba(Dzdprimary, 0.08) !default;
+
+Dzdcomponent-line-height: 1.54 !default; // (C)
+Dzdcomponent-focus-shadow-width: 2px !default; // (C)
+
+Dzdfloating-component-border-color: transparent !default; // (C)
+Dzdfloating-component-shadow: Dzdbox-shadow !default; // (C)
+
+Dzdhr-color: Dzdborder-color !default;
+Dzdhr-opacity: 1 !default;
+Dzdbordered-row-border-color: Dzdhr-color !default; // (C)
+
+// scss-docs-start caret-variables
+Dzdcaret-width: 0.42em !default;
+Dzdcaret-vertical-align: middle !default;
+Dzdcaret-spacing: 0.5em !default;
+// scss-docs-end caret-variables
+
+// * Typography
+// *******************************************************************************
+
+// scss-docs-start font-variables
+Dzdfont-family-sans-serif: 'Public Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Oxygen', 'Ubuntu', 'Cantarell',
+  'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif !default;
+Dzdfont-family-serif: Georgia, 'Times New Roman', serif !default; // (C)
+Dzdfont-family-monospace: 'SFMono-Regular', Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace !default;
+// stylelint-enable value-keyword-case
+Dzdfont-family-base: var(--#{Dzdvariable-prefix}font-sans-serif) !default;
+Dzdfont-family-code: var(--#{Dzdvariable-prefix}font-monospace) !default;
+
+// Dzdfont-size-root effects the value of `rem`, which is used for as well font sizes, paddings and margins
+// Dzdfont-size-base effects the font size of the body text
+Dzdfont-size-root: 16px !default;
+Dzdfont-size-base: 0.9375rem !default; // Assumes the browser default, typically `15px/16px`
+Dzdfont-size-xl: 1.25rem !default; // (C)
+Dzdfont-size-lg: 1rem !default;
+Dzdfont-size-sm: 0.75rem !default;
+Dzdfont-size-xs: Dzdfont-size-sm !default; // (C)
+
+Dzdfont-weight-semibold: 600 !default; // (C)
+Dzdfont-weight-bolder: 900 !default;
+Dzdfont-weight-lighter: 100 !default;
+
+Dzdline-height-base: 1.53 !default;
+Dzdline-height-xl: 1.5 !default; // (C)
+Dzdline-height-lg: 1.5 !default;
+Dzdline-height-sm: 1.5 !default;
+Dzdline-height-xs: 1.5 !default; // (C)
+
+Dzdh1-font-size: 2.375rem !default;
+Dzdh2-font-size: 2rem !default;
+Dzdh3-font-size: 1.625rem !default;
+Dzdh4-font-size: 1.375rem !default;
+Dzdh5-font-size: 1.125rem !default;
+Dzdh6-font-size: Dzdfont-size-base !default;
+// scss-docs-end font-variables
+
+// scss-docs-start headings-variables
+Dzdheadings-margin-bottom: Dzdspacer !default;
+Dzdheadings-font-weight: 500 !default;
+Dzdheadings-line-height: 1.1 !default;
+Dzdheadings-color: rgba-to-hex(Dzdgray-900, Dzdrgba-to-hex-bg) !default;
+// scss-docs-end headings-variables
+
+// scss-docs-start display-headings
+Dzddisplay-font-sizes: (
+  1: 4rem,
+  2: 3.5rem,
+  3: 3rem,
+  4: 2.5rem,
+  5: 2rem,
+  6: 1.5rem
+) !default;
+
+Dzddisplay-font-weight: 500 !default;
+// scss-docs-end display-headings
+
+// scss-docs-start type-variables
+Dzdlead-font-size: Dzdfont-size-base * 1.125 !default;
+Dzdblockquote-font-size: Dzdfont-size-base * 1.125 !default;
+Dzdlead-font-weight: 400 !default;
+// scss-docs-end type-variables
+
+// scss-docs-start type-variables
+Dzdtiny-font-size: 70% !default; // (C)
+Dzdsmall-font-size: 85% !default;
+Dzdbig-font-size: 112% !default; // (C)
+Dzdlarge-font-size: 150% !default; // (C)
+Dzdxlarge-font-size: 170% !default; // (C)
+
+Dzdtext-muted: rgba-to-hex(Dzdgray-500, Dzdrgba-to-hex-bg) !default;
+Dzdtext-muted-hover: rgba-to-hex(Dzdgray-600, Dzdrgba-to-hex-bg) !default; // (C)
+
+Dzdtext-light: rgba-to-hex(Dzdgray-400, Dzdrgba-to-hex-bg) !default; // (C)
+Dzdtext-lighter: rgba-to-hex(Dzdgray-300, Dzdrgba-to-hex-bg) !default; // (C)
+Dzdtext-lightest: rgba-to-hex(Dzdgray-200, Dzdrgba-to-hex-bg) !default; // (C)
+// scss-docs-end type-variables
+
+// * Z-index master list
+// *******************************************************************************
+
+Dzdzindex-menu-fixed: 1080 !default;
+Dzdzindex-modal: 1090 !default;
+Dzdzindex-modal-backdrop: Dzdzindex-modal - 1 !default;
+// Dzdzindex-modal-top: 1090 !default; // (C)
+Dzdzindex-offcanvas: 1090 !default;
+Dzdzindex-offcanvas-backdrop: Dzdzindex-offcanvas - 1 !default;
+Dzdzindex-layout-mobile: 1100 !default; // (C)
+Dzdzindex-popover: 1091 !default;
+Dzdzindex-toast: 1095 !default; // (C)
+Dzdzindex-tooltip: 1099 !default;
+Dzdzindex-notification: 999999 !default; // (C)
+
+// * Tables
+// *******************************************************************************
+
+// scss-docs-start table-variables
+Dzdtable-cell-padding-y: 0.625rem !default;
+Dzdtable-cell-padding-x: 1.25rem !default;
+Dzdtable-cell-padding-y-sm: 0.3125rem !default;
+Dzdtable-cell-padding-x-sm: 0.625rem !default;
+
+Dzdtable-cell-vertical-align: middle !default;
+
+Dzdtable-th-font-weight: Dzdfont-weight-semibold !default;
+
+Dzdtable-striped-bg-factor: 0.03 !default;
+Dzdtable-striped-bg: rgba-to-hex(rgba(Dzdblack, Dzdtable-striped-bg-factor), Dzdrgba-to-hex-bg) !default;
+
+Dzdtable-hover-bg-factor: 0.06 !default;
+Dzdtable-hover-bg: rgba(Dzdblack, Dzdtable-hover-bg-factor) !default;
+
+Dzdtable-border-color: Dzdborder-color !default;
+
+Dzdtable-group-separator-color: Dzdtable-border-color !default;
+
+// * Buttons + Forms
+// *******************************************************************************
+
+Dzdinput-btn-padding-y: 0.4375rem !default;
+Dzdinput-btn-padding-x: 1.25rem !default;
+Dzdinput-btn-font-size: Dzdfont-size-base !default;
+Dzdinput-btn-line-height: Dzdline-height-base !default;
+
+Dzdinput-btn-focus-width: 0.05rem !default;
+Dzdinput-btn-focus-color-opacity: 0.1 !default;
+Dzdinput-btn-focus-color: rgba(Dzdcomponent-active-bg, Dzdinput-btn-focus-color-opacity) !default;
+Dzdinput-btn-focus-blur: 0.25rem !default;
+Dzdinput-btn-focus-box-shadow: 0 0 Dzdinput-btn-focus-blur Dzdinput-btn-focus-width Dzdinput-btn-focus-color !default;
+
+Dzdinput-btn-padding-y-xs: 0 !default; // (C)
+Dzdinput-btn-padding-x-xs: 0.5rem !default; // (C)
+Dzdinput-btn-font-size-xs: Dzdfont-size-xs !default; // (C)
+Dzdinput-btn-line-height-xs: Dzdline-height-xs !default; // (C)
+
+Dzdinput-btn-padding-y-sm: 0.25rem !default;
+Dzdinput-btn-padding-x-sm: 0.6875rem !default;
+Dzdinput-btn-font-size-sm: Dzdfont-size-sm !default;
+Dzdinput-btn-line-height-sm: Dzdline-height-sm !default;
+
+Dzdinput-btn-padding-y-lg: 0.75rem !default;
+Dzdinput-btn-padding-x-lg: 1.5rem !default;
+Dzdinput-btn-font-size-lg: Dzdfont-size-lg !default;
+Dzdinput-btn-line-height-lg: Dzdline-height-lg !default;
+
+Dzdinput-btn-padding-y-xl: 0.875rem !default; // (C)
+Dzdinput-btn-padding-x-xl: 2.125rem !default; // (C)
+Dzdinput-btn-font-size-xl: Dzdfont-size-xl !default; // (C)
+Dzdinput-btn-line-height-xl: Dzdline-height-xl !default; // (C)
+
+// * Buttons
+// *******************************************************************************
+
+Dzdbtn-padding-y-xs: Dzdinput-btn-padding-y-xs !default; // (C)
+Dzdbtn-padding-x-xs: Dzdinput-btn-padding-x-xs !default; // (C)
+Dzdbtn-font-size-xs: Dzdinput-btn-font-size-xs !default; // (C)
+
+Dzdbtn-padding-y-xl: Dzdinput-btn-padding-y-xl !default; // (C)
+Dzdbtn-padding-x-xl: Dzdinput-btn-padding-x-xl !default; // (C)
+Dzdbtn-font-size-xl: Dzdinput-btn-font-size-xl !default; // (C)
+
+Dzdbtn-line-height-xs: Dzdinput-btn-line-height-xs !default; // (C)
+Dzdbtn-line-height-sm: Dzdline-height-sm; //(C)
+Dzdbtn-line-height-lg: Dzdline-height-lg; //(C)
+Dzdbtn-line-height-xl: Dzdinput-btn-line-height-xl !default; // (C)
+
+Dzdbtn-box-shadow: none !default;
+Dzdbtn-focus-box-shadow: none !default;
+Dzdbtn-active-box-shadow: none !default;
+
+Dzdbtn-border-radius-xs: Dzdborder-radius-xs !default; // (C)
+Dzdbtn-border-radius-xl: Dzdborder-radius-xl !default; // (C)
+
+Dzdbtn-transition: all 0.2s ease-in-out !default;
+
+Dzdbtn-label-bg-shade-amount: 84% !default; // (C)
+Dzdbtn-label-bg-tint-amount: 84% !default; // (C)
+
+Dzdbtn-label-disabled-bg-shade-amount: 84% !default; // (C)
+Dzdbtn-label-disabled-bg-tint-amount: 84% !default; // (C)
+
+Dzdbtn-hover-bg-shade-amount: 10% !default;
+Dzdbtn-hover-bg-tint-amount: 10% !default;
+Dzdbtn-hover-border-shade-amount: 10% !default;
+Dzdbtn-hover-border-tint-amount: 10% !default;
+Dzdbtn-hover-transform: translateY(-1px) !default; // (C)
+
+Dzdbtn-focus-transform: translateY(0) !default; // (C)
+
+Dzdbtn-disabled-opacity: 0.65 !default;
+
+Dzdbtn-active-bg-shade-amount: 15% !default;
+Dzdbtn-active-bg-tint-amount: 15% !default;
+Dzdbtn-active-border-shade-amount: 15% !default;
+Dzdbtn-active-border-tint-amount: 15% !default;
+
+// * Forms
+// *******************************************************************************
+
+// scss-docs-start form-text-variables
+Dzdform-text-margin-top: 0.3rem !default;
+Dzdform-text-font-size: Dzdsmall-font-size !default;
+Dzdform-text-color: Dzdtext-light !default;
+// scss-docs-end form-text-variables
+
+// scss-docs-start form-label-variables
+Dzdform-label-font-size: 0.75rem !default;
+Dzdform-label-font-weight: 500 !default;
+Dzdform-label-color: Dzdheadings-color !default;
+Dzdform-label-letter-spacing: inherit !default; //(C)
+Dzdform-label-text-transform: uppercase !default; //(C)
+// scss-docs-end form-label-variables
+
+// scss-docs-start form-input-variables
+Dzdinput-padding-x: 0.875rem !default;
+Dzdinput-line-height: Dzdinput-btn-line-height !default;
+
+Dzdinput-padding-x-sm: 0.625rem !default;
+
+Dzdinput-padding-x-lg: 1.25rem !default;
+
+Dzdinput-bg: Dzdwhite !default;
+Dzdinput-disabled-bg: rgba-to-hex(Dzdgray-100, Dzdrgba-to-hex-bg) !default;
+
+Dzdinput-color: Dzdbody-color !default;
+Dzdinput-border-color: rgba-to-hex(Dzdgray-200, Dzdrgba-to-hex-bg) !default;
+
+Dzdinput-hover-border-color: rgba-to-hex(Dzdgray-200, Dzdrgba-to-hex-bg) !default; // (C)
+
+Dzdinput-focus-border-color-scale: 50% !default; //(C)
+Dzdinput-focus-border-color: tint-color(Dzdcomponent-active-bg, Dzdinput-focus-border-color-scale) !default;
+
+Dzdinput-placeholder-transition: all 0.25s ease;
+Dzdinput-placeholder-transform: translate(5px);
+Dzdinput-placeholder-color: rgba-to-hex(Dzdgray-400, Dzdrgba-to-hex-bg) !default;
+
+Dzdinput-height-inner: px-to-rem(
+  floor(rem-to-px((Dzdinput-btn-font-size * Dzdinput-btn-line-height) + (Dzdinput-btn-padding-y * 2)))
+) !default;
+Dzdinput-height-inner-sm: px-to-rem(
+  floor(rem-to-px((Dzdinput-btn-font-size-sm * Dzdinput-btn-line-height-sm) + (Dzdinput-btn-padding-y-sm * 2)))
+) !default; // (C)
+Dzdinput-height-inner-lg: px-to-rem(
+  floor(rem-to-px((Dzdfont-size-lg * Dzdline-height-lg) + (Dzdinput-btn-padding-y-lg * 2)))
+) !default; // (C)
+// scss-docs-end form-input-variables
+
+// scss-docs-start form-check-variables
+Dzdform-check-input-width: 1.2em !default;
+Dzdform-datatables-check-input-size: 18px !default; // (C) For datatables with checkbox- update according to Dzdform-check-input-width
+
+Dzdform-check-input-border: 1px solid Dzdinput-border-color !default;
+
+Dzdform-check-label-disabled-color: Dzdtext-muted !default; // (C)R
+
+Dzdform-check-input-checked-color: Dzdcomponent-active-color !default;
+Dzdform-check-input-checked-bg-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><path fill='none' stroke='#{Dzdform-check-input-checked-color}' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 10l3 3l6-6'/></svg>") !default;
+Dzdform-check-radio-checked-bg-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'><circle r='1.5' fill='#{Dzdform-check-input-checked-color}'/></svg>") !default;
+
+Dzdform-check-input-indeterminate-color: Dzdcomponent-active-color !default;
+Dzdform-check-input-indeterminate-bg-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><path fill='none' stroke='#{Dzdform-check-input-indeterminate-color}' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 10h8'/></svg>") !default;
+
+Dzdform-check-input-disabled-bg: Dzdinput-disabled-bg !default;
+// scss-docs-end form-check-variables
+
+// scss-docs-start form-switch-variables
+Dzdform-switch-color: Dzdgray-300 !default;
+Dzdform-switch-width: 2em !default;
+Dzdform-switch-padding-start: Dzdform-switch-width + 0.5em !default;
+
+Dzdform-switch-checked-bg-position-rtl: left center !default; //(C)
+// scss-docs-end form-switch-variables
+
+//input-group-variables
+Dzdinput-group-addon-color: Dzdinput-color !default;
+Dzdinput-group-addon-bg: Dzdinput-bg !default;
+Dzdinput-group-addon-border-color: Dzdinput-border-color !default;
+// scss-docs-end input-group-variables
+
+// scss-docs-start form-select-variables
+Dzdform-select-padding-y: Dzdinput-btn-padding-y !default;
+Dzdform-select-padding-x: Dzdinput-padding-x !default;
+Dzdform-select-indicator-padding: Dzdform-select-padding-x + 1rem !default;
+Dzdform-select-disabled-color: Dzdbody-color !default;
+Dzdform-select-disabled-bg: Dzdinput-disabled-bg !default;
+Dzdform-select-bg-size: 17px 12px !default;
+Dzdform-select-indicator-color: Dzdgray-600 !default;
+Dzdform-select-indicator: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='#{Dzdform-select-indicator-color}' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/></svg>") !default;
+Dzdform-select-indicator-rtl: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='#{Dzdform-select-indicator-color}' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/></svg>") !default; // (C)
+
+Dzdform-select-focus-box-shadow: Dzdinput-btn-focus-box-shadow !default;
+
+Dzdform-select-padding-y-sm: Dzdinput-btn-padding-y-sm !default;
+Dzdform-select-padding-x-sm: Dzdinput-padding-x-sm !default;
+
+Dzdform-select-padding-y-lg: Dzdinput-btn-padding-y-lg !default;
+Dzdform-select-padding-x-lg: Dzdinput-padding-x-lg !default;
+// scss-docs-end form-select-variables
+
+// scss-docs-start form-range-variables
+Dzdform-range-track-height: 0.375rem !default;
+Dzdform-range-track-bg: rgba-to-hex(Dzdgray-100, Dzdrgba-to-hex-bg) !default;
+Dzdform-range-track-box-shadow: none !default;
+Dzdform-range-track-disabled-bg: Dzdgray-50 !default; // (C)
+
+Dzdform-range-thumb-width: 0.875rem !default;
+Dzdform-range-thumb-height: Dzdform-range-thumb-width !default;
+Dzdform-range-thumb-bg: Dzdwhite !default;
+Dzdform-range-thumb-box-shadow: 0 0 6px 0 Dzdgray-400 !default;
+Dzdform-range-thumb-focus-box-shadow: 0 0 8px 0px Dzdgray-400 !default;
+Dzdform-range-thumb-active-bg: Dzdform-range-thumb-bg !default;
+Dzdform-range-thumb-disabled-bg: rgba-to-hex(Dzdgray-200, Dzdrgba-to-hex-bg) !default;
+// scss-docs-end form-range-variables
+
+// scss-docs-start form-floating-variables
+Dzdform-floating-label-opacity: 0.75 !default;
+Dzdform-floating-transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out !default;
+Dzdform-floating-label-transform-rtl: scale(0.85) translateY(-0.5rem) translateX(-0.15rem) !default; // (C)
+// scss-docs-end form-floating-variables
+
+// Form validation
+
+// scss-docs-start form-feedback-variables
+Dzdform-feedback-valid-color: Dzdsuccess !default;
+Dzdform-feedback-invalid-color: Dzddanger !default;
+
+Dzdform-select-feedback-icon-padding: Dzdform-select-indicator-padding + Dzdinput-height-inner !default; // (C)
+Dzdform-select-feedback-icon-padding-sm: Dzdform-select-indicator-padding + Dzdinput-height-inner-sm !default; // (C)
+Dzdform-select-feedback-icon-padding-lg: Dzdform-select-indicator-padding + Dzdinput-height-inner-lg !default; // (C)
+// scss-docs-end form-feedback-variables
+
+// * Navs
+// *******************************************************************************
+
+Dzdnav-spacer: 0.125rem !default; // (C)
+
+Dzdnav-link-padding-y: 0.5rem !default;
+Dzdnav-link-padding-x: 1.25rem !default;
+Dzdnav-link-color: Dzdtext-muted-hover !default;
+Dzdnav-link-disabled-color: Dzdtext-lighter !default;
+Dzdnav-link-line-height: Dzdcomponent-line-height !default; // (C)
+
+Dzdnav-link-padding-y-lg: 0.875rem !default; // (C)
+Dzdnav-link-padding-x-lg: 1.3125rem !default; // (C)
+Dzdnav-link-line-height-lg: Dzdline-height-lg !default; // (C)
+
+Dzdnav-link-padding-y-sm: 0.3125rem !default; // (C)
+Dzdnav-link-padding-x-sm: 0.875rem !default; // (C)
+Dzdnav-link-line-height-sm: Dzdline-height-sm !default; // (C)
+
+Dzdnav-tabs-link-hover-border-color: Dzdgray-100 !default;
+Dzdnav-tabs-link-active-color: Dzdbody-color !default;
+Dzdnav-tabs-link-active-bg: Dzdwhite !default;
+Dzdnav-tabs-border-color: Dzdnav-tabs-link-active-bg !default;
+Dzdnav-tabs-link-active-border-color: Dzdnav-tabs-border-color !default;
+Dzdnav-tabs-btn-bg-factor: 0.16 !default; // (C)
+Dzdnav-tabs-btn-color: Dzdheadings-color !default; // (C)
+Dzdnav-tabs-btn-bg: rgba-to-hex(Dzdgray-100, Dzdrgba-to-hex-bg) !default; // (C)
+
+Dzdnav-pills-link-active-color: Dzdwhite !default;
+Dzdnav-pills-link-active-bg: transparent !default;
+
+// * Navbar
+// *******************************************************************************
+
+Dzdnavbar-toggler-padding-y: 0 !default;
+Dzdnavbar-toggler-padding-x: 0 !default;
+Dzdnavbar-toggler-font-size: 0.75rem !default;
+
+Dzdnavbar-dark-color: rgba(Dzdwhite, 0.8) !default;
+Dzdnavbar-dark-hover-color: Dzdwhite !default;
+Dzdnavbar-dark-active-color: Dzdwhite !default;
+Dzdnavbar-dark-disabled-color: rgba(Dzdwhite, 0.4) !default;
+Dzdnavbar-dark-toggler-icon-bg: url("data:image/svg+xml,%3Csvg width='14px' height='11px' viewBox='0 0 14 11' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cdefs%3E%3Cpath d='M0,0 L14,0 L14,1.75 L0,1.75 L0,0 Z M0,4.375 L14,4.375 L14,6.125 L0,6.125 L0,4.375 Z M0,8.75 L14,8.75 L14,10.5 L0,10.5 L0,8.75 Z' id='path-1'%3E%3C/path%3E%3C/defs%3E%3Cg id='💎-UI-Elements' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E%3Cg id='12)-Navbar' transform='translate(-1174.000000, -1290.000000)'%3E%3Cg id='Group' transform='translate(1174.000000, 1288.000000)'%3E%3Cg id='Icon-Color' transform='translate(0.000000, 2.000000)'%3E%3Cuse fill='#{Dzdnavbar-dark-color}' xlink:href='%23path-1'%3E%3C/use%3E%3Cuse fill-opacity='0.1' fill='#{Dzdnavbar-dark-color}' xlink:href='%23path-1'%3E%3C/use%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E") !default;
+
+Dzdnavbar-light-color: Dzdgray-500 !default;
+Dzdnavbar-light-hover-color: Dzdbody-color !default;
+Dzdnavbar-light-active-color: Dzdbody-color !default;
+Dzdnavbar-light-disabled-color: Dzdgray-300 !default;
+Dzdnavbar-light-toggler-icon-bg: url("data:image/svg+xml,%3Csvg width='14px' height='11px' viewBox='0 0 14 11' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cdefs%3E%3Cpath d='M0,0 L14,0 L14,1.75 L0,1.75 L0,0 Z M0,4.375 L14,4.375 L14,6.125 L0,6.125 L0,4.375 Z M0,8.75 L14,8.75 L14,10.5 L0,10.5 L0,8.75 Z' id='path-1'%3E%3C/path%3E%3C/defs%3E%3Cg id='💎-UI-Elements' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E%3Cg id='12)-Navbar' transform='translate(-1174.000000, -1290.000000)'%3E%3Cg id='Group' transform='translate(1174.000000, 1288.000000)'%3E%3Cg id='Icon-Color' transform='translate(0.000000, 2.000000)'%3E%3Cuse fill='#{Dzdnavbar-light-color}' xlink:href='%23path-1'%3E%3C/use%3E%3Cuse fill-opacity='0.1' fill='#{Dzdnavbar-light-color}' xlink:href='%23path-1'%3E%3C/use%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E") !default;
+Dzdnavbar-light-toggler-border-color: rgba(Dzdblack, 0.06) !default;
+
+// * Dropdowns
+// *******************************************************************************
+Dzddropdown-min-width: 12rem !default;
+Dzddropdown-padding-y: 0.3125rem !default;
+Dzddropdown-font-size: Dzdfont-size-base !default;
+Dzddropdown-border-color: Dzdfloating-component-border-color !default;
+Dzddropdown-divider-bg: Dzdborder-color !default;
+Dzddropdown-box-shadow: Dzdfloating-component-shadow !default;
+
+Dzddropdown-inner-border-radius: 0 !default;
+
+Dzddropdown-link-color: Dzdbody-color !default;
+Dzddropdown-link-hover-bg: rgba(Dzdblack, 0.04) !default;
+Dzddropdown-link-line-height: Dzdcomponent-line-height !default; // (C)
+
+Dzddropdown-link-disabled-color: Dzdtext-lighter !default;
+
+Dzddropdown-item-padding-y: 0.532rem !default;
+Dzddropdown-item-padding-x: 1.25rem !default;
+
+Dzddropdown-header-color: Dzdtext-muted !default;
+
+Dzddropdown-header-padding: Dzddropdown-item-padding-y Dzddropdown-item-padding-x !default;
+
+// * Pagination
+// *******************************************************************************
+
+Dzdpagination-padding-y: 0.625rem !default;
+Dzdpagination-padding-x: 0.5125rem !default;
+Dzdpagination-padding-y-sm: 0.375rem !default;
+Dzdpagination-padding-x-sm: 0.25rem !default;
+Dzdpagination-padding-y-lg: 0.9375rem !default;
+Dzdpagination-padding-x-lg: 0.5rem !default;
+
+Dzdpagination-line-height: 1 !default; // (c)
+
+Dzdpagination-color: Dzdbody-color !default;
+Dzdpagination-bg: rgba-to-hex(rgba(Dzdblack, 0.08), Dzdrgba-to-hex-bg) !default;
+Dzdpagination-border-width: 0px !default;
+Dzdpagination-border-radius: Dzdborder-radius-sm !default;
+Dzdpagination-margin-start: 0.1875rem !default;
+Dzdpagination-border-color: Dzdborder-inner-color !default;
+
+Dzdpagination-focus-box-shadow: none !default;
+
+Dzdpagination-focus-color: Dzdpagination-color !default;
+Dzdpagination-focus-bg: rgba-to-hex(rgba(Dzdblack, 0.16), Dzdrgba-to-hex-bg) !default;
+
+Dzdpagination-hover-color: Dzdpagination-color !default;
+Dzdpagination-hover-bg: rgba-to-hex(rgba(Dzdblack, 0.16), Dzdrgba-to-hex-bg) !default;
+
+Dzdpagination-disabled-color: Dzdtext-muted !default;
+Dzdpagination-disabled-bg: rgba-to-hex(rgba(Dzdblack, 0.04), Dzdrgba-to-hex-bg) !default;
+
+// * Cards
+// *******************************************************************************
+
+Dzdcard-spacer-y: Dzdspacer * 1.5 !default;
+Dzdcard-spacer-x: Dzdspacer * 1.5 !default;
+Dzdcard-title-font-size: Dzdh5-font-size !default; // (C)
+Dzdcard-title-spacer-y: Dzdspacer * 0.875 !default;
+Dzdcard-spacer-x-sm: 1rem !default; // (C)
+Dzdcard-border-width: 0;
+Dzdcard-border-color: Dzdborder-color !default;
+Dzdcard-border-radius: Dzdborder-radius-lg !default;
+Dzdcard-box-shadow: 0 2px 6px 0 rgba(Dzdblack, 0.12) !default;
+Dzdcard-inner-border-color: Dzdborder-inner-color !default; // (C)
+Dzdcard-cap-padding-y: Dzdspacer * 1.5 !default;
+
+Dzdcard-cap-bg: transparent !default;
+Dzdcard-img-overlay-padding: 1.5rem !default;
+
+// * Accordion
+// *******************************************************************************
+
+Dzdaccordion-padding-y: 0.79rem !default;
+Dzdaccordion-padding-x: 1.125rem !default;
+Dzdaccordion-color: Dzdbody-color !default;
+Dzdaccordion-bg: Dzdwhite !default;
+Dzdaccordion-button-color: Dzdheadings-color !default;
+
+Dzdaccordion-border-width: 0 !default;
+Dzdaccordion-border-color: Dzdborder-color !default;
+Dzdaccordion-button-active-bg: Dzdaccordion-bg !default;
+Dzdaccordion-button-active-color: Dzdaccordion-button-color !default;
+
+Dzdaccordion-icon-width: 0.75rem !default;
+Dzdaccordion-icon-color: Dzdaccordion-button-color !default;
+Dzdaccordion-icon-active-color: Dzdaccordion-button-active-color !default;
+
+Dzdaccordion-icon-transform: rotate(90deg) !default;
+
+Dzdaccordion-button-icon: url("data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 12 12' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cdefs%3E%3Cpath id='a' d='m1.532 12 6.182-6-6.182-6L0 1.487 4.65 6 0 10.513z'/%3E%3C/defs%3E%3Cg transform='translate(2.571)' fill='none' fill-rule='evenodd'%3E%3Cuse fill='%23435971' xlink:href='%23a'/%3E%3Cuse fill-opacity='.1' fill='#{Dzdaccordion-icon-color}' xlink:href='%23a'/%3E%3C/g%3E%3C/svg%3E%0A") !default;
+Dzdaccordion-button-active-icon: url("data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 12 12' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cdefs%3E%3Cpath id='a' d='m1.532 12 6.182-6-6.182-6L0 1.487 4.65 6 0 10.513z'/%3E%3C/defs%3E%3Cg transform='translate(2.571)' fill='none' fill-rule='evenodd'%3E%3Cuse fill='%23435971' xlink:href='%23a'/%3E%3Cuse fill-opacity='.1' fill='#{Dzdaccordion-icon-active-color}' xlink:href='%23a'/%3E%3C/g%3E%3C/svg%3E%0A") !default;
+
+// * Tooltips
+// *******************************************************************************
+
+Dzdtooltip-bg: Dzddark !default;
+Dzdtooltip-opacity: 1 !default;
+Dzdtooltip-box-shadow: Dzdbox-shadow-sm !default; // (C)
+Dzdtooltip-padding-y: 0.25rem !default;
+Dzdtooltip-padding-x: 0.7rem !default;
+Dzdtooltip-font-size: Dzdfont-size-base !default;
+Dzdtooltip-border-radius: Dzdborder-radius-sm !default;
+
+// * Popovers
+// *******************************************************************************
+
+Dzdpopover-bg: Dzdwhite !default;
+Dzdpopover-font-size: Dzdfont-size-base !default;
+Dzdpopover-box-shadow: Dzdfloating-component-shadow !default;
+Dzdpopover-border-width: 0px !default;
+Dzdpopover-header-bg: transparent !default;
+Dzdpopover-header-padding-y: 0 !default;
+Dzdpopover-header-padding-x: 1.125rem !default;
+Dzdpopover-header-font-size: Dzdh5-font-size !default; // (C)
+
+Dzdpopover-body-padding-y: 1.125rem !default;
+Dzdpopover-body-padding-x: Dzdpopover-body-padding-y !default;
+Dzdpopover-arrow-outer-color: Dzdpopover-bg !default;
+
+// * Toasts
+// *******************************************************************************
+
+Dzdtoast-padding-x: 1.25rem !default;
+Dzdtoast-padding-y: Dzdtoast-padding-x !default;
+Dzdtoast-font-size: Dzdfont-size-base !default;
+Dzdtoast-background-color: Dzdwhite !default;
+Dzdtoast-bg-factor: 0.85 !default; // (C)
+Dzdtoast-border-width: 0 !default;
+Dzdtoast-border-color: Dzdgray-100 !default;
+Dzdtoast-border-radius: Dzdborder-radius-lg !default;
+Dzdtoast-box-shadow: Dzdfloating-component-shadow !default;
+
+Dzdtoast-header-color: Dzdbody-color !default;
+Dzdtoast-header-background-color: transparent !default;
+Dzdtoast-header-border-color: transparent !default;
+Dzdtoast-spacing: 1.25rem !default;
+
+Dzdtoast-btn-close-size: 0.625em !default; // (C)
+
+// * Badges
+// *******************************************************************************
+
+Dzdbadge-font-size: 0.8125em !default;
+Dzdbadge-font-weight: 500 !default;
+Dzdbadge-padding-y: 0.52em !default;
+Dzdbadge-padding-x: 0.593em !default;
+Dzdbadge-border-radius: Dzdborder-radius-sm !default;
+
+Dzdbadge-height: 1.5rem !default; // (C)
+Dzdbadge-width: 1.5rem !default; // (C)
+Dzdbadge-line-height: 0.75 !default; // (C)
+
+// * Modals
+// *******************************************************************************
+Dzdmodal-inner-padding: Dzdspacer * 1.5 !default;
+Dzdmodal-dialog-margin: 1.5rem !default;
+
+Dzdmodal-content-border-width: 0px !default;
+Dzdmodal-content-box-shadow-xs: 0 2px 16px 0 rgba(Dzdblack, 0.45) !default;
+Dzdmodal-content-box-shadow-sm-up: 0 2px 20px 0 rgba(Dzdblack, 0.45) !default;
+Dzdmodal-header-border-width: 0px !default;
+
+Dzdmodal-header-padding-y: 0.25rem !default;
+Dzdmodal-header-padding-x: Dzdmodal-inner-padding !default;
+Dzdmodal-header-padding: Dzdmodal-header-padding-x Dzdmodal-header-padding-x Dzdmodal-header-padding-y !default; // Keep this for backwards compatibility
+Dzdmodal-footer-padding: Dzdmodal-header-padding-y Dzdmodal-header-padding-x Dzdmodal-header-padding-x !default; // (C)
+
+Dzdmodal-lg: 50rem !default;
+Dzdmodal-md: 35rem !default;
+Dzdmodal-sm: 22.5rem !default;
+
+Dzdmodal-fade-transform: translateY(-100px) scale(0.8) !default;
+Dzdmodal-show-transform: translateY(0) scale(1) !default;
+
+Dzdmodal-transition-duration: 0.15s !default; // (C)
+Dzdmodal-transition: transform Dzdmodal-transition-duration ease-out !default;
+
+Dzdmodal-simple-padding: 3rem !default; // (C)
+Dzdmodal-simple-close-position: 1rem !default; // (C)
+
+// * Alerts
+// *******************************************************************************
+
+Dzdalert-padding-y: Dzdspacer * 0.9375 !default;
+Dzdalert-padding-x: Dzdspacer * 0.9375 !default;
+Dzdalert-border-width: 0 !default;
+Dzdalert-bg-scale: -84% !default;
+Dzdalert-border-scale: -70% !default;
+Dzdalert-color-scale: 0% !default;
+
+// * Progress bars
+// *******************************************************************************
+
+Dzdprogress-height: 0.75rem !default;
+Dzdprogress-font-size: 0.625rem !default;
+Dzdprogress-bg: Dzdgray-100 !default;
+Dzdprogress-border-radius: 10rem !default;
+Dzdprogress-bar-color: Dzdwhite !default;
+
+// List group
+// *******************************************************************************
+
+// scss-docs-start list-group-variables
+Dzdlist-group-color: Dzdbody-color !default;
+Dzdlist-group-bg: transparent !default;
+Dzdlist-group-border-color: Dzdborder-color !default;
+Dzdlist-group-item-padding-y: 0.58rem !default;
+Dzdlist-group-item-padding-x: 0.9375rem !default;
+Dzdlist-group-item-color-scale: 0 !default;
+Dzdlist-group-border-radius: Dzdborder-radius-lg !default;
+Dzdlist-group-item-bg-hover-scale: 5% !default; //  (c)
+
+Dzdlist-group-hover-bg: rgba(Dzdblack, 0.06) !default;
+Dzdlist-group-active-color: Dzdwhite !default;
+
+Dzdlist-group-disabled-color: Dzdtext-lighter !default;
+
+Dzdlist-group-action-color: Dzdtext-muted-hover !default;
+Dzdlist-group-action-hover-color: Dzdbody-color !default;
+Dzdlist-group-action-active-bg: Dzdgray-50 !default;
+// scss-docs-end list-group-variables
+
+// * Image thumbnails
+// *******************************************************************************
+
+Dzdthumbnail-padding: 0 !default;
+Dzdthumbnail-bg: transparent !default;
+Dzdthumbnail-border-width: 0px !default;
+Dzdthumbnail-border-radius: 0px !default;
+
+// * Figures
+// *******************************************************************************
+
+Dzdfigure-caption-color: Dzdtext-muted !default;
+
+// * Breadcrumbs
+// *******************************************************************************
+
+Dzdbreadcrumb-padding-y: 0 !default;
+Dzdbreadcrumb-padding-x: 0 !default;
+Dzdbreadcrumb-item-padding-x: 0.5rem !default;
+Dzdbreadcrumb-margin-bottom: 1rem !default;
+Dzdbreadcrumb-bg: transparent !default;
+Dzdbreadcrumb-divider-color: Dzdtext-muted !default;
+Dzdbreadcrumb-active-color: Dzdbody-color !default;
+Dzdbreadcrumb-divider: '/' !default;
+Dzdbreadcrumb-divider-flipped: '\\' !default;
+Dzdbreadcrumb-color: Dzdbody-color !default; // (C)
+
+// * Carousel
+// *******************************************************************************
+Dzdcarousel-control-color: Dzdwhite !default;
+Dzdcarousel-control-width: 14% !default;
+Dzdcarousel-control-icon-width: 2.55rem !default;
+Dzdcarousel-control-opacity: 1 !default;
+Dzdcarousel-control-hover-opacity: 1 !default;
+
+Dzdcarousel-control-prev-icon-bg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' style='fill: #{Dzdcarousel-control-color};transform: ;msFilter:;'%3E%3Cpath d='M13.293 6.293 7.586 12l5.707 5.707 1.414-1.414L10.414 12l4.293-4.293z'%3E%3C/path%3E%3C/svg%3E") !default;
+Dzdcarousel-control-next-icon-bg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' style='fill: #{Dzdcarousel-control-color};transform: ;msFilter:;'%3E%3Cpath d='M10.707 17.707 16.414 12l-5.707-5.707-1.414 1.414L13.586 12l-4.293 4.293z'%3E%3C/path%3E%3C/svg%3E") !default;
+
+// Spinners
+// *******************************************************************************
+
+Dzdspinner-width-lg: 3rem !default; // (C)
+Dzdspinner-height-lg: Dzdspinner-width-lg !default; // (C)
+Dzdspinner-border-width-lg: 0.3em !default; // (C)
+
+// * Close
+// *******************************************************************************
+
+Dzdbtn-close-width: 0.8em !default;
+Dzdbtn-close-height: Dzdbtn-close-width !default;
+Dzdbtn-close-color: Dzdtext-muted !default;
+Dzdbtn-close-bg: url("data:image/svg+xml,%3Csvg width='150px' height='151px' viewBox='0 0 150 151' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cdefs%3E%3Cpolygon id='path-1' points='131.251657 0 74.9933705 56.25 18.7483426 0 0 18.75 56.2450278 75 0 131.25 18.7483426 150 74.9933705 93.75 131.251657 150 150 131.25 93.7549722 75 150 18.75'%3E%3C/polygon%3E%3C/defs%3E%3Cg id='🎨-%5BSetup%5D:-Colors-&amp;-Shadows' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E%3Cg id='Artboard' transform='translate(-225.000000, -250.000000)'%3E%3Cg id='Icon-Color' transform='translate(225.000000, 250.500000)'%3E%3Cuse fill='#{Dzdbtn-close-color}' xlink:href='%23path-1'%3E%3C/use%3E%3Cuse fill-opacity='0.5' fill='#{Dzdbtn-close-color}' xlink:href='%23path-1'%3E%3C/use%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E") !default;
+Dzdbtn-close-focus-shadow: none !default;
+Dzdbtn-close-opacity: 0.95 !default;
+Dzdbtn-close-hover-opacity: 0.95 !default;
+Dzdbtn-close-focus-opacity: 0.95 !default;
+
+Dzdclose-font-weight: 300 !default; // (C)
+
+// * Offcanvas
+// *******************************************************************************
+
+// scss-docs-start offcanvas-variables
+Dzdoffcanvas-transition-duration: 0.25s !default;
+// scss-docs-end offcanvas-variables
+
+// Utilities
+Dzdoverflows: auto, hidden, scroll, visible !default;
+
+// Config
+Dzdrtl-support: false !default;
+Dzddark-style: false !default;
+
+// * Chevron Icons
+// ********************************************************************************
+
+Dzdchevron-up: "data:image/svg+xml,%3Csvg width='10px' height='6px' viewBox='0 0 10 6' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cdefs%3E%3Cpolygon id='path-1' points='0 4.57961362 1.23882951 5.71428571 5 2.26934419 8.76117049 5.71428571 10 4.57961362 5 0'%3E%3C/polygon%3E%3C/defs%3E%3Cg id='⚙️-Symbols' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E%3Cg id='31)-DataTables' transform='translate(-289.000000, -64.000000)'%3E%3Cg id='Table-Basic' transform='translate(0.000000, 52.000000)'%3E%3Cg id='Table-Header' transform='translate(19.000000, 10.000000)'%3E%3Cg id='Group' transform='translate(270.000000, 0.000000)'%3E%3Cg id='Icon-Color' transform='translate(0.000000, 2.142857)'%3E%3Cuse fill='#{str-replace(#{rgba-to-hex(Dzdgray-500,Dzdrgba-to-hex-bg)},'#', '%23')}' xlink:href='%23path-1'%3E%3C/use%3E%3Cuse fill-opacity='0.5' fill='#{str-replace(#{rgba-to-hex(Dzdgray-500,Dzdrgba-to-hex-bg)},'#', '%23')}' xlink:href='%23path-1'%3E%3C/use%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E";
+Dzdchevron-down: "data:image/svg+xml,%3Csvg width='10px' height='6px' viewBox='0 0 10 6' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Cdefs%3E%3Cpolygon id='path-1' points='8.76117049 0 5 3.44494152 1.23882951 0 0 1.1346721 5 5.71428571 10 1.1346721'%3E%3C/polygon%3E%3C/defs%3E%3Cg id='⚙️-Symbols' stroke='none' stroke-width='1' fill='none' fill-rule='evenodd'%3E%3Cg id='31)-DataTables' transform='translate(-289.000000, -76.000000)'%3E%3Cg id='Table-Basic' transform='translate(0.000000, 52.000000)'%3E%3Cg id='Table-Header' transform='translate(19.000000, 10.000000)'%3E%3Cg id='Group' transform='translate(270.000000, 12.000000)'%3E%3Cg id='Icon-Color' transform='translate(0.000000, 2.142857)'%3E%3Cuse fill='#{str-replace(#{rgba-to-hex(Dzdgray-500,Dzdrgba-to-hex-bg)},'#', '%23')}' xlink:href='%23path-1'%3E%3C/use%3E%3Cuse fill-opacity='0.8' fill='#{str-replace(#{rgba-to-hex(Dzdgray-500,Dzdrgba-to-hex-bg)},'#', '%23')}' xlink:href='%23path-1'%3E%3C/use%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/g%3E%3C/svg%3E";

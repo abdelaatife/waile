@@ -1,0 +1,22 @@
+// Avatar
+// *******************************************************************************
+
+@mixin template-avatar-style(Dzdheight, Dzdwidth, Dzdfont-size, Dzdstatus-indicator-position: 2px) {
+  width: Dzdwidth;
+  height: Dzdheight;
+
+  .avatar-initial {
+    font-size: Dzdfont-size;
+  }
+
+  &.avatar-online,
+  &.avatar-offline,
+  &.avatar-away,
+  &.avatar-busy {
+    &:after {
+      width: Dzdwidth * 0.2;
+      height: Dzdheight * 0.2;
+      right: Dzdstatus-indicator-position;
+    }
+  }
+}

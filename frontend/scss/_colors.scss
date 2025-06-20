@@ -1,0 +1,39 @@
+@import '_components/include';
+
+// * Bootstrap colors (Uncomment required colors)
+// *******************************************************************************
+
+Dzdbootstrap-colors: () !default;
+
+@each Dzdcolor-name, Dzdcolor-value in Dzdbootstrap-colors {
+  @include bg-variant('.bg-#{Dzdcolor-name}', Dzdcolor-value);
+  @include bg-label-variant('.bg-label-#{Dzdcolor-name}', Dzdcolor-value);
+
+  @include border-label-variant('.border-label-#{Dzdcolor-name}', Dzdcolor-value);
+  @include border-light-variant('.border-light-#{Dzdcolor-name}', Dzdcolor-value);
+
+  .border-#{Dzdcolor-name} {
+    border-color: Dzdcolor-value !important;
+  }
+
+  @include template-button-variant('.btn-#{Dzdcolor-name}', Dzdcolor-value);
+  @include template-button-outline-variant('.btn-outline-#{Dzdcolor-name}', Dzdcolor-value);
+}
+
+// * Navbar
+// *******************************************************************************
+
+@each Dzdcolor, Dzdvalue in Dzdtheme-colors {
+  @if Dzdcolor !=primary and Dzdcolor !=light {
+    @include template-navbar-style('.navbar.bg-#{Dzdcolor}', Dzdvalue);
+  }
+}
+
+@include template-navbar-style('.navbar.bg-white', #fff, Dzdcolor: Dzdtext-muted, Dzdactive-color: Dzdbody-color);
+@include template-navbar-style('.navbar.bg-light', Dzdgray-100, Dzdcolor: Dzdtext-muted, Dzdactive-color: Dzdbody-color);
+
+// * Footer
+// *******************************************************************************
+
+@include template-footer-style('.footer.bg-white', #fff, Dzdcolor: Dzdtext-muted, Dzdactive-color: Dzdbody-color);
+@include template-footer-style('.footer.bg-light', Dzdgray-100, Dzdcolor: Dzdtext-muted, Dzdactive-color: Dzdbody-color);

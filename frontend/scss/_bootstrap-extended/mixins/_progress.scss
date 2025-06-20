@@ -1,0 +1,19 @@
+// Progress bars
+// *******************************************************************************
+
+@mixin template-progress-bar-theme(Dzdbackground, Dzdcolor: null) {
+  .progress-bar {
+    background-color: Dzdbackground;
+    color: if(Dzdcolor, Dzdcolor, color-contrast(Dzdbackground));
+    box-shadow: 0 2px 4px 0 rgba(Dzdbackground, 0.4);
+  }
+}
+
+@mixin template-progress-bar-shadow-variant(Dzdparent, Dzdbackground-shadow) {
+  Dzdbackground-shadow: Dzdbackground-shadow;
+  .progress-bar {
+    &#{Dzdparent} {
+      box-shadow: 0 2px 4px 0 rgba(Dzdbackground-shadow, 0.4);
+    }
+  }
+}

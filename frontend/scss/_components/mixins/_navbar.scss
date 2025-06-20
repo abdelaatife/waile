@@ -1,0 +1,90 @@
+// Navbar
+// *******************************************************************************
+
+@mixin template-navbar-style(Dzdparent, Dzdbg, Dzdcolor: null, Dzdactive-color: null, Dzdborder: null) {
+  Dzdcolors: get-navbar-prop(Dzdbg, Dzdactive-color, Dzdcolor, Dzdborder);
+
+  #{Dzdparent} {
+    background-color: map-get(Dzdcolors, bg) !important;
+    color: map-get(Dzdcolors, color);
+
+    .navbar-brand,
+    .navbar-brand a {
+      color: map-get(Dzdcolors, active-color);
+
+      &:hover,
+      &:focus {
+        color: map-get(Dzdcolors, active-color);
+      }
+    }
+
+    // Navbar search color
+    .navbar-search-wrapper {
+      .navbar-search-icon,
+      .search-input {
+        color: map-get(Dzdcolors, color);
+      }
+    }
+    .search-input-wrapper {
+      .search-input,
+      .search-toggler {
+        background-color: Dzdbg !important;
+        color: map-get(Dzdcolors, color);
+      }
+    }
+
+    .navbar-nav {
+      > .nav-link,
+      > .nav-item > .nav-link,
+      > .nav > .nav-item > .nav-link {
+        color: map-get(Dzdcolors, color);
+
+        &:hover,
+        &:focus {
+          color: map-get(Dzdcolors, active-color);
+        }
+
+        &.disabled {
+          color: map-get(Dzdcolors, disabled-color) !important;
+        }
+      }
+
+      .show > .nav-link,
+      .active > .nav-link,
+      .nav-link.show,
+      .nav-link.active {
+        color: map-get(Dzdcolors, active-color);
+      }
+    }
+
+    .navbar-toggler {
+      color: map-get(Dzdcolors, color);
+      border-color: map-get(Dzdcolors, border);
+    }
+
+    .navbar-toggler-icon {
+      background-image: if(
+        map-get(Dzdcolors, active-color) == #fff,
+        Dzdnavbar-dark-toggler-icon-bg,
+        Dzdnavbar-light-toggler-icon-bg
+      );
+    }
+
+    .navbar-text {
+      color: map-get(Dzdcolors, color);
+
+      a {
+        color: map-get(Dzdcolors, active-color);
+
+        &:hover,
+        &:focus {
+          color: map-get(Dzdcolors, active-color);
+        }
+      }
+    }
+
+    hr {
+      border-color: map-get(Dzdcolors, border);
+    }
+  }
+}

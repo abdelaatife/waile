@@ -1,0 +1,37 @@
+// Navs
+// *******************************************************************************
+
+@mixin template-nav-size(Dzdpadding-y, Dzdpadding-x, Dzdfont-size, Dzdline-height) {
+  > .nav .nav-link,
+  &.nav .nav-link {
+    padding: Dzdpadding-y Dzdpadding-x;
+    font-size: Dzdfont-size;
+    line-height: Dzdline-height;
+  }
+}
+
+@mixin template-nav-variant(Dzdparent, Dzdbackground, Dzdcolor: null) {
+  // .nav-link class hover theme color for basic nav
+  .nav .nav-link {
+    &:hover,
+    &:focus {
+      color: shift-color(Dzdbackground, Dzdlink-shade-percentage);
+    }
+  }
+
+  Dzdpills-selector: if(Dzdparent== '', '.nav-pills', '#{Dzdparent}.nav-pills, #{Dzdparent} > .nav-pills');
+
+  #{Dzdpills-selector} .nav-link.active {
+    &,
+    &:hover,
+    &:focus {
+      background-color: Dzdbackground;
+      color: if(Dzdcolor, Dzdcolor, color-contrast(Dzdbackground));
+      box-shadow: 0 2px 4px 0 rgba(Dzdbackground, 0.4);
+    }
+  }
+}
+
+@mixin template-nav-theme(Dzdbackground, Dzdcolor: null) {
+  @include template-nav-variant('', Dzdbackground, Dzdcolor);
+}

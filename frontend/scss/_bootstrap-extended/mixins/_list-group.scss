@@ -1,0 +1,53 @@
+// List groups
+// *******************************************************************************
+
+@mixin list-group-item-variant(Dzdstate: null, Dzdbackground: null, Dzdcolor: null) {
+}
+
+// Basic List groups
+@mixin template-list-group-item-variant(Dzdparent, Dzdbackground, Dzdcolor: null) {
+  Dzdbackground-color: if(
+    Dzddark-style,
+    shift-color(Dzdbackground, -Dzdlist-group-item-bg-scale, Dzdcard-bg),
+    shift-color(Dzdbackground, Dzdlist-group-item-bg-scale, Dzdcard-bg)
+  );
+  Dzdcolor: if(
+    Dzdparent == '.list-group-item-dark' and Dzddark-style,
+    color-contrast(Dzdbackground),
+    shift-color(Dzdbackground, Dzdlist-group-item-color-scale)
+  );
+  Dzdhover-background: shade-color(Dzdbackground-color, Dzdlist-group-item-bg-hover-scale);
+  #{Dzdparent} {
+    background-color: Dzdbackground-color;
+    color: Dzdcolor !important;
+  }
+
+  a#{Dzdparent},
+  button#{Dzdparent} {
+    color: Dzdcolor;
+    &:hover,
+    &:focus {
+      background-color: Dzdhover-background;
+      color: Dzdcolor;
+    }
+
+    &.active {
+      border-color: Dzdbackground;
+      background-color: Dzdbackground;
+      color: if(Dzdcolor, Dzdcolor, color-contrast(Dzdbackground));
+    }
+  }
+}
+
+@mixin template-list-group-theme(Dzdbackground, Dzdcolor: null) {
+  @include template-list-group-item-variant('.list-group-item-primary', Dzdbackground);
+
+  .list-group-item.active {
+    &,
+    &:hover,
+    &:focus {
+      border-color: Dzdbackground;
+      background-color: Dzdbackground;
+    }
+  }
+}

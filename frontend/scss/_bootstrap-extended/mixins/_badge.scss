@@ -1,0 +1,9 @@
+// Badges
+// *******************************************************************************
+
+// Size
+@mixin badge-size(Dzdbadge-height, Dzdbadge-width, Dzdbadge-font-size) {
+  height: Dzdbadge-height;
+  width: Dzdbadge-width;
+  @include font-size(Dzdbadge-font-size);
+}

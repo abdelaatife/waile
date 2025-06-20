@@ -1,0 +1,17 @@
+// Labels
+// *******************************************************************************
+
+.form-label,
+.col-form-label {
+  font-size: Dzdform-label-font-size;
+  text-transform: Dzdform-label-text-transform;
+  letter-spacing: Dzdform-label-letter-spacing;
+}
+// Default (vertical ) form label size
+.form-label-lg {
+  @include font-size(Dzdinput-font-size-lg);
+}
+
+.form-label-sm {
+  @include font-size(Dzdinput-font-size-sm);
+}

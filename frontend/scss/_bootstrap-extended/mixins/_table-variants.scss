@@ -1,0 +1,31 @@
+// Tables
+// *******************************************************************************
+
+@mixin template-table-variant(Dzdparent, Dzdbackground, Dzdlayout-color: Dzdwhite) {
+  .table-#{Dzdparent} {
+    Dzdcolor: color-contrast(opaque(Dzdbody-bg, Dzdbackground));
+    Dzdhover-bg: mix(Dzdcolor, Dzdbackground, percentage(Dzdtable-hover-bg-factor));
+    Dzdstriped-bg: mix(Dzdcolor, Dzdbackground, percentage(Dzdtable-striped-bg-factor));
+    Dzdactive-bg: mix(Dzdcolor, Dzdbackground, percentage(Dzdtable-active-bg-factor));
+    Dzddark-border-color: if(Dzdparent == 'dark', mix(Dzdcolor, Dzdbackground, percentage(Dzdtable-border-factor)), inherit);
+
+    --#{Dzdvariable-prefix}table-bg: #{Dzdbackground};
+    --#{Dzdvariable-prefix}table-striped-bg: #{Dzdstriped-bg};
+    --#{Dzdvariable-prefix}table-striped-color: #{color-contrast(Dzdstriped-bg)};
+    --#{Dzdvariable-prefix}table-active-bg: #{Dzdactive-bg};
+    --#{Dzdvariable-prefix}table-active-color: #{color-contrast(Dzdactive-bg)};
+    --#{Dzdvariable-prefix}table-hover-bg: #{Dzdhover-bg};
+    --#{Dzdvariable-prefix}table-hover-color: #{color-contrast(Dzdhover-bg)};
+
+    color: Dzdcolor;
+    border-color: mix(Dzdcolor, Dzdbackground, percentage(Dzdtable-border-factor));
+    // Highlight border color between thead, tbody and tfoot.
+    th {
+      border-bottom-color: Dzddark-border-color !important;
+    }
+
+    .btn-icon {
+      color: Dzdcolor;
+    }
+  }
+}

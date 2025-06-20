@@ -1,0 +1,92 @@
+// Pagination
+// *******************************************************************************
+
+// Pagination next, prev, first & last css padding
+.page-item {
+  &.first,
+  &.last,
+  &.next,
+  &.prev,
+  &.previous {
+    .page-link {
+      padding-top: Dzdpagination-padding-y - 0.125rem;
+      padding-bottom: Dzdpagination-padding-y - 0.125rem;
+    }
+  }
+  &.disabled {
+    .page-link {
+      border-color: Dzdpagination-border-color;
+    }
+  }
+  &.active {
+    .page-link {
+      margin: 0 0.1rem 0 0.3rem;
+    }
+  }
+}
+
+// Pagination basic style
+.page-link,
+.page-link > a {
+  @include border-radius(Dzdborder-radius);
+
+  line-height: Dzdpagination-line-height;
+  text-align: center;
+  min-width: calc(
+    #{'#{(Dzdfont-size-base * Dzdpagination-line-height) + (Dzdpagination-padding-y * 2)} + #{Dzdpagination-border-width * 2}'}
+  );
+
+  &:focus {
+    color: Dzdpagination-hover-color;
+  }
+}
+
+.page-link.btn-primary {
+  box-shadow: none !important;
+}
+
+// Sizing
+// *******************************************************************************
+
+// Pagination Large
+.pagination-lg .page-link,
+.pagination-lg > li > a:not(.page-link) {
+  min-width: calc(
+    #{'#{(Dzdfont-size-lg * Dzdpagination-line-height) + (Dzdpagination-padding-y-lg * 2)} + #{Dzdpagination-border-width * 2}'}
+  );
+}
+.pagination-lg > .page-item {
+  &.first,
+  &.last,
+  &.next,
+  &.prev,
+  &.previous {
+    .page-link {
+      padding-top: Dzdpagination-padding-y-lg - 0.0845rem;
+      padding-bottom: Dzdpagination-padding-y-lg - 0.0845rem;
+    }
+  }
+}
+
+// Pagination Small
+.pagination-sm .page-link,
+.pagination-sm > li > a:not(.page-link) {
+  min-width: calc(
+    #{'#{(Dzdfont-size-sm * Dzdpagination-line-height) + (Dzdpagination-padding-y-sm * 2)} + #{Dzdpagination-border-width * 2}'}
+  );
+  .tf-icon {
+    font-size: Dzdfont-size-base;
+  }
+}
+.pagination-sm > .page-item {
+  &.first,
+  &.last,
+  &.next,
+  &.prev,
+  &.previous {
+    .page-link {
+      padding-top: Dzdpagination-padding-y-sm - 0.075rem;
+      padding-bottom: Dzdpagination-padding-y-sm - 0.075rem;
+    }
+  }
+}
