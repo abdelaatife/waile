@@ -218,10 +218,12 @@ document.addEventListener('DOMContentLoaded', () => {
     tresorerie_nette: {
       calculate: () => parse(window.globalInputs.tresorerie_disponible) - parse(window.globalInputs.tresorerie_passive)
     },
+
+     
+    
   };
 
   capitauxPropres = document.getElementById('capitaux_propres');
-
   // Helper functions
   function parse(value) {
     if (typeof value === 'string') {
@@ -236,7 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (type === 'currency') {
       return new Intl.NumberFormat('fr-FR', {
         style: 'currency',
-        currency: 'EUR',
+        currency: 'DZD',
         minimumFractionDigits: 2
       }).format(numericValue);
     }
@@ -607,7 +609,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('taux_integ').textContent = formatNumber(TauxInteg);
 
     // Rentabilité des capitaux propres
-    const capitauxPropres = parseFloat(document.getElementById('capitaux_propres').value) || 0;
+    const capitauxPropres =  savedData.table1.inputs.capitaux_propres  || 0;
     const rentabiliteCaptProp = (capitauxPropres !== 0) ? (varResNetEx / capitauxPropres) : 0;
 
     window.globalTable2Calculations.taux_integ = rentabiliteCaptProp;
@@ -709,27 +711,111 @@ function formatPercent(value) {
 }
 ///////////////////////////////////
 //
-document.getElementById('generatePdfBtn').addEventListener('click', async () => {
-    const reportData = {
-      table1: {
-        inputs: { ...window.globalInputs },
-        calculations: { ...window.globalCalculations }
-      },
-      table2: {
-        inputs: { ...window.globalTable2Inputs },
-        calculations: { ...window.globalTable2Calculations }
-      }
+ // Add this function to save non-zero variables to localStorage
+// Function to safely save data with merging
+function saveNonZeroVariablesToStorage() {
+  try {
+    // 1. Get existing data or initialize empty structure
+    const existingData = getSavedNonZeroVariables() || {
+      table1: { inputs: {}, calculations: {} },
+      table2: { inputs: {}, calculations: {} }
     };
- const response = await fetch('http://localhost:3000/generate-report', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify({ reportData })
+
+    // 2. Create new merged data structure
+    const mergedData = JSON.parse(JSON.stringify(existingData)); // Deep clone
+
+    // 3. Helper function with improved validation
+    function isNonZero(value) {
+      if (value === null || value === undefined || value === "") return false;
+      const num = typeof value === 'string' 
+        ? parseFloat(value.replace(/,/g, '.').replace(/[^0-9.-]/g, '')) || 0
+        : Number(value) || 0;
+      return num !== 0;
+    }
+
+    // 4. Safely merge Table 1 data
+    if (window.globalInputs && typeof window.globalInputs === 'object') {
+      for (const key in window.globalInputs) {
+        if (isNonZero(window.globalInputs[key])) {
+          mergedData.table1.inputs[key] = window.globalInputs[key];
+        }
+      }
+    }
+    
+    if (window.globalCalculations && typeof window.globalCalculations === 'object') {
+      for (const key in window.globalCalculations) {
+        if (isNonZero(window.globalCalculations[key])) {
+          mergedData.table1.calculations[key] = window.globalCalculations[key];
+        }
+      }
+    }
+
+    // 5. Safely merge Table 2 data
+    if (window.globalTable2Inputs && typeof window.globalTable2Inputs === 'object') {
+      for (const key in window.globalTable2Inputs) {
+        if (isNonZero(window.globalTable2Inputs[key])) {
+          mergedData.table2.inputs[key] = window.globalTable2Inputs[key];
+        }
+      }
+    }
+    
+    if (window.globalTable2Calculations && typeof window.globalTable2Calculations === 'object') {
+      for (const key in window.globalTable2Calculations) {
+        if (isNonZero(window.globalTable2Calculations[key])) {
+          mergedData.table2.calculations[key] = window.globalTable2Calculations[key];
+        }
+      }
+    }
+
+    // 6. Save to localStorage with verification
+    localStorage.setItem('nonZeroVariables', JSON.stringify(mergedData));
+    
+    // Verify save was successful
+    const verify = localStorage.getItem('nonZeroVariables');
+    if (!verify) throw new Error("Failed to save to localStorage");
+    
+    return mergedData;
+  } catch (error) {
+    console.error("Save error:", error);
+    alert("Failed to save data. See console for details.");
+    return null;
+  }
+}
+
+// Helper function with error handling
+function getSavedNonZeroVariables() {
+  try {
+    const savedData = localStorage.getItem('nonZeroVariables');
+    return savedData ? JSON.parse(savedData) : null;
+  } catch (e) {
+    console.error("Load error:", e);
+    return null;
+  }
+}
+
+// Event handlers with verification
+document.addEventListener('DOMContentLoaded', () => {
+  // First button - simple save
+  const saveBtn = document.getElementById('saveVariablesBtn');
+  if (saveBtn) {
+    saveBtn.addEventListener('click', () => {
+      const result = saveNonZeroVariablesToStorage();
+      if (result) {
+        alert(`Saved ${Object.keys(result.table1.inputs).length + Object.keys(result.table2.inputs).length} inputs`);
+        console.log("Saved data:", result);
+      }
+    });
+  }
+
+  // Second button - save and process
+  const submitBtn = document.getElementById('submitBtn2');
+  if (submitBtn) {
+    submitBtn.addEventListener('click', () => {
+      const result = saveNonZeroVariablesToStorage();
+      if (result) {
+        console.log("Data ready for processing:", result);
+        // Show AI assistant UI here
+      }
+    });
+  }
 });
-
-const result = await response.json();
-const reportText = result.report;
-// Puis tu génères le PDF comme avant
-
-  });
