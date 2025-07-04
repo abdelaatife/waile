@@ -46,7 +46,6 @@ app.post('/generate-report', async (req, res) => {
 });
 
 app.listen(3000, () => console.log("Serveur démarré sur http://localhost:3000"));
-=======
 // server.js
 const express = require('express');
 const cors = require('cors');
