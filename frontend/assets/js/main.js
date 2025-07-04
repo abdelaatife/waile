@@ -207,7 +207,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // Helper functions
   function parse(value) {
     if (typeof value === 'string') {
-      return parseFloat(value.replace(/,/g, '.').replace(/[^0-9.]/g, '')) || 0;
+      // Keep minus sign if it's the first character
+      value = value.trim().replace(/,/g, '.');
+
+      // Allow digits, dot, and a minus at the start
+      const matched = value.match(/^[-]?[0-9.]+$/);
+      return matched ? parseFloat(value) : 0;
     }
     return value || 0;
   }
@@ -280,9 +285,18 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   });
+if (cellConfig[key].isInput) {
+  const input = document.getElementById(key);
+  if (input) {
+    input.addEventListener('input', () => {
+      window.globalInputs[key] = input.value;
+      updateCalculations();
+    });
 
-  // Initial calculation
-  updateCalculations();
+     window.globalInputs[key] = input.value;
+  }
+}
+
 });
 
 ///table2////////////////////////////
@@ -446,18 +460,19 @@ document.addEventListener('DOMContentLoaded', () => {
       window.globalTable2Inputs.n_ACHATS_CONSOMMES + window.globalTable2Inputs.n_SERVICES_AUTRES_CONSOMMATIONS;
     document.getElementById('n_CONSOMMATION_EXERCICE').textContent = formatNumber(nConso);
 
-    const n1Conso = window.globalTable2Inputs.n1_ACHATS_CONSOMMES + window.globalTable2Inputs.n1_SERVICES_AUTRES_CONSOMMATIONS;
+    const n1Conso =
+      window.globalTable2Inputs.n1_ACHATS_CONSOMMES + window.globalTable2Inputs.n1_SERVICES_AUTRES_CONSOMMATIONS;
     document.getElementById('n1_CONSOMMATION_EXERCICE').textContent = formatNumber(n1Conso);
     const varConso = nConso - n1Conso;
     window.globalTable2Calculations.CONSOMMATION_EXERCICE = varConso;
     document.getElementById('CONSOMMATION_EXERCICE').textContent = formatNumber(varConso);
 
     // Valeur ajoutée d'exploitation
-    const nVA =     nProdEx - nConso;
-        document.getElementById('n_VALEUR_AJOUTEE_EXPLOITATION').textContent = formatNumber(nVA);
+    const nVA = nProdEx - nConso;
+    document.getElementById('n_VALEUR_AJOUTEE_EXPLOITATION').textContent = formatNumber(nVA);
 
     const n1VA = n1ProdEx - n1Conso;
-        document.getElementById('n1_VALEUR_AJOUTEE_EXPLOITATION').textContent = formatNumber(n1VA);
+    document.getElementById('n1_VALEUR_AJOUTEE_EXPLOITATION').textContent = formatNumber(n1VA);
     const varVA = nVA - n1VA;
     window.globalTable2Calculations.VALEUR_AJOUTEE_EXPLOITATION = varVA;
     document.getElementById('VALEUR_AJOUTEE_EXPLOITATION').textContent = formatNumber(varVA);
@@ -477,15 +492,16 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('IMPOTS_TAXES').textContent = formatNumber(varTaxes);
 
     // Excédent brut d'exploitation
-    const nEBE =  nVA - nPersonnel -nTaxes ; 
-        document.getElementById('n_EXCEDENT_BRUT_EXPLOITATION').textContent = formatNumber(nEBE);
+    const nEBE = nVA - nPersonnel - nTaxes;
+    document.getElementById('n_EXCEDENT_BRUT_EXPLOITATION').textContent = formatNumber(nEBE);
 
-    const n1EBE =  n1VA - n1Personnel -n1Taxes;
-        document.getElementById('n1_EXCEDENT_BRUT_EXPLOITATION').textContent = formatNumber(n1EBE);
+    const n1EBE = n1VA - n1Personnel - n1Taxes;
+    document.getElementById('n1_EXCEDENT_BRUT_EXPLOITATION').textContent = formatNumber(n1EBE);
 
     const varEBE = nEBE - n1EBE;
     window.globalTable2Calculations.EXCEDENT_BRUT_EXPLOITATION = varEBE;
     document.getElementById('EXCEDENT_BRUT_EXPLOITATION').textContent = formatNumber(varEBE);
+    document.getElementById('excedent_brut').textContent = formatNumber(varEBE);
 
     // Autres produits opérationnels
     const nAutresProd = window.globalTable2Inputs.n_AUTRES_PRODUITS_OPERATIONNELS;
@@ -507,6 +523,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const varDot = nDot - n1Dot;
     window.globalTable2Calculations.DOTATIONS = varDot;
     document.getElementById('DOTATIONS').textContent = formatNumber(varDot);
+    document.getElementById("Dotations").textContent = formatNumber(varDot)
 
     // Reprises
     const nReprises = window.globalTable2Inputs.n_REPRISES;
@@ -514,111 +531,102 @@ document.addEventListener('DOMContentLoaded', () => {
     const varReprises = nReprises - n1Reprises;
     window.globalTable2Calculations.REPRISES = varReprises;
     document.getElementById('REPRISES').textContent = formatNumber(varReprises);
+    document.getElementById("repris").textContent = formatNumber(varReprises)
 
     // RESULTAT_OPERATIONNEL
-    const nvarOpRes = nEBE + nAutresProd - nAutresCharges - nDot + nReprises ;
-        document.getElementById('n_RESULTAT_OPERATIONNEL').textContent = formatNumber(nvarOpRes);
+    const nvarOpRes = nEBE + nAutresProd - nAutresCharges - nDot + nReprises;
+    document.getElementById('n_RESULTAT_OPERATIONNEL').textContent = formatNumber(nvarOpRes);
 
-    const n1varOpRes =n1EBE + n1AutresProd - n1AutresCharges - n1Dot + n1Reprises ;
-        document.getElementById('n1_RESULTAT_OPERATIONNEL').textContent = formatNumber(n1varOpRes);
+    const n1varOpRes = n1EBE + n1AutresProd - n1AutresCharges - n1Dot + n1Reprises;
+    document.getElementById('n1_RESULTAT_OPERATIONNEL').textContent = formatNumber(n1varOpRes);
 
-    const varOpRes =
-    nvarOpRes - n1varOpRes;
+    const varOpRes = nvarOpRes - n1varOpRes;
     window.globalTable2Calculations.RESULTAT_OPERATIONNEL = varOpRes;
     document.getElementById('RESULTAT_OPERATIONNEL').textContent = formatNumber(varOpRes);
 
     // PRODUITS_FINANCIERS
     const nvarProdFin = window.globalTable2Inputs.n_PRODUITS_FINANCIERS;
-    const n1varProdFin =window.globalTable2Inputs.n1_PRODUITS_FINANCIERS;
-    const varProdFin =
-    nvarProdFin
-       - n1varProdFin;
+    const n1varProdFin = window.globalTable2Inputs.n1_PRODUITS_FINANCIERS;
+    const varProdFin = nvarProdFin - n1varProdFin;
     window.globalTable2Calculations.PRODUITS_FINANCIERS = varProdFin;
     document.getElementById('PRODUITS_FINANCIERS').textContent = formatNumber(varProdFin);
 
     // CHARGES_FINANCIERES
-     const nvarChargesFin =  window.globalTable2Inputs.n_CHARGES_FINANCIERES;
+    const nvarChargesFin = window.globalTable2Inputs.n_CHARGES_FINANCIERES;
     const n1varChargesFin = window.globalTable2Inputs.n1_CHARGES_FINANCIERES;
-    const varChargesFin =nvarChargesFin
-      - n1varChargesFin;
+    const varChargesFin = nvarChargesFin - n1varChargesFin;
     window.globalTable2Calculations.CHARGES_FINANCIERES = varChargesFin;
     document.getElementById('CHARGES_FINANCIERES').textContent = formatNumber(varChargesFin);
 
     // RESULTAT_FINANCIER
-     const nvarResFin = nvarProdFin - nvarChargesFin;
-         document.getElementById('n_RESULTAT_FINANCIER').textContent = formatNumber(nvarResFin);
+    const nvarResFin = nvarProdFin - nvarChargesFin;
+    document.getElementById('n_RESULTAT_FINANCIER').textContent = formatNumber(nvarResFin);
 
     const n1varResFin = n1varProdFin - n1varChargesFin;
-        document.getElementById('n1_RESULTAT_FINANCIER').textContent = formatNumber(n1varResFin);
+    document.getElementById('n1_RESULTAT_FINANCIER').textContent = formatNumber(n1varResFin);
 
     const varResFin = nvarResFin - n1varResFin;
     window.globalTable2Calculations.RESULTAT_FINANCIER = varResFin;
     document.getElementById('RESULTAT_FINANCIER').textContent = formatNumber(varResFin);
 
     // RESULTAT_ORDINAIRE_AVANT_IMPOTS
-    const nvarOrdAvantImp = nvarOpRes + nvarResFin ; 
-        document.getElementById('n_RESULTAT_ORDINAIRE_AVANT_IMPOTS').textContent = formatNumber(nvarOrdAvantImp);
+    const nvarOrdAvantImp = nvarOpRes + nvarResFin;
+    document.getElementById('n_RESULTAT_ORDINAIRE_AVANT_IMPOTS').textContent = formatNumber(nvarOrdAvantImp);
 
-        const n1varOrdAvantImp = n1varOpRes -n1varResFin ; 
-            document.getElementById('n1_RESULTAT_ORDINAIRE_AVANT_IMPOTS').textContent = formatNumber(n1varOrdAvantImp);
+    const n1varOrdAvantImp = n1varOpRes - n1varResFin;
+    document.getElementById('n1_RESULTAT_ORDINAIRE_AVANT_IMPOTS').textContent = formatNumber(n1varOrdAvantImp);
 
-
-    const varOrdAvantImp =
-     nvarOrdAvantImp -
-     n1varOrdAvantImp;  
+    const varOrdAvantImp = nvarOrdAvantImp - n1varOrdAvantImp;
     window.globalTable2Calculations.RESULTAT_ORDINAIRE_AVANT_IMPOTS = varOrdAvantImp;
     document.getElementById('RESULTAT_ORDINAIRE_AVANT_IMPOTS').textContent = formatNumber(varOrdAvantImp);
 
     // IMPOTS_EXIGIBLES
-     const nvarImpExig = nvarOrdAvantImp * 0.19;
-         document.getElementById('n_IMPOTS_EXIGIBLES').textContent = formatNumber(nvarImpExig);
+    const nvarImpExig = nvarOrdAvantImp * 0.19;
+    document.getElementById('n_IMPOTS_EXIGIBLES').textContent = formatNumber(nvarImpExig);
 
     const n1varImpExig = n1varOrdAvantImp * 0.19;
-        document.getElementById('n1_IMPOTS_EXIGIBLES').textContent = formatNumber(n1varImpExig);
+    document.getElementById('n1_IMPOTS_EXIGIBLES').textContent = formatNumber(n1varImpExig);
 
     const varImpExig = nvarImpExig - n1varImpExig;
     window.globalTable2Calculations.IMPOTS_EXIGIBLES = varImpExig;
     document.getElementById('IMPOTS_EXIGIBLES').textContent = formatNumber(varImpExig);
 
     // IMPOTS_DIFFERES
-    const varImpDiff = window.globalTable2Inputs.n_IMPOTS_DIFFERES - window.globalTable2Inputs.n1_IMPOTS_DIFFERES ;
+    const varImpDiff = window.globalTable2Inputs.n_IMPOTS_DIFFERES - window.globalTable2Inputs.n1_IMPOTS_DIFFERES;
     window.globalTable2Calculations.IMPOTS_DIFFERES = varImpDiff;
     document.getElementById('IMPOTS_DIFFERES').textContent = formatNumber(varImpDiff);
 
     // TOTAL_PRODUITS_ORDINAIRES
-    const nvarTotalProdOrd =   nProdEx + nAutresProd + nReprises +nvarProdFin;
-        document.getElementById('n_TOTAL_PRODUITS_ORDINAIRES').textContent = formatNumber(nvarTotalProdOrd);
+    const nvarTotalProdOrd = nProdEx + nAutresProd + nReprises + nvarProdFin;
+    document.getElementById('n_TOTAL_PRODUITS_ORDINAIRES').textContent = formatNumber(nvarTotalProdOrd);
 
-    const n1varTotalProdOrd = n1ProdEx + n1AutresProd + n1Reprises +n1varProdFin ; 
-        document.getElementById('n1_TOTAL_PRODUITS_ORDINAIRES').textContent = formatNumber(n1varTotalProdOrd);
+    const n1varTotalProdOrd = n1ProdEx + n1AutresProd + n1Reprises + n1varProdFin;
+    document.getElementById('n1_TOTAL_PRODUITS_ORDINAIRES').textContent = formatNumber(n1varTotalProdOrd);
 
-    const varTotalProdOrd =
-       nvarTotalProdOrd - n1varTotalProdOrd;
+    const varTotalProdOrd = nvarTotalProdOrd - n1varTotalProdOrd;
     window.globalTable2Calculations.TOTAL_PRODUITS_ORDINAIRES = varTotalProdOrd;
     document.getElementById('TOTAL_PRODUITS_ORDINAIRES').textContent = formatNumber(varTotalProdOrd);
 
-    // TOTAL_CHARGES_ORDINAIRES 
-const nvarTotalChargesOrd = nConso + nPersonnel + nTaxes + nAutresCharges + nDot + nvarChargesFin+  nvarImpExig   ; 
+    // TOTAL_CHARGES_ORDINAIRES
+    const nvarTotalChargesOrd = nConso + nPersonnel + nTaxes + nAutresCharges + nDot + nvarChargesFin + nvarImpExig;
     document.getElementById('n_TOTAL_CHARGES_ORDINAIRES').textContent = formatNumber(nvarTotalChargesOrd);
 
-const n1varTotalChargesOrd = n1Conso + n1Personnel + n1Taxes + n1AutresCharges + n1Dot + n1varChargesFin+  n1varImpExig   ;
+    const n1varTotalChargesOrd =
+      n1Conso + n1Personnel + n1Taxes + n1AutresCharges + n1Dot + n1varChargesFin + n1varImpExig;
     document.getElementById('n1_TOTAL_CHARGES_ORDINAIRES').textContent = formatNumber(n1varTotalChargesOrd);
 
-
-    const varTotalChargesOrd =
-    nvarTotalChargesOrd - n1varTotalChargesOrd;
+    const varTotalChargesOrd = nvarTotalChargesOrd - n1varTotalChargesOrd;
     window.globalTable2Calculations.TOTAL_CHARGES_ORDINAIRES = varTotalChargesOrd;
     document.getElementById('TOTAL_CHARGES_ORDINAIRES').textContent = formatNumber(varTotalChargesOrd);
 
     // RESULTAT_NET_ORDINAIRES
-    const nvarResNetOrd = nvarOrdAvantImp -nvarImpExig ;
-        document.getElementById('n_RESULTAT_NET_ORDINAIRES').textContent = formatNumber(nvarResNetOrd);
+    const nvarResNetOrd = nvarOrdAvantImp - nvarImpExig;
+    document.getElementById('n_RESULTAT_NET_ORDINAIRES').textContent = formatNumber(nvarResNetOrd);
 
-        const n1varResNetOrd = n1varOrdAvantImp - n1varImpExig  ;
+    const n1varResNetOrd = n1varOrdAvantImp - n1varImpExig;
     document.getElementById('n1_RESULTAT_NET_ORDINAIRES').textContent = formatNumber(n1varResNetOrd);
 
-    const varResNetOrd =
-      nvarResNetOrd -n1varResNetOrd;
+    const varResNetOrd = nvarResNetOrd - n1varResNetOrd;
     window.globalTable2Calculations.RESULTAT_NET_ORDINAIRES = varResNetOrd;
     document.getElementById('RESULTAT_NET_ORDINAIRES').textContent = formatNumber(varResNetOrd);
 
@@ -633,26 +641,25 @@ const n1varTotalChargesOrd = n1Conso + n1Personnel + n1Taxes + n1AutresCharges +
     document.getElementById('EXTRA_CHARGES').textContent = formatNumber(varExtraCharges);
 
     // RESULTAT_EXTRAORDINAIRE
-    const nvarResExtra = window.globalTable2Inputs.n_EXTRA_PRODUITS -window.globalTable2Inputs.n_EXTRA_CHARGES  ;
-        document.getElementById('n_RESULTAT_EXTRAORDINAIRE').textContent = formatNumber(nvarResExtra);
+    const nvarResExtra = window.globalTable2Inputs.n_EXTRA_PRODUITS - window.globalTable2Inputs.n_EXTRA_CHARGES;
+    document.getElementById('n_RESULTAT_EXTRAORDINAIRE').textContent = formatNumber(nvarResExtra);
 
-        const n1varResExtra = window.globalTable2Inputs.n1_EXTRA_PRODUITS -window.globalTable2Inputs.n1_EXTRA_CHARGES  ;
+    const n1varResExtra = window.globalTable2Inputs.n1_EXTRA_PRODUITS - window.globalTable2Inputs.n1_EXTRA_CHARGES;
     document.getElementById('n1_RESULTAT_EXTRAORDINAIRE').textContent = formatNumber(n1varResExtra);
-    const varResExtra =
-     nvarResExtra - n1varResExtra; 
+    const varResExtra = nvarResExtra - n1varResExtra;
     window.globalTable2Calculations.RESULTAT_EXTRAORDINAIRE = varResExtra;
     document.getElementById('RESULTAT_EXTRAORDINAIRE').textContent = formatNumber(varResExtra);
 
     // RESULTAT_NET_EXERCICE
-     const nvarResNetEx = nvarResNetOrd + nvarResExtra   ;
-        document.getElementById('n_RESULTAT_NET_EXERCICE').textContent = formatNumber(nvarResNetEx);
+    const nvarResNetEx = nvarResNetOrd + nvarResExtra;
+    document.getElementById('n_RESULTAT_NET_EXERCICE').textContent = formatNumber(nvarResNetEx);
 
-        const n1varResNetEx = nvarResNetOrd + nvarResExtra    ;
+    const n1varResNetEx = n1varResNetOrd + n1varResExtra;
     document.getElementById('n1_RESULTAT_NET_EXERCICE').textContent = formatNumber(n1varResNetEx);
-    const varResNetEx =
-    nvarResNetEx - n1varResNetEx;
+    const varResNetEx = nvarResNetEx - n1varResNetEx;
     window.globalTable2Calculations.RESULTAT_NET_EXERCICE = varResNetEx;
     document.getElementById('RESULTAT_NET_EXERCICE').textContent = formatNumber(varResNetEx);
+    document.getElementById('Résultat_net').textContent = formatNumber(varResNetEx)
 
     // Ratios
     const evoCA = n1CA !== 0 ? varCA / n1CA : 0;
@@ -753,54 +760,61 @@ const n1varTotalChargesOrd = n1Conso + n1Personnel + n1Taxes + n1AutresCharges +
     document.getElementById('rentabilite_brute_ressources_stables').textContent =
       formatNumber(rentabiliteBruteRessources);
 
+    // excedent_brut = varEBE
+
     //table03
 
     // total_positif
-    // total_positif
-    const totalPositif =
-      (parseFloat(document.getElementById('impots_benefices').value) || 0) +
-      (parseFloat(document.getElementById('participations_salaries').value) || 0) +
-      (parseFloat(document.getElementById('charges_exceptionnelles').value) || 0) +
-      (parseFloat(document.getElementById('produits_exceptionnels').value) || 0) +
-      (parseFloat(document.getElementById('charges_financieres').value) || 0) +
-      (parseFloat(document.getElementById('charge_exploitation').value) || 0) +
-      (parseFloat(document.getElementById('produits_financiers').value) || 0) +
-      (parseFloat(document.getElementById('produit_exploitation').value) || 0) +
-      (parseFloat(document.getElementById('excedent_brut').value) || 0);
 
-    window.globalTable2Calculations.taux_integ = totalPositif;
-    document.getElementById('total_positif').textContent = formatNumber(totalPositif);
+    // Optional: format as decimal
+  }
+  function calculateCAF() {
+    // Helper to parse float from input
+    const parseInput = id => {
+      const val = document.getElementById(id)?.value.replace(',', '.');
+      return parseFloat(val) || 0;
+    };
 
-    // total_negatif
-    const totalNegatif =
-      (parseFloat(document.getElementById('impots_benefices_neg').value) || 0) +
-      (parseFloat(document.getElementById('participations_salaries_neg').value) || 0) +
-      (parseFloat(document.getElementById('charges_exceptionnelles_neg').value) || 0) +
-      (parseFloat(document.getElementById('produits_exceptionnels_neg').value) || 0) +
-      (parseFloat(document.getElementById('charges_financieres_neg').value) || 0) +
-      (parseFloat(document.getElementById('charge_exploitation_neg').value) || 0) +
-      (parseFloat(document.getElementById('produits_financiers_neg').value) || 0) +
-      (parseFloat(document.getElementById('produit_exploitation_neg').value) || 0) +
-      (parseFloat(document.getElementById('excedent_brut_neg').value) || 0);
+    // Positive inputs
+    const excedent_brut = document.getElementById('excedent_brut').value;
+    const produit_exploitation = parseInput('produit_exploitation');
+    const produits_financiers = parseInput('produits_financiers');
+    const produits_exceptionnels = parseInput('produits_exceptionnels');
 
-    window.globalTable2Calculations.taux_integ_neg = totalNegatif;
-    document.getElementById('total_negatif').textContent = formatNumber(totalNegatif);
+    const total_positif = excedent_brut + produit_exploitation + produits_financiers + produits_exceptionnels;
 
-    const totalCap = totalNegatif + totalPositif;
+    // Negative inputs
+    const charge_exploitation = parseInput('charge_exploitation_neg');
+    const charges_financieres = parseInput('charges_financieres_neg');
+    const charges_exceptionnelles = parseInput('charges_exceptionnelles_neg');
+    const participations_salaries = parseInput('participations_salaries_neg');
+    const impots_benefices = parseInput('impots_benefices_neg');
 
-    window.globalTable2Calculations.total_cap = totalCap;
-    document.getElementById('total_cap').textContent = formatNumber(totalCap);
+    const total_negatif =
+      charge_exploitation + charges_financieres + charges_exceptionnelles + participations_salaries + impots_benefices;
 
-    //table03
+    // Capacité d'autofinancement
+    const total_cap = total_positif - total_negatif;
+
+    // Update DOM
+    document.getElementById('total_positif').textContent = total_positif.toFixed(2).replace('.', ',');
+    document.getElementById('total_negatif').textContent = total_negatif.toFixed(2).replace('.', ',');
+    document.getElementById('total_cap').textContent = total_cap.toFixed(2).replace('.', ',');
+  }
+
+  // Wrapper function to run both calculations
+  function runAllCalculations() {
+    updateCalculations();
+    calculateCAF();
   }
 
   // Add event listeners to all inputs
   document.querySelectorAll('input').forEach(input => {
-    input.addEventListener('input', updateCalculations);
+    input.addEventListener('input', runAllCalculations);
   });
 
   // Initial calculation
-  updateCalculations();
+  runAllCalculations();
 
   // Ratios Section
   const nReprises = parseNumber(document.getElementById('n_REPRISES').value);
@@ -812,7 +826,7 @@ const n1varTotalChargesOrd = n1Conso + n1Personnel + n1Taxes + n1AutresCharges +
 function formatCurrency(value) {
   return new Intl.NumberFormat('fr-FR', {
     style: 'currency',
-    currency: 'EUR'
+    currency: 'DZA'
   }).format(value || 0);
 }
 
@@ -933,3 +947,183 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+$.addEventListener('DOMContentLoaded', () => {
+  updateCalculations();
+});
+
+
+/// saved 2 
+// Initialize savedData at the beginning
+let savedData = null;
+
+// Enhanced save function
+function saveAllVariablesToStorage() {
+  try {
+    // Initialize data structure if it doesn't exist
+    const dataToSave = {
+      table1: {
+        inputs: {},
+        calculations: {}
+      },
+      table2: {
+        inputs: {},
+        calculations: {}
+      },
+      table3: {
+        inputs: {},
+        calculations: {}
+      },
+      timestamp: new Date().toISOString()
+    };
+
+    // Helper function to safely add values
+    function addNonZeroValues(source, target) {
+      for (const key in source) {
+        const value = source[key];
+        if (value !== null && value !== undefined && value !== '' && value !== 0) {
+          // Handle both string and number values
+          const numValue = typeof value === 'string' ? 
+            parseFloat(value.replace(/,/g, '.')) || 0 : 
+            Number(value) || 0;
+            
+          if (numValue !== 0) {
+            target[key] = numValue;
+          }
+        }
+      }
+    }
+
+    // Save Table 1 data
+    if (window.globalInputs) {
+      addNonZeroValues(window.globalInputs, dataToSave.table1.inputs);
+    }
+    if (window.globalCalculations) {
+      addNonZeroValues(window.globalCalculations, dataToSave.table1.calculations);
+    }
+
+    // Save Table 2 data
+    if (window.globalTable2Inputs) {
+      addNonZeroValues(window.globalTable2Inputs, dataToSave.table2.inputs);
+    }
+    if (window.globalTable2Calculations) {
+      addNonZeroValues(window.globalTable2Calculations, dataToSave.table2.calculations);
+    }
+
+    // Save Table 3 (CAF) data
+    const cafInputs = {
+      excedent_brut: document.getElementById('excedent_brut')?.value,
+      produit_exploitation: document.getElementById('produit_exploitation')?.value,
+      produits_financiers: document.getElementById('produits_financiers')?.value,
+      produits_exceptionnels: document.getElementById('produits_exceptionnels')?.value,
+      charge_exploitation: document.getElementById('charge_exploitation_neg')?.value,
+      charges_financieres: document.getElementById('charges_financieres_neg')?.value,
+      charges_exceptionnelles: document.getElementById('charges_exceptionnelles_neg')?.value,
+      participations_salaries: document.getElementById('participations_salaries_neg')?.value,
+      impots_benefices: document.getElementById('impots_benefices_neg')?.value
+    };
+    addNonZeroValues(cafInputs, dataToSave.table3.inputs);
+
+    const cafCalculations = {
+      total_positif: document.getElementById('total_positif')?.textContent,
+      total_negatif: document.getElementById('total_negatif')?.textContent,
+      total_cap: document.getElementById('total_cap')?.textContent
+    };
+    addNonZeroValues(cafCalculations, dataToSave.table3.calculations);
+
+    // Save to localStorage
+    localStorage.setItem('financialDashboardData', JSON.stringify(dataToSave));
+    savedData = dataToSave;
+    
+    return dataToSave;
+  } catch (error) {
+    console.error('Error saving data:', error);
+    return null;
+  }
+}
+
+// Load function
+function loadSavedData() {
+  try {
+    const saved = localStorage.getItem('financialDashboardData');
+    if (saved) {
+      savedData = JSON.parse(saved);
+      return savedData;
+    }
+    return null;
+  } catch (error) {
+    console.error('Error loading saved data:', error);
+    return null;
+  }
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', () => {
+  // Load any saved data
+  savedData = loadSavedData();
+  
+  // If we have saved data, populate the form fields
+  if (savedData) {
+    // Populate Table 1 inputs
+    for (const key in savedData.table1.inputs) {
+      const input = document.getElementById(key);
+      if (input) {
+        input.value = savedData.table1.inputs[key];
+      }
+    }
+    
+    // Populate Table 2 inputs
+    for (const key in savedData.table2.inputs) {
+      const input = document.getElementById(key);
+      if (input) {
+        input.value = savedData.table2.inputs[key];
+      }
+    }
+    
+    // Populate Table 3 inputs
+    for (const key in savedData.table3.inputs) {
+      const input = document.getElementById(key);
+      if (input) {
+        input.value = savedData.table3.inputs[key];
+      }
+    }
+    
+    // Trigger calculations to update all derived values
+    updateCalculations();
+    runAllCalculations();
+  }
+});
+
+// Update your save button handlers
+document.addEventListener('DOMContentLoaded', () => {
+  const saveBtn = document.getElementById('saveVariablesBtn');
+  if (saveBtn) {
+    saveBtn.addEventListener('click', () => {
+      const result = saveAllVariablesToStorage();
+      if (result) {
+        const totalItems = 
+          Object.keys(result.table1.inputs).length +
+          Object.keys(result.table1.calculations).length +
+          Object.keys(result.table2.inputs).length +
+          Object.keys(result.table2.calculations).length +
+          Object.keys(result.table3.inputs).length +
+          Object.keys(result.table3.calculations).length;
+          
+        alert(`Saved ${totalItems} financial items`);
+        console.log('Saved financial data:', result);
+      }
+    });
+  }
+
+  const submitBtn = document.getElementById('submitBtn2');
+  if (submitBtn) {
+    submitBtn.addEventListener('click', () => {
+      const result = saveAllVariablesToStorage();
+      if (result) {
+        console.log('Complete financial data ready for processing:', result);
+        // Here you can add code to show AI assistant UI or process the data
+      }
+    });
+  }
+});
+
+ 
