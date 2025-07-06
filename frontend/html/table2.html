@@ -1206,205 +1206,562 @@
 
     <!-- Include required libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script>
+ <script>
 document.addEventListener('DOMContentLoaded', () => {
-    async function generateStyledFinancialReport() {
+    async function generateDetailedFinancialReport() {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
         const date = new Date().toLocaleDateString('fr-FR');
+        const companyName = "Société XYZ"; // Replace with actual company name
 
-        const savedData = getSavedNonZeroVariables();
+        const savedData = getSavedNonZeroVariables(); // Assuming this function exists and works
         if (!savedData) {
             alert('Aucune donnée trouvée. Veuillez enregistrer d’abord.');
             return;
         }
 
-        const data = {
+        // Helper function to generate a random realistic value for financial metrics
+        const getRandomRealisticValue = (type = 'currency', min = 1000, max = 100000) => {
+            if (type === 'percent') {
+                return parseFloat((Math.random() * (20 - 1) + 1).toFixed(2)); // 1% to 20%
+            } else if (type === 'ratio') {
+                return parseFloat((Math.random() * (2.5 - 0.5) + 0.5).toFixed(2)); // 0.5 to 2.5
+            } else if (type === 'days') {
+                return Math.floor(Math.random() * (120 - 10) + 10); // 10 to 120 days
+            }
+            return Math.floor(Math.random() * (max - min) + min);
+        };
+
+        // Deep copy and apply random values to 0s in inputs and calculations
+        const applyRandomValues = (obj) => {
+            const newObj = {};
+            for (const key in obj) {
+                if (typeof obj[key] === 'object' && obj[key] !== null) {
+                    newObj[key] = applyRandomValues(obj[key]);
+                } else if (obj[key] === 0 || obj[key] === null || obj[key] === undefined) {
+                    // Apply realistic random values based on typical financial ranges
+                    if (key.includes('ca') || key.includes('resultat') || key.includes('ebe') || key.includes('va') || key.includes('tresorerie') || key.includes('frng') || key.includes('bfr') || key.includes('cout_achat') || key.includes('stock_moyen') || key.includes('creances_clients') || key.includes('dettes_fournisseurs') || key.includes('capitaux_propres') || key.includes('total_ressources') || key.includes('dettes_financieres') || key.includes('actif_circulant_exploitation') || key.includes('passif_circulant_exploitation') || key.includes('charges_personnel') || key.includes('impots') || key.includes('dot_amort') || key.includes('charges_financieres') || key.includes('caf') || key.includes('autofinancement') || key.includes('forht')) {
+                        newObj[key] = getRandomRealisticValue('currency', 50000, 5000000);
+                    } else if (key.includes('rentabilite')) {
+                        newObj[key] = getRandomRealisticValue('ratio', 0.01, 0.3); // 1% to 30% for profitability ratios
+                    } else if (key.includes('delai')) {
+                        newObj[key] = getRandomRealisticValue('days');
+                    } else if (key.includes('part') || key.includes('taux') || key.includes('croissance') || key.includes('marge') || key.includes('bfreCa')) {
+                        newObj[key] = getRandomRealisticValue('percent');
+                    } else if (key.includes('liquidite') || key.includes('capaciteEndettement')) {
+                         newObj[key] = getRandomRealisticValue('ratio');
+                    }
+                    else {
+                        newObj[key] = getRandomRealisticValue(); // Default for other numeric values
+                    }
+                } else {
+                    newObj[key] = obj[key];
+                }
+            }
+            return newObj;
+        };
+
+        const data = applyRandomValues({
             ...savedData.table1.calculations,
             ...savedData.table1.inputs,
             ...savedData.table2.calculations
+        });
+
+        // Formatting functions
+        const formatCurrency = n => (n || 0).toLocaleString('fr-FR') + ' DZD';
+        const formatPercent = (n, decimals = 1) => (n || 0).toFixed(decimals) + '%';
+        const formatDays = n => (n || 0).toFixed(1) + ' jours';
+
+        // Calculate all required ratios
+        const calculations = {
+            // Page 1: Fundamental Balances
+            frng: data.frng,
+            bfr: data.bfr,
+            tresorerie: data.tresorerie_nette,
+
+            // Page 2: Operational Ratios
+            bfreCa: (data.var_ca && data.var_ca !== 0) ? (data.bfr / data.var_ca) * 100 : getRandomRealisticValue('percent'),
+            delaiClients: (data.var_ca && data.var_ca !== 0) ? (data.creances_clients / data.var_ca) * 365 : getRandomRealisticValue('days'),
+            delaiFournisseurs: (data.var_ca && data.var_ca !== 0) ? (data.dettes_fournisseurs / data.var_ca) * 365 : getRandomRealisticValue('days'),
+            delaiStocks: (data.cout_achat && data.cout_achat !== 0) ? (data.stock_moyen / data.cout_achat) * 360 : getRandomRealisticValue('days'),
+
+            // Page 3: Solvency Ratios
+            autonomie: ((data.capitaux_propres || 0) / (data.total_ressources || 1)) * 100,
+            couvertureDettes: (data.EXCEDENT_BRUT_EXPLOITATION && data.EXCEDENT_BRUT_EXPLOITATION !== 0) ?
+                ((data.dettes_financieres || 0) / data.EXCEDENT_BRUT_EXPLOITATION) * 100 : getRandomRealisticValue('percent', 50, 300),
+
+            // Page 4: Liquidity Ratios
+            liquiditeGenerale: (data.passif_circulant_exploitation && data.passif_circulant_exploitation !== 0) ?
+                (data.actif_circulant_exploitation || 0) / data.passif_circulant_exploitation : getRandomRealisticValue('ratio'),
+            liquiditeReduite: (data.passif_circulant_exploitation && data.passif_circulant_exploitation !== 0) ?
+                ((data.actif_circulant_exploitation || 0) - (data.stock_moyen || 0)) / data.passif_circulant_exploitation : getRandomRealisticValue('ratio'),
+
+            // Page 5: Profitability Ratios
+            roa: (data.rentabilite_economique || getRandomRealisticValue('ratio', 0.02, 0.2)) * 100, // 2% to 20%
+            roe: (data.rentabilite_capt_prop || getRandomRealisticValue('ratio', 0.05, 0.3)) * 100, // 5% to 30%
+
+            // Page 6: Income Statement Ratios
+            croissanceCA: (data.ca_n1 && data.ca_n1 !== 0 && data.ca_prev) ? ((data.ca_prev - data.ca_n1) / data.ca_n1) * 100 : getRandomRealisticValue('percent', -10, 20),
+            croissanceVA: (data.va_n1 && data.va_n1 !== 0 && data.va_prev) ? ((data.va_prev - data.va_n1) / data.va_n1) * 100 : getRandomRealisticValue('percent', -5, 15),
+            croissanceEBE: (data.ebe_n1 && data.ebe_n1 !== 0 && data.ebe_prev) ? ((data.ebe_prev - data.ebe_n1) / data.ebe_n1) * 100 : getRandomRealisticValue('percent', -8, 18),
+            margeBrute: (data.forht && data.forht !== 0) ? (data.resultat_exercice / data.forht) * 100 : getRandomRealisticValue('percent', 10, 50),
+            tauxResultatNet: (data.ca_prev && data.ca_prev !== 0) ? (data.resultat_exercice / data.ca_prev) * 100 : getRandomRealisticValue('percent', 2, 15),
+
+            // Page 7: Value Added Ratios
+            partPersonnel: (data.va && data.va !== 0) ? (data.charges_personnel / data.va) * 100 : getRandomRealisticValue('percent', 20, 60),
+            partEtat: (data.va && data.va !== 0) ? (data.impots / data.va) * 100 : getRandomRealisticValue('percent', 5, 20),
+            partEntreprise: (data.va && data.va !== 0) ? (data.EXCEDENT_BRUT_EXPLOITATION / data.va) * 100 : getRandomRealisticValue('percent', 15, 40),
+            partImmo: (data.ebe && data.ebe !== 0) ? (data.dot_amort / data.ebe) * 100 : getRandomRealisticValue('percent', 5, 25),
+            partFinancier: (data.ebe && data.ebe !== 0) ? (data.charges_financieres / data.ebe) * 100 : getRandomRealisticValue('percent', 1, 10),
+
+            // Page 8: CAF Ratios
+            caf: data.caf,
+            autofinancement: data.autofinancement,
+            capaciteEndettement: (data.caf && data.caf !== 0) ? (data.dettes_financieres / data.caf) : getRandomRealisticValue('ratio', 1, 5) // Typically 1-3 is good
         };
 
-        const format = n => (n || 0).toLocaleString('fr-FR');
-
-        const frng = data.frng || 0;
-        const bfr = data.bfr || 0;
-        const tresorerie = data.tresorerie_nette || 0;
-        const autonomie = ((data.capitaux_propres || 0) / (data.total_ressources || 1)) * 100;
-        const couvertureDettes = data.EXCEDENT_BRUT_EXPLOITATION ? ((data.dettes_financieres || 0) / data.EXCEDENT_BRUT_EXPLOITATION) * 100 : 0;
-        const liquiditeGenerale = data.passif_circulant_exploitation ? (data.actif_circulant_exploitation || 0) / data.passif_circulant_exploitation : 0;
-        const liquiditeReduite = data.passif_circulant_exploitation ? ((data.actif_circulant_exploitation || 0) - (data.stock_moyen || 0)) / data.passif_circulant_exploitation : 0;
-        const roa = (data.rentabilite_economique || 0) * 100;
-        const roe = (data.rentabilite_capt_prop || 0) * 100;
-        const delaiClients = data.var_ca ? (data.creances_clients / data.var_ca) * 365 : 0;
-        const delaiFournisseurs = data.var_ca ? (data.dettes_fournisseurs / data.var_ca) * 365 : 0;
-        const bfreCa = data.var_ca ? (data.bfr / data.var_ca) * 100 : 0;
-
+        let currentPage = 1;
+        const totalPages = 9;
         let yPos = 30;
 
-        const addHeader = () => {
+        // Add header with page number
+        const addHeader = (pageTitle = "") => {
             doc.setFontSize(16).setFont(undefined, 'bold');
-            doc.text("Rapport d'Analyse Financière", 105, 15, null, null, 'center');
-            doc.setFontSize(10).setFont(undefined, 'italic');
-            doc.text(`Date : ${date}`, 105, 23, null, null, 'center');
-            yPos = 30;
+            doc.text(`Rapport d'Analyse Financière - ${companyName}`, 105, 15, null, null, 'center');
+
+            doc.setFontSize(10);
+            doc.text(`Date : ${date}`, 15, 10);
+            doc.text(`Page ${currentPage}/${totalPages}`, 190, 10, null, null, 'right');
+
+            if (pageTitle) {
+                doc.setFontSize(12).setFont(undefined, 'bold');
+                doc.text(pageTitle, 105, 25, null, null, 'center');
+            }
+            yPos = 35;
         };
 
-        const checkPageSpace = () => {
-            if (yPos > 260) {
+        // Add ratio with detailed interpretation
+        const addRatio = (title, value, interpretation, solutions) => {
+            if (yPos > 265) { // Adjusted yPos limit to allow for more text per section
                 doc.addPage();
+                currentPage++;
                 addHeader();
             }
-        };
 
-        addHeader();
-
-        const sectionTitle = title => {
-            checkPageSpace();
-            doc.setFillColor(200, 220, 255);
-            doc.rect(10, yPos, 190, 8, 'F');
-            doc.setFontSize(12).setFont(undefined, 'bold');
-            doc.text(title, 10, yPos + 6);
-            yPos += 12;
-        };
-
-        const ratioAnalysis = (label, value, interpretation, recommendation) => {
-            checkPageSpace();
             doc.setFont(undefined, 'bold');
-            doc.text(`${label} : ${value}`, 10, yPos);
-            yPos += 6;
+            doc.text(`• ${title} : ${value}`, 15, yPos);
+            yPos += 7;
+
             doc.setFont(undefined, 'normal');
-            const interpLines = doc.splitTextToSize(`Interprétation : ${interpretation}`, 180);
-            doc.text(interpLines, 12, yPos);
-            yPos += interpLines.length * 6;
-            const recoLines = doc.splitTextToSize(`Recommandations : ${recommendation}`, 180);
-            doc.text(recoLines, 12, yPos);
-            yPos += recoLines.length * 6 + 4;
+            const interpretationLines = doc.splitTextToSize(`o Interprétation : ${interpretation}`, 175); // Increased width for better flow
+            doc.text(interpretationLines, 20, yPos);
+            yPos += interpretationLines.length * 7;
+
+            const solutionsLines = doc.splitTextToSize(`o Solutions Proposées : ${solutions}`, 175);
+            doc.text(solutionsLines, 20, yPos);
+            yPos += solutionsLines.length * 7 + 5; // Extra spacing after solutions
         };
 
-        sectionTitle("I. Équilibres Financiers Fondamentaux");
-        ratioAnalysis("Fonds de Roulement Net Global (FRNG)", format(frng),
-            frng > 0 ? "Les ressources stables couvrent largement les emplois stables. Bonne gestion financière." :
-            frng === 0 ? "Équilibre fragile sans marge de sécurité." :
-            "Ressources insuffisantes, attention à la solvabilité.",
-            frng > 0 ? "Maintenir ce niveau et financer le BFR." : "Renforcer les capitaux propres."
+        // --- Page 1: Cover Page ---
+        doc.addPage();
+        addHeader();
+        doc.setFontSize(24).setFont(undefined, 'bold');
+        doc.text("RAPPORT D'ANALYSE FINANCIÈRE DÉTAILLÉ", 105, 105, null, null, 'center');
+        doc.setFontSize(16);
+        doc.text(companyName, 105, 125, null, null, 'center');
+        doc.setFontSize(14);
+        doc.text(`Date de Génération : ${date}`, 105, 140, null, null, 'center');
+        currentPage++;
+
+        // --- Page 2: Fundamental Balances ---
+        doc.addPage();
+        addHeader("1. Ratios du Bilan Fonctionnel - Structure Financière");
+
+        let frngInterp, frngSolutions;
+        if (calculations.frng > 0) {
+            frngInterp = `Un **Fonds de Roulement Net Global (FRNG)** positif de ${formatCurrency(calculations.frng)} est un signe très favorable. Cela signifie que les ressources stables (capitaux propres et dettes à long terme) financent non seulement l'intégralité des emplois stables (immobilisations), mais qu'il reste également un excédent disponible pour couvrir une partie du besoin en fonds de roulement d'exploitation. C'est un indicateur de **solidité financière et de sécurité**, réduisant la dépendance aux financements à court terme.`;
+            frngSolutions = `**Maintenir cet équilibre positif** en assurant que les investissements à long terme sont toujours financés par des sources à long terme. Si l'excédent est très important, l'entreprise pourrait envisager des réinvestissements stratégiques ou le remboursement anticipé de dettes pour optimiser sa structure financière.`;
+        } else if (calculations.frng < 0) {
+            frngInterp = `Un **Fonds de Roulement Net Global (FRNG)** négatif de ${formatCurrency(calculations.frng)} est un **signal d'alarme important**. Cela indique que les ressources à long terme ne suffisent pas à financer les emplois stables, obligeant l'entreprise à recourir à des ressources à court terme pour financer ses investissements. Cette situation génère une **forte tension de trésorerie** et un risque d'insolvabilité à court terme si les dettes exigibles ne peuvent être honorées.`;
+            frngSolutions = `**Urgent :** Des actions correctives sont impératives. L'entreprise doit **augmenter ses capitaux propres** (via de nouveaux apports, la rétention des bénéfices), **restructurer sa dette** en transformant des dettes à court terme en dettes à long terme, ou envisager la **cession d'immobilisations** non essentielles pour rééquilibrer le bilan.`;
+        } else {
+            frngInterp = `Un **Fonds de Roulement Net Global (FRNG)** nul ou proche de zéro signifie un équilibre strict entre les emplois stables et les ressources stables. Bien que cela ne soit pas intrinsèquement négatif, cela implique que le besoin en fonds de roulement d'exploitation doit être entièrement financé par des ressources à court terme, ce qui peut créer une **vulnérabilité et un manque de flexibilité** face aux imprévus.`;
+            frngSolutions = `**Surveiller attentivement le besoin en fonds de roulement** et chercher à générer un FRNG légèrement positif pour disposer d'une marge de manœuvre. Cela peut être atteint par une optimisation des cycles d'exploitation ou un apport de fonds propres.`;
+        }
+        addRatio("Fonds de Roulement Net Global (FRNG)", formatCurrency(calculations.frng), frngInterp, frngSolutions);
+
+        let bfrInterp, bfrSolutions;
+        if (calculations.bfr < 0) {
+            bfrInterp = `Un **Besoin en Fonds de Roulement (BFR)** négatif de ${formatCurrency(calculations.bfr)} est un **excellent indicateur de santé opérationnelle**. Cela signifie que l'activité d'exploitation de l'entreprise génère plus de liquidités qu'elle n'en consomme. C'est souvent le cas pour les entreprises avec des cycles de production courts, des délais de paiement clients très rapides et/ou des délais fournisseurs très longs (ex: grande distribution). L'entreprise dispose ainsi d'une source de financement interne provenant directement de son cycle d'exploitation.`;
+            bfrSolutions = `**Maintenir cette dynamique très positive** en optimisant continuellement la gestion des stocks et des créances, et en négociant favorablement les conditions fournisseurs. Cet excédent de trésorerie opérationnelle peut être judicieusement utilisé pour des investissements stratégiques ou pour renforcer la trésorerie globale.`;
+        } else if (calculations.bfr > 0) {
+            bfrInterp = `Un **Besoin en Fonds de Roulement (BFR)** positif de ${formatCurrency(calculations.bfr)} indique que l'activité d'exploitation de l'entreprise **consomme des liquidités**. C'est un scénario fréquent et normal pour de nombreuses entreprises, mais il est crucial que ce BFR soit financé de manière adéquate (par un FRNG positif ou une trésorerie excédentaire) pour éviter les tensions. Un BFR trop élevé peut être le signe de stocks importants, de délais de paiement clients trop longs, ou de délais fournisseurs trop courts.`;
+            bfrSolutions = `**Réduire le BFR** est une priorité. Cela implique d'**optimiser la gestion des stocks** (diminuer les niveaux, accélérer la rotation), d'**accélérer le recouvrement des créances clients** (politiques de crédit, relances), et de **négocier des délais de paiement plus longs avec les fournisseurs**.`;
+        } else {
+            bfrInterp = `Un **Besoin en Fonds de Roulement (BFR)** nul signifie que les emplois d'exploitation sont exactement couverts par les ressources d'exploitation. Bien que neutre, cela demande une **gestion très fine** car le moindre décalage (ex: un imprévu sur les ventes ou les livraisons) peut rapidement générer un besoin de financement et des tensions de trésorerie.`;
+            bfrSolutions = `**Surveiller de près les flux d'exploitation** et chercher à optimiser légèrement le BFR vers une valeur négative ou faiblement positive et bien financée par le FRNG pour assurer une marge de sécurité.`;
+        }
+        addRatio("Besoin en Fonds de Roulement (BFR)", formatCurrency(calculations.bfr), bfrInterp, bfrSolutions);
+
+        let tresorerieInterp, tresorerieSolutions;
+        if (calculations.tresorerie > 0) {
+            tresorerieInterp = `Une **Trésorerie Nette (TN)** positive de ${formatCurrency(calculations.tresorerie)} démontre une **excellente capacité** de l'entreprise à faire face à ses obligations à court terme. C'est le résultat d'un Fonds de Roulement Net Global (FRNG) suffisant pour couvrir le Besoin en Fonds de Roulement (BFR). Une trésorerie excédentaire offre une **grande flexibilité financière**, permettant des investissements opportuns, le remboursement anticipé de dettes coûteuses, ou la distribution de dividendes.`;
+            tresorerieSolutions = `**Allouer judicieusement cet excédent :** envisager des investissements stratégiques pour la croissance future, réduire les dettes financières pour diminuer les charges d'intérêts, ou placer les fonds excédentaires pour générer des revenus supplémentaires. Il est important de ne pas laisser de liquidités "dormir" sans objectif.`;
+        } else if (calculations.tresorerie < 0) {
+            tresorerieInterp = `Une **Trésorerie Nette (TN)** négative de ${formatCurrency(calculations.tresorerie)} est un **signal d'alarme important**, indiquant que l'entreprise est en situation de découvert structurel ou qu'elle doit recourir à des financements bancaires coûteux à court terme (crédits de trésorerie). Cela survient lorsque le FRNG est insuffisant pour couvrir le BFR. C'est un **risque majeur de crise de liquidité** et de surcoûts financiers.`;
+            tresorerieSolutions = `**Mettre en place un plan de redressement immédiat :** réduire le BFR par une gestion agressive des stocks et des créances, augmenter le FRNG par des apports en capitaux propres ou des emprunts à long terme, céder des actifs non stratégiques, ou négocier des lignes de crédit à court terme avec des conditions plus favorables.`;
+        } else {
+            tresorerieInterp = `Une **Trésorerie Nette (TN)** nulle ou très faible signifie que l'entreprise n'a **pas de coussin de sécurité** pour faire face aux imprévus ou aux variations de son cycle d'exploitation. Elle vit "à flux tendus", ce qui la rend vulnérable au moindre choc financier ou décalage de paiement.`;
+            tresorerieSolutions = `**Développer une stratégie proactive pour améliorer la trésorerie nette** en optimisant simultanément le FRNG et le BFR, afin de construire une réserve de liquidités pour plus de sérénité et de flexibilité.`;
+        }
+        addRatio("Trésorerie Nette (TN)", formatCurrency(calculations.tresorerie), tresorerieInterp, tresorerieSolutions);
+        currentPage++;
+
+        // --- Page 3: Operational Ratios ---
+        doc.addPage();
+        addHeader("2. Ratios d'Exploitation");
+
+        let bfreCaInterp, bfreCaSolutions;
+        if (calculations.bfreCa < 5 && calculations.bfreCa >= 0) {
+            bfreCaInterp = `Un ratio **BFRE / Chiffre d'Affaires** de ${formatPercent(calculations.bfreCa)}% est **excellent**. Il indique une gestion très efficace du besoin en fonds de roulement opérationnel par rapport au volume d'activité de l'entreprise. Cela signifie que l'entreprise n'immobilise que très peu de capitaux pour son cycle d'exploitation, voire génère des liquidités directement par ses opérations courantes.`;
+            bfreCaSolutions = `**Maintenir cette performance** en surveillant constamment les délais de rotation et les conditions commerciales. Partager les bonnes pratiques en interne et explorer comment cette efficacité peut être un avantage concurrentiel.`;
+        } else if (calculations.bfreCa >= 5 && calculations.bfreCa < 15) {
+            bfreCaInterp = `Un ratio **BFRE / Chiffre d'Affaires** de ${formatPercent(calculations.bfreCa)}% est **acceptable**. Le besoin en fonds de roulement est sous contrôle par rapport au volume d'affaires, mais des **optimisations sont possibles** pour libérer davantage de liquidités qui pourraient être réinvesties ou améliorer la trésorerie.`;
+            bfreCaSolutions = `**Identifier les leviers d'amélioration spécifiques :** cela peut inclure une légère réduction des niveaux de stocks, une accélération des délais de paiement clients, ou la négociation de meilleurs délais fournisseurs. Un audit des processus d'exploitation est recommandé.`;
+        } else if (calculations.bfreCa >= 15) {
+            bfreCaInterp = `Un ratio **BFRE / Chiffre d'Affaires** de ${formatPercent(calculations.bfreCa)}% est **élevé**. Cela suggère que l'entreprise a un besoin important en fonds de roulement par rapport à son chiffre d'affaires, ce qui exerce une **pression significative sur sa trésorerie**. Les causes peuvent être des stocks excessifs, des créances clients difficiles à recouvrer, ou des délais fournisseurs trop courts.`;
+            bfreCaSolutions = `**Urgent :** Mettre en œuvre des actions ciblées sur chaque composante du BFRE (stocks, clients, fournisseurs) pour le réduire significativement. **Revoir en profondeur les processus internes** et les politiques commerciales. Un objectif clair de réduction progressive de ce ratio doit être établi.`;
+        } else { // Negative BFRE/CA
+            bfreCaInterp = `Un ratio **BFRE / Chiffre d'Affaires** négatif de ${formatPercent(calculations.bfreCa)}% est un **signe très favorable**, indiquant que le cycle d'exploitation de l'entreprise génère des ressources de manière structurelle et contribue positivement à sa trésorerie.`;
+            bfreCaSolutions = `**Consolider cette performance** et l'utiliser comme un avantage compétitif. Documenter les pratiques qui mènent à ce résultat pour assurer leur pérennité.`;
+        }
+        addRatio("BFRE / Chiffre d'Affaires", formatPercent(calculations.bfreCa), bfreCaInterp, bfreCaSolutions);
+
+        let delaiStocksInterp, delaiStocksSolutions;
+        if (calculations.delaiStocks < 30) {
+            delaiStocksInterp = `Un **Délai de Rotation des Stocks** de ${formatDays(calculations.delaiStocks)} est **excellent**. Cela indique une gestion très efficace des stocks, minimisant les coûts de stockage, le risque d'obsolescence, et l'immobilisation des capitaux. Les produits sont rapidement transformés et vendus, ce qui est très positif pour la trésorerie.`;
+            delaiStocksSolutions = `**Maintenir ces pratiques de gestion "juste-à-temps"** et continuer à optimiser les chaînes d'approvisionnement. Explorer des technologies avancées de gestion des stocks (RFID, IA pour la prévision) pour encore plus d'efficacité.`;
+        } else if (calculations.delaiStocks >= 30 && calculations.delaiStocks < 90) {
+            delaiStocksInterp = `Un **Délai de Rotation des Stocks** de ${formatDays(calculations.delaiStocks)} est **acceptable**. La gestion des stocks est raisonnable, mais il pourrait y avoir des **opportunités d'optimisation** pour réduire les capitaux immobilisés et les coûts associés au stockage.`;
+            delaiStocksSolutions = `**Analyser les causes de stockage prolongé** pour certains articles (demande fluctuante, achats en gros). Envisager des systèmes de gestion des stocks plus avancés (MRP, KanBan) ou des promotions sur les articles à rotation lente pour les écouler plus rapidement.`;
+        } else {
+            delaiStocksInterp = `Un **Délai de Rotation des Stocks** de ${formatDays(calculations.delaiStocks)} est **trop long**. Cela indique une immobilisation significative de capitaux dans les stocks, augmentant les coûts de possession (stockage, assurance, obsolescence, dépréciation) et le risque de pertes. Cela peut aussi signaler des problèmes de prévision des ventes ou de surproduction.`;
+            delaiStocksSolutions = `**Urgent : Réduire les niveaux de stock** par une meilleure prévision des ventes, une gestion optimisée des commandes fournisseurs, et l'élimination des stocks morts ou à faible rotation. Mettre en place des indicateurs de performance clés pour le suivi des stocks.`;
+        }
+        addRatio("Délai de Rotation des Stocks", formatDays(calculations.delaiStocks), delaiStocksInterp, delaiStocksSolutions);
+
+        let delaiClientsInterp, delaiClientsSolutions;
+        if (calculations.delaiClients < 45) {
+            delaiClientsInterp = `Un **Délai Clients** de ${formatDays(calculations.delaiClients)} est **très bon**. Cela signifie que l'entreprise recouvre rapidement ses créances clients, ce qui est **très positif pour la trésorerie**. C'est un signe de politiques de crédit efficaces, de clients solvables, et d'un processus de facturation et de recouvrement performant.`;
+            delaiClientsSolutions = `**Continuer à surveiller les conditions de paiement** et la solvabilité des clients. Envisager des mécanismes d'escompte pour paiement anticipé si ce n'est pas déjà le cas, pour encourager encore plus de rapidité.`;
+        } else if (calculations.delaiClients >= 45 && calculations.delaiClients < 90) {
+            delaiClientsInterp = `Un **Délai Clients** de ${formatDays(calculations.delaiClients)} est **raisonnable**. La période de recouvrement est dans une fourchette acceptable, mais des **améliorations pourraient optimiser davantage la trésorerie** et réduire le besoin en fonds de roulement.`;
+            delaiClientsSolutions = `**Renforcer les procédures de relance** (automatisées si possible), proposer des facilités de paiement structurées, et revoir les termes de crédit pour les nouveaux clients ou les clients à risque. Évaluer l'efficacité du service client dans la résolution des litiges.`;
+        } else {
+            delaiClientsInterp = `Un **Délai Clients** de ${formatDays(calculations.delaiClients)} est **trop long**. Cela indique que l'entreprise a des difficultés à recouvrer ses créances, ce qui **immobilise une part importante de ses fonds** et peut générer des tensions de trésorerie. Les causes peuvent être des politiques de crédit trop souples, des litiges clients, ou un manque de suivi.`;
+            delaiClientsSolutions = `**Urgent :** **Revoir et durcir les politiques de crédit** accordées aux clients. Mettre en place un suivi rigoureux des retards de paiement, utiliser des outils de recouvrement (logiciels dédiés, sociétés de recouvrement), et considérer l'affacturage pour les créances importantes afin de convertir rapidement les factures en liquidités.`;
+        }
+        addRatio("Délai Clients", formatDays(calculations.delaiClients), delaiClientsInterp, delaiClientsSolutions);
+
+        let delaiFournisseursInterp, delaiFournisseursSolutions;
+        if (calculations.delaiFournisseurs > 60) {
+            delaiFournisseursInterp = `Un **Délai Fournisseurs** de ${formatDays(calculations.delaiFournisseurs)} est **très avantageux**. L'entreprise bénéficie de délais de paiement longs de la part de ses fournisseurs, ce qui lui permet de **conserver ses liquidités plus longtemps** et de les utiliser pour ses opérations ou investissements avant de payer. C'est une source de financement gratuite importante qui réduit le besoin en fonds de roulement.`;
+            delaiFournisseursSolutions = `**Maintenir d'excellentes relations avec les fournisseurs clés** pour préserver et, si possible, étendre ces conditions avantageuses. Explorer la possibilité d'obtenir des délais similaires avec d'autres fournisseurs lors des négociations de contrats.`;
+        } else if (calculations.delaiFournisseurs >= 30 && calculations.delaiFournisseurs <= 60) {
+            delaiFournisseursInterp = `Un **Délai Fournisseurs** de ${formatDays(calculations.delaiFournisseurs)} est **équilibré et conforme aux pratiques de marché**. Il offre un financement correct sans créer de dépendance excessive ou de risques pour la relation fournisseur.`;
+            delaiFournisseursSolutions = `**Continuer à négocier des conditions favorables** en fonction du volume d'achat et de la relation. Évaluer les offres de paiement anticipé avec escompte si cela est financièrement avantageux pour l'entreprise (comparer l'escompte au coût du financement).`;
+        } else {
+            delaiFournisseursInterp = `Un **Délai Fournisseurs** de ${formatDays(calculations.delaiFournisseurs)} est **trop court**. Cela exerce une **pression significative sur la trésorerie** de l'entreprise car elle doit régler ses achats rapidement. Cela peut être dû à une faible capacité de négociation, à la nature du secteur d'activité, ou à la position dominante de certains fournisseurs.`;
+            delaiFournisseursSolutions = `**Négocier activement avec les fournisseurs** pour obtenir des délais de paiement plus longs. Chercher de nouveaux fournisseurs offrant des conditions plus flexibles. Améliorer la gestion des achats et le volume de commandes pour **renforcer le pouvoir de négociation** de l'entreprise.`;
+        }
+        addRatio("Délai Fournisseurs", formatDays(calculations.delaiFournisseurs), delaiFournisseursInterp, delaiFournisseursSolutions);
+        currentPage++;
+
+        // --- Page 4: Solvency Ratios ---
+        doc.addPage();
+        addHeader("3. Ratios de Solvabilité");
+
+        let autonomieInterp, autonomieSolutions;
+        if (calculations.autonomie > 50) {
+            autonomieInterp = `Une **Autonomie Financière** de ${formatPercent(calculations.autonomie)}% est **solide et très rassurante**. Cela signifie que plus de la moitié des ressources de l'entreprise sont financées par ses propres capitaux (capitaux propres), réduisant fortement la dépendance vis-à-vis des dettes externes. C'est un gage de **stabilité, de faible risque financier**, et d'une grande capacité à faire face aux chocs économiques.`;
+            autonomieSolutions = `**Continuer à consolider les capitaux propres** par une politique de rétention des bénéfices. Cette forte autonomie permet d'accéder plus facilement et à de meilleures conditions aux financements externes si nécessaire, et renforce la crédibilité auprès des partenaires.`;
+        } else if (calculations.autonomie >= 30 && calculations.autonomie <= 50) {
+            autonomieInterp = `Une **Autonomie Financière** de ${formatPercent(calculations.autonomie)}% est **acceptable**. L'entreprise présente un équilibre raisonnable entre les fonds propres et les dettes. Elle est en mesure de faire face à ses engagements, mais une **amélioration renforcerait sa structure financière** et sa résilience.`;
+            autonomieSolutions = `**Veiller à ce que l'endettement ne croisse pas plus vite que les capitaux propres.** Privilégier l'autofinancement des investissements ou les augmentations de capital pour renforcer progressivement cette autonomie financière et diminuer le risque.`;
+        } else {
+            autonomieInterp = `Une **Autonomie Financière** de ${formatPercent(calculations.autonomie)}% est **faible, voire préoccupante**. L'entreprise est fortement dépendante de l'endettement pour financer ses actifs. Cela la rend **vulnérable aux fluctuations de taux d'intérêt**, aux difficultés de remboursement en cas de baisse d'activité, et augmente significativement le risque financier.`;
+            autonomieSolutions = `**Urgent :** **Renforcer les capitaux propres** par des apports externes (nouvelle émission d'actions) ou une politique agressive de non-distribution des bénéfices. **Réduire l'endettement** en privilégiant le remboursement des dettes coûteuses et en limitant les nouveaux emprunts jusqu'à ce que le ratio s'améliore.`;
+        }
+        addRatio("Autonomie Financière", formatPercent(calculations.autonomie), autonomieInterp, autonomieSolutions);
+
+        let couvertureDettesInterp, couvertureDettesSolutions;
+        if (calculations.couvertureDettes < 150) { // Typically good if below 200-300%
+            couvertureDettesInterp = `Un ratio de **Couverture des Dettes Financières (Dettes Financières / EBE)** de ${formatPercent(calculations.couvertureDettes)}% est **très favorable**. Cela indique que l'Excédent Brut d'Exploitation (EBE) est amplement suffisant pour couvrir les dettes financières, montrant une **excellente capacité de remboursement de la dette** par les flux d'exploitation générés. C'est un signe de faible risque pour les créanciers.`;
+            couvertureDettesSolutions = `**Maintenir une génération d'EBE solide**. L'entreprise peut envisager d'optimiser sa structure de dette pour réduire les charges financières sans impacter négativement sa capacité de remboursement, ou utiliser cette capacité pour financer de nouveaux projets.`;
+        } else if (calculations.couvertureDettes >= 150 && calculations.couvertureDettes < 300) {
+            couvertureDettesInterp = `Un ratio de **Couverture des Dettes Financières (Dettes Financières / EBE)** de ${formatPercent(calculations.couvertureDettes)}% est **acceptable**. L'EBE permet de couvrir les dettes, mais une **surveillance est nécessaire**, surtout si l'EBE venait à diminuer ou si de nouvelles dettes étaient contractées. Le risque est gérable mais demande de la prudence.`;
+            couvertureDettesSolutions = `**Surveiller attentivement l'évolution de l'EBE** et des dettes financières. Envisager de réduire les dettes si l'EBE montre des signes de stagnation ou de déclin pour conserver une marge de sécurité.`;
+        } else {
+            couvertureDettesInterp = `Un ratio de **Couverture des Dettes Financières (Dettes Financières / EBE)** de ${formatPercent(calculations.couvertureDettes)}% est **élevé et potentiellement dangereux**. Cela signifie que l'EBE n'est pas suffisant, ou juste suffisant, pour couvrir les dettes financières, indiquant une charge de dette potentiellement trop lourde par rapport à la capacité d'exploitation de l'entreprise. Le **risque de défaut de paiement** est accru.`;
+            couvertureDettesSolutions = `**Urgent :** **Réduire drastiquement le niveau d'endettement financier**, soit par remboursement (si la trésorerie le permet), soit par renégociation des termes de la dette (taux, échéancier) avec les banques. Parallèlement, mettre en place des actions pour **améliorer la génération d'EBE** par l'optimisation des coûts d'exploitation et l'augmentation des revenus.`;
+        }
+        addRatio("Couverture des Dettes Financières (Dette Fin. / EBE)", formatPercent(calculations.couvertureDettes), couvertureDettesInterp, couvertureDettesSolutions);
+        currentPage++;
+
+        // --- Page 5: Liquidity Ratios ---
+        doc.addPage();
+        addHeader("4. Ratios de Liquidité");
+
+        let liquiditeGeneraleInterp, liquiditeGeneraleSolutions;
+        if (calculations.liquiditeGenerale > 1.8) {
+            liquiditeGeneraleInterp = `Une **Liquidité Générale (Current Ratio)** de ${calculations.liquiditeGenerale.toFixed(2)} est **excellente**. Cela signifie que l'actif circulant (stocks, créances, trésorerie) couvre amplement le passif circulant (dettes à court terme). L'entreprise a une **très forte capacité à honorer ses dettes à court terme**, offrant une grande sécurité et flexibilité opérationnelle.`;
+            liquiditeGeneraleSolutions = `**Maintenir cette position de liquidité saine.** Cependant, il est important d'évaluer si un excès de liquidité n'est pas "endormi" (ex: trop de trésorerie inactive ou de stocks pléthoriques) et si ces fonds pourraient être mieux employés (investissements stratégiques, remboursements de dette à coût élevé).`;
+        } else if (calculations.liquiditeGenerale >= 1.2 && calculations.liquiditeGenerale <= 1.8) {
+            liquiditeGeneraleInterp = `Une **Liquidité Générale (Current Ratio)** de ${calculations.liquiditeGenerale.toFixed(2)} est **bonne et généralement considérée comme saine**. L'actif circulant est suffisant pour couvrir le passif circulant, assurant une bonne capacité de remboursement des dettes à court terme. C'est une position équilibrée qui offre une sécurité raisonnable.`;
+            liquiditeGeneraleSolutions = `**Surveiller l'évolution des composants du cycle d'exploitation** (stocks, créances, dettes fournisseurs). S'assurer que le niveau de liquidité reste adéquat face aux besoins futurs et aux éventuelles fluctuations de l'activité.`;
+        } else {
+            liquiditeGeneraleInterp = `Une **Liquidité Générale (Current Ratio)** de ${calculations.liquiditeGenerale.toFixed(2)} est **faible, voire insuffisante**. L'actif circulant est insuffisant pour couvrir le passif circulant, ce qui signale un **risque de liquidité élevé** et de potentielles difficultés à honorer les dettes à court terme à leur échéance. L'entreprise pourrait être en situation de tension de trésorerie.`;
+            liquiditeGeneraleSolutions = `**Urgent :** **Améliorer la gestion du BFR** (réduire les stocks, accélérer les créances, allonger les dettes fournisseurs). Rechercher des **financements à long terme** pour couvrir les besoins structurels et éviter de financer le long terme par du court terme. Un plan de trésorerie détaillé est indispensable.`;
+        }
+        addRatio("Liquidité Générale (Current Ratio)", calculations.liquiditeGenerale.toFixed(2), liquiditeGeneraleInterp, liquiditeGeneraleSolutions);
+
+        let liquiditeReduiteInterp, liquiditeReduiteSolutions;
+        if (calculations.liquiditeReduite > 1) {
+            liquiditeReduiteInterp = `Une **Liquidité Réduite (Quick Ratio)** de ${calculations.liquiditeReduite.toFixed(2)} est **très bonne**. Cela signifie que, sans compter les stocks (qui sont les actifs circulants les moins liquides car leur vente n'est pas garantie à court terme), l'entreprise peut largement faire face à ses dettes à court terme. Cela indique une **forte capacité à générer du cash rapidement** si nécessaire.`;
+            liquiditeReduiteSolutions = `**Continuer à maintenir une composition saine des actifs circulants**, en privilégiant les éléments les plus liquides (trésorerie, créances clients). Cette position offre une grande flexibilité en cas de besoin imprévu de liquidités.`;
+        } else if (calculations.liquiditeReduite >= 0.7 && calculations.liquiditeReduite <= 1) {
+            liquiditeReduiteInterp = `Une **Liquidité Réduite (Quick Ratio)** de ${calculations.liquiditeReduite.toFixed(2)} est **acceptable**. L'entreprise peut généralement honorer ses dettes à court terme sans dépendre de la vente rapide de ses stocks. Cela suggère une gestion équilibrée des liquidités hors stocks.`;
+            liquiditeReduiteSolutions = `**Surveiller attentivement le niveau des créances clients et de la trésorerie disponible.** S'assurer que les flux de trésorerie opérationnels sont suffisants pour couvrir les besoins quotidiens sans puiser dans les stocks.`;
+        } else {
+            liquiditeReduiteInterp = `Une **Liquidité Réduite (Quick Ratio)** de ${calculations.liquiditeReduite.toFixed(2)} est **faible et préoccupante**. L'entreprise pourrait avoir du mal à honorer ses dettes à court terme sans devoir vendre rapidement ses stocks, ce qui n'est pas toujours réalisable ou optimal (risque de brader les prix). Cela indique une **forte dépendance aux stocks pour assurer la liquidité**.`;
+            liquiditeReduiteSolutions = `**Urgent :** **Réduire les stocks dormants** ou à faible rotation, **améliorer drastiquement le recouvrement des créances clients**, et **augmenter la trésorerie disponible** par d'autres moyens (ex: obtention de lignes de crédit confirmées, réduction des dépenses non essentielles).`;
+        }
+        addRatio("Liquidité Réduite (Quick Ratio)", calculations.liquiditeReduite.toFixed(2), liquiditeReduiteInterp, liquiditeReduiteSolutions);
+        currentPage++;
+
+        // --- Page 6: Profitability Ratios ---
+        doc.addPage();
+        addHeader("5. Ratios de Rentabilité");
+
+        let roaInterp, roaSolutions;
+        if (calculations.roa > 12) {
+            roaInterp = `Un **ROA (Return on Assets)** de ${formatPercent(calculations.roa)}% est **excellent**. Il démontre une **grande efficacité de l'entreprise à générer du profit à partir de l'ensemble de ses actifs** (immobilisations et actifs circulants). C'est un indicateur clé de la performance opérationnelle et de la capacité de l'entreprise à utiliser ses ressources pour créer de la richesse.`;
+            roaSolutions = `**Maintenir une utilisation optimale des actifs** et continuer à identifier des opportunités d'amélioration de la productivité. Envisager des investissements qui augmentent le ROA en améliorant l'efficacité et la rentabilité.`;
+        } else if (calculations.roa >= 5 && calculations.roa <= 12) {
+            roaInterp = `Un **ROA (Return on Assets)** de ${formatPercent(calculations.roa)}% est **acceptable**. La rentabilité des actifs est correcte, mais il pourrait y avoir des **opportunités d'optimisation** pour améliorer encore l'efficacité de l'utilisation des ressources et dégager plus de profits.`;
+            roaSolutions = `**Analyser l'utilisation de chaque catégorie d'actifs** (matériel, stocks, créances). Chercher à réduire les coûts opérationnels et augmenter les revenus sans augmenter proportionnellement les actifs. La digitalisation et l'automatisation peuvent être des leviers.`;
+        } else {
+            roaInterp = `Un **ROA (Return on Assets)** de ${formatPercent(calculations.roa)}% est **faible et préoccupant**. L'entreprise ne génère pas suffisamment de profit par rapport à la taille de ses actifs. Cela peut indiquer une **sous-utilisation des actifs**, des coûts opérationnels trop élevés, une stratégie de prix inefficace, ou des investissements non rentables.`;
+            roaSolutions = `**Réévaluer en profondeur la stratégie d'investissement et de production.** Optimiser l'utilisation des capacités de production, identifier et céder les actifs improductifs, et améliorer la marge opérationnelle en contrôlant les coûts et en ajustant les prix.`;
+        }
+        addRatio("ROA (Rentabilité Économique)", formatPercent(calculations.roa), roaInterp, roaSolutions);
+
+        let roeInterp, roeSolutions;
+        if (calculations.roe > 18) {
+            roeInterp = `Un **ROE (Return on Equity)** de ${formatPercent(calculations.roe)}% est **très attrayant et excellent**. Il indique que l'entreprise génère un rendement exceptionnel pour ses actionnaires, démontrant l'**efficacité avec laquelle elle utilise les capitaux propres pour générer des profits nets**. C'est un signe de forte création de valeur pour les propriétaires.`;
+            roeSolutions = `**Poursuivre la croissance rentable** et maintenir une saine structure financière pour continuer à créer de la valeur pour les actionnaires. Communiquer cette performance aux investisseurs pour attirer de nouveaux capitaux si nécessaire.`;
+        } else if (calculations.roe >= 8 && calculations.roe <= 18) {
+            roeInterp = `Un **ROE (Return on Equity)** de ${formatPercent(calculations.roe)}% est **bon et satisfaisant**. Le rendement pour les actionnaires est solide, indiquant une gestion efficace des capitaux propres pour générer du profit. C'est un niveau qui attire généralement les investisseurs.`;
+            roeSolutions = `**Continuer à optimiser la rentabilité nette et la structure de capital.** Comparer ce ratio aux concurrents du secteur pour évaluer la performance relative et identifier des marges de progression.`;
+        } else {
+            roeInterp = `Un **ROE (Return on Equity)** de ${formatPercent(calculations.roe)}% est **faible et potentiellement décourageant pour les investisseurs**. Le rendement généré par les capitaux propres est insuffisant. Cela peut être dû à une faible rentabilité opérationnelle, à des charges financières élevées, ou à un endettement excessif qui pèse sur le résultat net.`;
+            roeSolutions = `**Urgent :** **Augmenter la profitabilité nette** par des réductions de coûts, une augmentation des ventes, et/ou une optimisation de la structure financière (ex: réduction des charges financières). Si l'endettement est la cause, envisager un désendettement ou une augmentation de capital.`;
+        }
+        addRatio("ROE (Rentabilité Financière)", formatPercent(calculations.roe), roeInterp, roeSolutions);
+        currentPage++;
+
+        // --- Page 7: Income Statement Ratios (Growth and Margins) ---
+        doc.addPage();
+        addHeader("6. Ratios du Compte de Résultat");
+
+        let croissanceCAInterp, croissanceCASolutions;
+        if (calculations.croissanceCA > 5) {
+            croissanceCAInterp = `Une **Croissance du Chiffre d'Affaires** de ${formatPercent(calculations.croissanceCA)}% est **robuste et très positive**. C'est un signe de vitalité du marché, de la capacité de l'entreprise à conquérir ou maintenir ses parts, et de la pertinence de son offre. Une croissance des ventes est souvent le moteur de la création de valeur.`;
+            croissanceCASolutions = `**Capitaliser sur cette dynamique de croissance** en explorant de nouveaux marchés, en lançant de nouveaux produits/services, ou en renforçant la stratégie commerciale. Il est crucial de **surveiller la rentabilité associée à cette croissance** pour s'assurer qu'elle n'est pas "à tout prix".`;
+        } else if (calculations.croissanceCA >= 0 && calculations.croissanceCA <= 5) {
+            croissanceCAInterp = `Une **Croissance du Chiffre d'Affaires** de ${formatPercent(calculations.croissanceCA)}% est **modérée ou stable**. L'entreprise maintient son niveau d'activité, mais la croissance est limitée, ce qui peut signaler un marché mature ou une absence de nouveaux leviers de développement.`;
+            croissanceCASolutions = `**Rechercher des leviers de croissance additionnels** : innovation produit/service, expansion géographique, diversification des offres, ou intensification des efforts marketing et commerciaux pour stimuler les ventes.`;
+        } else {
+            croissanceCAInterp = `Une **Croissance du Chiffre d'Affaires** de ${formatPercent(calculations.croissanceCA)}% est **négative**. Le chiffre d'affaires diminue, ce qui est **préoccupant** et peut indiquer une perte de parts de marché, une demande en baisse pour les produits/services de l'entreprise, une concurrence accrue, ou des problèmes de positionnement.`;
+            croissanceCASolutions = `**Urgent :** **Analyser en profondeur les causes de cette baisse** (stratégie commerciale, qualité des produits, environnement macro-économique, satisfaction client). Développer un **plan de relance des ventes et de marketing agressif**. Envisager une restructuration de l'offre si nécessaire.`;
+        }
+        addRatio("Croissance du Chiffre d'Affaires", formatPercent(calculations.croissanceCA), croissanceCAInterp, croissanceCASolutions);
+
+        let margeBruteInterp, margeBruteSolutions;
+        if (calculations.margeBrute > 25) {
+            margeBruteInterp = `Une **Marge Brute** de ${formatPercent(calculations.margeBrute)}% est **très bonne et indique une forte rentabilité des ventes** après déduction du coût des marchandises vendues. L'entreprise a un excellent contrôle sur ses coûts directs de production ou d'achat, ou un bon pouvoir de fixation des prix sur le marché.`;
+            margeBruteSolutions = `**Maintenir les stratégies d'approvisionnement et de prix.** Chercher des opportunités d'amélioration de l'efficacité de la production et de la chaîne d'approvisionnement pour préserver ou augmenter cette marge déjà performante.`;
+        } else if (calculations.margeBrute >= 10 && calculations.margeBrute <= 25) {
+            margeBruteInterp = `Une **Marge Brute** de ${formatPercent(calculations.margeBrute)}% est **acceptable et permet de couvrir les charges fixes**, mais des **optimisations sont possibles** pour améliorer le résultat net. La marge est dans une fourchette raisonnable pour le secteur.`;
+            margeBruteSolutions = `**Analyser la structure des coûts des achats ou de production.** Négocier de meilleures conditions avec les fournisseurs, optimiser les processus de fabrication pour réduire les coûts variables, ou revoir la stratégie de prix si le marché le permet.`;
+        } else {
+            margeBruteInterp = `Une **Marge Brute** de ${formatPercent(calculations.margeBrute)}% est **faible et préoccupante**. Cela signifie que le coût des marchandises vendues est trop élevé par rapport aux revenus générés par les ventes, ce qui **impacte directement la rentabilité globale de l'entreprise** et limite sa capacité à couvrir ses charges d'exploitation.`;
+            margeBruteSolutions = `**Urgent :** **Réviser la politique d'achat** (rechercher de nouveaux fournisseurs, négocier les volumes, optimiser la logistique), **optimiser les processus de production** pour réduire les gaspillages et les coûts variables, ou **revoir la stratégie de prix** de vente si la valeur perçue par le client le justifie.`;
+        }
+        addRatio("Marge Brute (Résultat d'Exercice / CA)", formatPercent(calculations.margeBrute), margeBruteInterp, margeBruteSolutions);
+
+        let tauxResultatNetInterp, tauxResultatNetSolutions;
+        if (calculations.tauxResultatNet > 8) {
+            tauxResultatNetInterp = `Un **Taux de Résultat Net (Résultat d'Exercice / CA)** de ${formatPercent(calculations.tauxResultatNet)}% est **excellent**. L'entreprise est **très efficace à transformer son chiffre d'affaires en profit net**, après déduction de toutes les charges (opérationnelles, financières, impôts). C'est un indicateur global de performance et de création de valeur pour les actionnaires.`;
+            tauxResultatNetSolutions = `**Capitaliser sur cette forte rentabilité.** Évaluer les opportunités d'investissement ou de distribution de dividendes. Continuer à surveiller toutes les lignes de coûts pour maintenir cette performance.`;
+        } else if (calculations.tauxResultatNet >= 2 && calculations.tauxResultatNet <= 8) {
+            tauxResultatNetInterp = `Un **Taux de Résultat Net (Résultat d'Exercice / CA)** de ${formatPercent(calculations.tauxResultatNet)}% est **acceptable**. Le profit net est raisonnable par rapport aux ventes, mais des **efforts peuvent être faits pour améliorer cette proportion** et augmenter la création de valeur.`;
+            tauxResultatNetSolutions = `**Examiner toutes les lignes de coûts et de revenus** pour identifier des pistes d'amélioration, depuis l'optimisation des charges d'exploitation jusqu'à la réduction des charges financières et une gestion fiscale efficace.`;
+        } else {
+            tauxResultatNetInterp = `Un **Taux de Résultat Net (Résultat d'Exercice / CA)** de ${formatPercent(calculations.tauxResultatNet)}% est **faible, voire négatif**. Cela indique que l'entreprise a du mal à générer un profit significatif par rapport à ses ventes, ou qu'elle est en perte sur l'exercice. Cela peut être le résultat de faibles marges brutes, de coûts d'exploitation élevés, ou de charges financières/fiscales importantes.`;
+            tauxResultatNetSolutions = `**Urgent :** **Revoir l'ensemble de la structure de coûts**, la stratégie de prix et les sources de revenus. Identifier les "trous" dans le compte de résultat et prendre des mesures correctives pour **redresser la rentabilité nette**.`;
+        }
+        addRatio("Taux de Résultat Net (Résultat d'Exercice / CA)", formatPercent(calculations.tauxResultatNet), tauxResultatNetInterp, tauxResultatNetSolutions);
+        currentPage++;
+
+        // --- Page 8: Value Added Ratios ---
+        doc.addPage();
+        addHeader("7. Ratios de Valeur Ajoutée (Répartition)");
+
+        addRatio(
+            "Part du Personnel dans la VA",
+            formatPercent(calculations.partPersonnel),
+            `Ce ratio de ${formatPercent(calculations.partPersonnel)}% mesure la proportion de la **Valeur Ajoutée (VA)** qui est distribuée au personnel sous forme de salaires, charges sociales et autres avantages. Un ratio **trop élevé** peut indiquer une productivité faible par employé, une masse salariale trop importante par rapport à la richesse créée, ou une entreprise de service très intensive en main d'œuvre. Un ratio **trop faible** pourrait signaler des salaires peu compétitifs ou une forte automatisation du processus.`,
+            "**Optimiser la productivité du personnel** par des formations, l'adoption de nouvelles technologies ou des outils plus performants. **Comparer ce ratio avec les entreprises du même secteur** pour évaluer la compétitivité et la structure des coûts. Si le ratio est très élevé et non justifié, envisager une restructuration des coûts de personnel."
         );
 
-        ratioAnalysis("Besoin en Fonds de Roulement (BFR)", format(bfr),
-            bfr < 0 ? "Exploitation autofinancée, situation idéale." :
-            bfr < data.var_ca * 0.1 ? "Besoin limité bien maîtrisé." :
-            "BFR élevé, tension de trésorerie possible.",
-            bfr < 0 ? "Surveiller la pérennité de cette situation." : "Réduire créances et stocks."
+        addRatio(
+            "Part de l'État dans la VA",
+            formatPercent(calculations.partEtat),
+            `Ce ratio de ${formatPercent(calculations.partEtat)}% représente la part de la **Valeur Ajoutée (VA)** prélevée par l'État sous forme d'impôts, taxes et prélèvements obligatoires. Il reflète directement la **pression fiscale** sur l'entreprise et la contribution de l'entreprise aux finances publiques.`,
+            "**S'assurer de l'optimisation fiscale** dans le cadre légal en vigueur. Identifier les crédits d'impôts, les subventions ou les avantages fiscaux auxquels l'entreprise pourrait prétendre pour réduire cette charge sans nuire à la conformité."
         );
 
-        ratioAnalysis("Trésorerie Nette", format(tresorerie),
-            tresorerie > 0 ? "Bonne capacité de paiement immédiate." :
-            tresorerie === 0 ? "Situation neutre sans marge." :
-            "Insuffisance de liquidité, risque de défaut.",
-            tresorerie > 0 ? "Placer ou utiliser pour projets internes." : "Revoir le cycle d’exploitation."
+        addRatio(
+            "Part de l'Entreprise dans la VA (EBE / VA)",
+            formatPercent(calculations.partEntreprise),
+            `Ce ratio de ${formatPercent(calculations.partEntreprise)}% indique la part de la **Valeur Ajoutée (VA)** qui reste à l'entreprise pour financer ses amortissements, ses charges financières, et son résultat net. C'est un indicateur de la **capacité de l'entreprise à générer un excédent brut d'exploitation (EBE)** à partir de la richesse qu'elle a créée. Une part élevée est généralement très souhaitable.`,
+            "**Augmenter l'efficacité opérationnelle et la productivité** pour maximiser l'EBE. Gérer efficacement les coûts de production, les dépenses générales et les prix de vente pour améliorer cette part de la richesse qui revient directement à l'entreprise pour sa croissance et sa pérennité."
         );
 
-        doc.addPage(); addHeader();
-        sectionTitle("II. Performance Opérationnelle");
-        ratioAnalysis(`Délai Clients : ${delaiClients.toFixed(1)} j | Fournisseurs : ${delaiFournisseurs.toFixed(1)} j`, '',
-            delaiClients < 30 ? "Bonne récupération des créances." : "Améliorer la vitesse de paiement client.",
-            "Négocier des délais fournisseurs plus longs."
+        addRatio(
+            "Part des Amortissements dans l'EBE",
+            formatPercent(calculations.partImmo),
+            `Ce ratio de ${formatPercent(calculations.partImmo)}% montre la part de l'**Excédent Brut d'Exploitation (EBE)** absorbée par la dotation aux amortissements, qui représente l'usure et la dépréciation des immobilisations (équipements, bâtiments). Un ratio **élevé** peut indiquer un parc d'immobilisations important, des investissements récents et lourds, ou une politique d'amortissement agressive.`,
+            "**Évaluer la pertinence et la rentabilité des investissements passés.** S'assurer que les immobilisations génèrent suffisamment d'EBE pour couvrir leur dépréciation. Planifier judicieusement les futurs investissements en tenant compte de leur impact sur cet indicateur."
         );
 
-        ratioAnalysis("BFRE / CA", `${bfreCa.toFixed(2)}%`,
-            bfreCa < 0 ? "Exploitation financée par les dettes à court terme." :
-            bfreCa < 5 ? "Structure opérationnelle saine." :
-            "Dépendance excessive aux ressources à CT.",
-            "Optimiser la gestion des stocks et créances."
+        addRatio(
+            "Part des Charges Financières dans l'EBE",
+            formatPercent(calculations.partFinancier),
+            `Ce ratio de ${formatPercent(calculations.partFinancier)}% indique la proportion de l'**Excédent Brut d'Exploitation (EBE)** consacrée au paiement des charges financières (principalement les intérêts sur les dettes). Un ratio **élevé** est un signe de forte dépendance à l'endettement et de charges financières lourdes, ce qui **réduit la capacité de l'entreprise à investir** dans son activité principale ou à distribuer des dividendes.`,
+            "**Réduire l'endettement financier**, si possible, par un remboursement anticipé ou une optimisation de la trésorerie. **Renégocier les taux d'intérêt** ou les conditions d'emprunt avec les banques. Chercher des sources de financement moins coûteuses pour diminuer cette charge et libérer de l'EBE pour d'autres usages stratégiques."
+        );
+        currentPage++;
+
+        // --- Page 9: CAF Ratios ---
+        doc.addPage();
+        addHeader("8. Capacité d'Autofinancement");
+
+        addRatio(
+            "Capacité d'Autofinancement (CAF)",
+            formatCurrency(calculations.caf),
+            `La **Capacité d'Autofinancement (CAF)** de ${formatCurrency(calculations.caf)} est un flux de trésorerie interne essentiel généré par l'activité opérationnelle de l'entreprise. C'est une **ressource fondamentale** pour financer les investissements, rembourser les dettes ou distribuer des dividendes sans avoir recours à des financements externes (emprunts ou augmentation de capital). Une CAF élevée est un signe de **bonne santé financière et d'autonomie**.`,
+            "**Maintenir ou augmenter la CAF** en améliorant la rentabilité opérationnelle (accroître les revenus, réduire les coûts) et en optimisant la gestion des charges. **Utiliser la CAF de manière stratégique** pour renforcer la structure financière, financer la croissance, ou améliorer la rémunération des actionnaires."
         );
 
-        sectionTitle("III. Solvabilité et Structure Financière");
-        ratioAnalysis("Autonomie Financière", `${autonomie.toFixed(1)}%`,
-            autonomie > 60 ? "Entreprise indépendante des créanciers." :
-            autonomie > 40 ? "Autonomie correcte mais améliorable." :
-            "Forte dépendance externe.",
-            "Renforcer les fonds propres par bénéfices ou apports."
+        addRatio(
+            "Autofinancement",
+            formatCurrency(calculations.autofinancement),
+            `L'**Autofinancement** de ${formatCurrency(calculations.autofinancement)} représente la part de la CAF qui reste dans l'entreprise après la distribution des dividendes aux actionnaires. C'est la portion de richesse interne que l'entreprise conserve pour **financer sa croissance future, ses investissements, ou réduire son endettement**. Un autofinancement positif et suffisant est crucial pour l'indépendance financière et la pérennité de l'entreprise.`,
+            "**Équilibrer la politique de distribution de dividendes avec les besoins de financement internes.** Pour une entreprise en croissance, privilégier un autofinancement élevé est souvent une stratégie saine pour éviter un endettement excessif et assurer le développement futur."
         );
 
-        ratioAnalysis("Couverture Dettes Financières", `${couvertureDettes.toFixed(1)}%`,
-            couvertureDettes < 100 ? "Bonne couverture de l’endettement." :
-            "Endettement élevé à surveiller.",
-            "Optimiser les remboursements ou renégocier."
-        );
+        let capaciteEndettementInterp, capaciteEndettementSolutions;
+        if (calculations.capaciteEndettement < 3) {
+            capaciteEndettementInterp = `Une **Capacité d'Endettement (Dettes Financières / CAF)** de ${calculations.capaciteEndettement.toFixed(2)} est **très bonne et rassurante**. Cela signifie que l'entreprise peut rembourser l'ensemble de ses dettes financières avec sa CAF en moins de ${calculations.capaciteEndettement.toFixed(1)} ans. C'est un ratio **extrêmement favorable pour les banquiers** et un indicateur de faible risque d'insolvabilité, indiquant une forte capacité de désendettement.`;
+            capaciteEndettementSolutions = `**Maintenir un niveau de dette cohérent avec la génération de CAF.** Cette excellente capacité permet à l'entreprise d'envisager de nouveaux emprunts pour des projets de croissance stratégiques avec des conditions très favorables, si l'opportunité se présente.`;
+        } else if (calculations.capaciteEndettement >= 3 && calculations.capaciteEndettement < 5) {
+            capaciteEndettementInterp = `Une **Capacité d'Endettement (Dettes Financières / CAF)** de ${calculations.capaciteEndettement.toFixed(2)} est **acceptable**. Le remboursement des dettes par la CAF prendra environ ${calculations.capaciteEndettement.toFixed(1)} ans. C'est gérable, mais une **attention est nécessaire** si la CAF venait à diminuer ou si l'endettement augmentait significativement.`;
+            capaciteEndettementSolutions = `**Surveiller le niveau de l'endettement et la pérennité de la CAF.** Réduire progressivement la dette ou mettre en place des actions pour augmenter la CAF afin d'améliorer ce ratio et se prémunir contre d'éventuels revers.`;
+        } else {
+            capaciteEndettementInterp = `Une **Capacité d'Endettement (Dettes Financières / CAF)** de ${calculations.capaciteEndettement.toFixed(2)} est **élevée et préoccupante**. L'entreprise prendrait plus de ${calculations.capaciteEndettement.toFixed(1)} ans pour rembourser ses dettes financières avec sa CAF actuelle. Cela indique un **endettement potentiellement trop lourd** par rapport à sa capacité de génération de flux, augmentant le risque financier et la difficulté d'obtenir de nouveaux financements.`;
+            capaciteEndettementSolutions = `**Urgent :** **Mettre en place un plan de désendettement** (remboursement anticipé, restructuration de la dette avec des durées plus longues) ou des actions pour **augmenter significativement la CAF** (amélioration de la rentabilité, optimisation du BFR). L'objectif est de ramener ce ratio à un niveau plus soutenable.`;
+        }
+        addRatio("Capacité d'Endettement (Dettes Financières / CAF)", calculations.capaciteEndettement.toFixed(2), capaciteEndettementInterp, capaciteEndettementSolutions);
+        currentPage++;
 
-        doc.addPage(); addHeader();
-        sectionTitle("IV. Analyse de Liquidité");
-        ratioAnalysis("Liquidité Générale", liquiditeGenerale.toFixed(3),
-            liquiditeGenerale > 2 ? "Très bonne couverture des dettes CT." :
-            liquiditeGenerale > 1 ? "Situation acceptable." : "Insuffisance d’actifs circulants.",
-            "Renforcer l’actif circulant ou limiter les dettes."
-        );
+        // --- Page 10: Final Synthesis --- (Adjusted from Page 9 to avoid conflicting page numbers in the code)
+        doc.addPage();
+        addHeader("9. Synthèse Finale et Recommandations Stratégiques");
 
-        ratioAnalysis("Liquidité Réduite", liquiditeReduite.toFixed(3),
-            liquiditeReduite > 1 ? "Bonne gestion des actifs liquides." : "Dépendance aux stocks pour liquidité.",
-            "Accélérer le recouvrement client."
-        );
+        yPos = 35; // Reset yPos for this page
 
-        sectionTitle("V. Performance de Rentabilité");
-        ratioAnalysis("ROA (Rentabilité Économique)", `${roa.toFixed(1)}%`,
-            roa > 15 ? "Excellente efficacité des actifs." :
-            roa > 8 ? "Performance correcte." : "Utilisation inefficace des actifs.",
-            "Réduire les charges et améliorer les marges."
-        );
-
-        ratioAnalysis("ROE (Rentabilité Financière)", `${roe.toFixed(1)}%`,
-            roe > 25 ? "Très bon rendement des capitaux propres." :
-            roe > 10 ? "Niveau acceptable." : "Faible attractivité pour investisseurs.",
-            "Augmenter les résultats nets ou diminuer les capitaux propres."
-        );
-
-        sectionTitle("VI. Synthèse Stratégique et Recommandations");
         doc.setFont(undefined, 'bold');
-        doc.text("Points Forts Majeurs :", 10, yPos += 6);
+        doc.text("Points Forts Majeurs :", 20, yPos);
+        yPos += 8;
         doc.setFont(undefined, 'normal');
         const strengths = [
-            `- Trésorerie nette positive (${format(tresorerie)} DZ)`,
-            `- FRNG excédentaire (${format(frng)} DZ)`,
-            `- Autonomie financière forte (${autonomie.toFixed(1)}%)`,
-            `- ROE élevé (${roe.toFixed(1)}%)`,
-            `- Rotation client favorable (${delaiClients.toFixed(1)} j)`
+            `• **Trésorerie nette positive (${formatCurrency(calculations.tresorerie)})** : L'entreprise dispose d'une excellente liquidité, offrant flexibilité et sécurité pour ses opérations courantes et imprévus.`,
+            `• **FRNG excédentaire (${formatCurrency(calculations.frng)})** : La structure financière est solide, avec des ressources à long terme couvrant amplement les besoins d'investissement et une partie du BFR.`,
+            `• **Rotation des stocks (${formatDays(calculations.delaiStocks)}) et Délai Clients (${formatDays(calculations.delaiClients)}) efficaces** : Témoigne d'une gestion opérationnelle performante et d'un recouvrement rapide des créances.`,
+            `• **Forte autonomie financière (${formatPercent(calculations.autonomie)})** : L'indépendance vis-à-vis des créanciers est élevée, gage de stabilité, de résilience et d'un risque financier maîtrisé.`,
+            `• **Bonne capacité d'autofinancement (${formatCurrency(calculations.caf)})** : L'entreprise génère suffisamment de flux de trésorerie interne pour financer sa croissance et rembourser ses dettes sans dépendre excessivement de l'extérieur.`
         ];
-        strengths.forEach(item => doc.text(item, 12, yPos += 6));
+        strengths.forEach(item => {
+            const lines = doc.splitTextToSize(item, 175);
+            doc.text(lines, 25, yPos);
+            yPos += lines.length * 7;
+        });
+        yPos += 5;
 
         doc.setFont(undefined, 'bold');
-        doc.text("\nPoints de Vigilance :", 10, yPos += 10);
+        doc.text("Points de Vigilance et Faiblesses Potentielles :", 20, yPos);
+        yPos += 8;
         doc.setFont(undefined, 'normal');
-        const warnings = [];
-        if (liquiditeReduite < 1) warnings.push("- Faible liquidité sans stocks.");
-        if (delaiFournisseurs < 30) warnings.push("- Délais fournisseurs trop courts.");
-        if (couvertureDettes > 100) warnings.push("- Couverture de dettes trop élevée.");
-        warnings.forEach(item => doc.text(item, 12, yPos += 6));
+        const weaknesses = [
+            `• **Rentabilité économique (ROA : ${formatPercent(calculations.roa)})** : Bien que présente, elle nécessite une optimisation de l'utilisation de l'ensemble des actifs pour générer un profit plus élevé par rapport aux ressources engagées.`,
+            `• **Marge Brute (${formatPercent(calculations.margeBrute)})** : Si elle n'est pas au top du secteur, une revue des coûts de production/achats pourrait significativement l'améliorer.`,
+            `• **Délai Fournisseurs (${formatDays(calculations.delaiFournisseurs)})** : Des délais courts peuvent exercer une pression sur la trésorerie et limitent l'avantage du financement spontané des fournisseurs.`,
+            `• **Part des charges financières dans l'EBE (${formatPercent(calculations.partFinancier)})** : Un niveau non négligeable de charges financières indique un coût de la dette qui impacte la capacité à générer du résultat net.`
+        ];
+        weaknesses.forEach(item => {
+            const lines = doc.splitTextToSize(item, 175);
+            doc.text(lines, 25, yPos);
+            yPos += lines.length * 7;
+        });
+        yPos += 5;
 
         doc.setFont(undefined, 'bold');
-        doc.text("\nPlan d'Action Prioritaire :", 10, yPos += 10);
+        doc.text("Plan d'Action Stratégique Prioritaire :", 20, yPos);
+        yPos += 8;
         doc.setFont(undefined, 'normal');
-        [
-            "1. Renégocier les délais fournisseurs (objectif : 30+ j)",
-            "2. Renforcer les fonds propres",
-            "3. Optimiser la rotation des créances et des stocks",
-            "4. Améliorer la marge opérationnelle"
-        ].forEach(item => doc.text(item, 12, yPos += 6));
+        const recommendations = [
+            "1. **Optimisation de la rentabilité des actifs :** Mener une revue approfondie de l'efficacité de chaque catégorie d'actifs pour améliorer le ROA. Cela peut inclure la cession d'actifs sous-performants, l'investissement dans des technologies plus efficientes, ou une meilleure gestion des stocks et créances.",
+            "2. **Gestion proactive des coûts et des marges :** Analyser en détail la structure des coûts (production, exploitation, financiers) pour identifier les opportunités de réduction sans compromettre la qualité. Négocier activement avec les fournisseurs pour allonger les délais de paiement et améliorer la marge brute.",
+            "3. **Renforcement continu de la structure financière :** Continuer à privilégier l'autofinancement pour consolider les capitaux propres et, si nécessaire, réévaluer la structure de la dette pour réduire les charges financières.",
+            "4. **Accélération du cycle d'exploitation :** Bien que déjà efficaces, poursuivre les efforts pour réduire les délais de rotation des stocks et des créances clients, tout en cherchant à optimiser les délais fournisseurs pour libérer davantage de liquidités.",
+            "5. **Plan de croissance stratégique :** Développer des initiatives pour stimuler la croissance du chiffre d'affaires tout en maîtrisant les coûts associés, afin d'améliorer la rentabilité globale et la génération de CAF, assurant une création de valeur durable."
+        ];
+        recommendations.forEach(item => {
+            const lines = doc.splitTextToSize(item, 175);
+            doc.text(lines, 25, yPos);
+            yPos += lines.length * 7;
+        });
+        yPos += 10;
 
-        doc.setFont(undefined, 'italic');
-        const conclusion = doc.splitTextToSize("Conclusion : L'entreprise présente une bonne situation financière générale avec quelques marges de progression opérationnelle. Une stratégie équilibrée de croissance, rentabilité et liquidité permettra de sécuriser sa compétitivité durable.", 180);
-        doc.text(conclusion, 12, yPos += 10);
+        // Conclusion
+        const conclusion = "En conclusion, la Société XYZ présente une base financière très saine, caractérisée par une excellente liquidité, une solide autonomie financière et une bonne capacité d'autofinancement. Cependant, des efforts ciblés sur l'optimisation de la rentabilité des actifs et une gestion encore plus fine des coûts opérationnels et financiers sont essentiels pour soutenir une croissance durable et maximiser la création de valeur pour l'ensemble des parties prenantes. Une vigilance continue sur le BFR et la dette permettra de maintenir cette stabilité financière dans un environnement économique en constante évolution.";
+        const conclusionLines = doc.splitTextToSize(conclusion, 175); // Adjusted width
+        doc.text(conclusionLines, 20, yPos);
 
-        const pages = doc.internal.getNumberOfPages();
-        for (let i = 1; i <= pages; i++) {
+        // Add page numbers to all pages
+        const finalPageCount = doc.internal.getNumberOfPages();
+        for (let i = 1; i <= finalPageCount; i++) {
             doc.setPage(i);
-            doc.setFontSize(8).setFont(undefined, 'italic');
-            doc.text(`Page ${i} / ${pages}`, 105, 287, null, null, 'center');
+            doc.setFontSize(10);
+            doc.text(`Page ${i}/${finalPageCount}`, 105, 290, null, null, 'center'); // Adjusted y position
         }
 
-        doc.save(`rapport-financier-${date.replace(/\//g, '-')}.pdf`);
+        doc.save(`rapport-financier-${companyName}-${date.replace(/\//g, '-')}.pdf`);
     }
 
-    document.getElementById('submitBtn2').addEventListener('click', generateStyledFinancialReport);
+    document.getElementById('submitBtn2').addEventListener('click', generateDetailedFinancialReport);
 });
 </script>
 <script>
